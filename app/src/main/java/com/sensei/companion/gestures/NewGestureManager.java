@@ -1,7 +1,5 @@
 package com.sensei.companion.gestures;
 
-import android.content.Context;
-import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,8 +9,8 @@ import android.view.View;
  * @version 0.2
  * @since 0.1 12/04/14
  */
-public class GestureManager implements View.OnTouchListener {
-    //private final GestureDetectorCompat gDetect;
+public class NewGestureManager implements View.OnTouchListener {
+
     private boolean debug = true;
     private boolean consumeTouchEvents = false;
 
@@ -22,22 +20,19 @@ public class GestureManager implements View.OnTouchListener {
     public static final long GESTURE_SPEED_FAST = 500;
     private static final String TAG = "SimpleFingerGestures";
     protected boolean tracking[] = {false, false, false, false, false};
-    private Gesture ga;
+    private NewGesture ga;
     private OnFingerGestureListener onFingerGestureListener;
-    public GestureDetectorCompat gDetect;
 
 
     /**
      * Constructor that creates an internal {@link in.championswimmer.sfg.lib.GestureAnalyser } object as well
      */
-    public GestureManager(Context context) {
-        ga = new Gesture();
-        gDetect = new GestureDetectorCompat(context, new MyGestureListener());
+    public NewGestureManager() {
+        ga = new NewGesture();
     }
 
-    public GestureManager(Context context, int swipeSlopeIntolerance, int doubleTapMaxDelayMillis, int doubleTapMaxDownMillis) {
-        ga = new Gesture(swipeSlopeIntolerance, doubleTapMaxDelayMillis, doubleTapMaxDownMillis);
-        gDetect = new GestureDetectorCompat(context, new MyGestureListener());
+    public NewGestureManager(int swipeSlopeIntolerance, int doubleTapMaxDelayMillis, int doubleTapMaxDownMillis) {
+        ga = new NewGesture(swipeSlopeIntolerance, doubleTapMaxDelayMillis, doubleTapMaxDownMillis);
     }
 
     public void setDebug(boolean debug) {
@@ -107,86 +102,81 @@ public class GestureManager implements View.OnTouchListener {
         return consumeTouchEvents;
     }
 
-    private void doCallBack(Gesture.GestureType mGt) {
+    private void doCallBack(NewGesture.GestureType mGt) {
         switch (mGt.getGestureFlag()) {
-            case Gesture.SINGLE_TAP_1:
-                onFingerGestureListener.onTap(1, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
-                break;
-            case Gesture.LONG_PRESS_1:
-                onFingerGestureListener.onLongPress(1, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
-                break;
-            case Gesture.SWIPE_1_UP:
+            case NewGesture.SWIPE_1_UP:
                 onFingerGestureListener.onSwipeUp(1, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_1_DOWN:
+            case NewGesture.SWIPE_1_DOWN:
                 onFingerGestureListener.onSwipeDown(1, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_1_LEFT:
+            case NewGesture.SWIPE_1_LEFT:
                 onFingerGestureListener.onSwipeLeft(1, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_1_RIGHT:
+            case NewGesture.SWIPE_1_RIGHT:
                 onFingerGestureListener.onSwipeRight(1, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.TAP_2:
-                onFingerGestureListener.onTap(2, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
 
-            case Gesture.SWIPE_2_UP:
+            case NewGesture.SWIPE_2_UP:
                 onFingerGestureListener.onSwipeUp(2, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_2_DOWN:
+            case NewGesture.SWIPE_2_DOWN:
                 onFingerGestureListener.onSwipeDown(2, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_2_LEFT:
+            case NewGesture.SWIPE_2_LEFT:
                 onFingerGestureListener.onSwipeLeft(2, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_2_RIGHT:
+            case NewGesture.SWIPE_2_RIGHT:
                 onFingerGestureListener.onSwipeRight(2, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.PINCH_2:
+            case NewGesture.PINCH_2:
                 onFingerGestureListener.onPinch(2, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.UNPINCH_2:
+            case NewGesture.UNPINCH_2:
                 onFingerGestureListener.onUnpinch(2, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
 
-            case Gesture.SWIPE_3_UP:
+            case NewGesture.SWIPE_3_UP:
                 onFingerGestureListener.onSwipeUp(3, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_3_DOWN:
+            case NewGesture.SWIPE_3_DOWN:
                 onFingerGestureListener.onSwipeDown(3, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_3_LEFT:
+            case NewGesture.SWIPE_3_LEFT:
                 onFingerGestureListener.onSwipeLeft(3, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_3_RIGHT:
+            case NewGesture.SWIPE_3_RIGHT:
                 onFingerGestureListener.onSwipeRight(3, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.PINCH_3:
+            case NewGesture.PINCH_3:
                 onFingerGestureListener.onPinch(3, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.UNPINCH_3:
+            case NewGesture.UNPINCH_3:
                 onFingerGestureListener.onUnpinch(3, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
 
-            case Gesture.SWIPE_4_UP:
+            case NewGesture.SWIPE_4_UP:
                 onFingerGestureListener.onSwipeUp(4, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_4_DOWN:
+            case NewGesture.SWIPE_4_DOWN:
                 onFingerGestureListener.onSwipeDown(4, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_4_LEFT:
+            case NewGesture.SWIPE_4_LEFT:
                 onFingerGestureListener.onSwipeLeft(4, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.SWIPE_4_RIGHT:
+            case NewGesture.SWIPE_4_RIGHT:
                 onFingerGestureListener.onSwipeRight(4, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.PINCH_4:
+            case NewGesture.PINCH_4:
                 onFingerGestureListener.onPinch(4, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
-            case Gesture.UNPINCH_4:
+            case NewGesture.UNPINCH_4:
                 onFingerGestureListener.onUnpinch(4, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
-            case Gesture.DOUBLE_TAP_1:
+            case NewGesture.DOUBLE_TAP_1:
                 onFingerGestureListener.onDoubleTap(1, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
+                break;
+            case NewGesture.SINGLE_TAP:
+                onFingerGestureListener.onSingleTap(ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
         }
     }
@@ -216,7 +206,7 @@ public class GestureManager implements View.OnTouchListener {
          * @param gestureDuration duration in milliSeconds
          * @return
          */
-        public boolean onSwipeUp(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
+        public boolean onSwipeUp(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         /**
          * Called when user swipes <b>down</b> with two fingers
@@ -225,7 +215,7 @@ public class GestureManager implements View.OnTouchListener {
          * @param gestureDuration duration in milliSeconds
          * @return
          */
-        public boolean onSwipeDown(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
+        public boolean onSwipeDown(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         /**
          * Called when user swipes <b>left</b> with two fingers
@@ -234,7 +224,7 @@ public class GestureManager implements View.OnTouchListener {
          * @param gestureDuration duration in milliSeconds
          * @return
          */
-        public boolean onSwipeLeft(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
+        public boolean onSwipeLeft(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         /**
          * Called when user swipes <b>right</b> with two fingers
@@ -243,7 +233,7 @@ public class GestureManager implements View.OnTouchListener {
          * @param gestureDuration duration in milliSeconds
          * @return
          */
-        public boolean onSwipeRight(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
+        public boolean onSwipeRight(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         /**
          * Called when user <b>pinches</b> with two fingers (bring together)
@@ -252,7 +242,7 @@ public class GestureManager implements View.OnTouchListener {
          * @param gestureDuration duration in milliSeconds
          * @return
          */
-        public boolean onPinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
+        public boolean onPinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         /**
          * Called when user <b>un-pinches</b> with two fingers (take apart)
@@ -261,13 +251,11 @@ public class GestureManager implements View.OnTouchListener {
          * @param gestureDuration duration in milliSeconds
          * @return
          */
-        public boolean onUnpinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
+        public boolean onUnpinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        public boolean onDoubleTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
+        public boolean onDoubleTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
+        public boolean onSingleTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        public boolean onLongPress(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
-
-        public boolean onTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long duration);
     }
 }

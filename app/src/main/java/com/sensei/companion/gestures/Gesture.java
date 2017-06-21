@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 public class Gesture {
     private static final String DEBUG_TAG = "appMonitor";
     public static final boolean DEBUG = true;
+    private boolean didTap = false;
     // Finished gestures flags
     public static final int SINGLE_TAP_1 = 108;
     public static final int SWIPE_1_UP = 11;
@@ -133,10 +134,16 @@ public class Gesture {
     }
 
     private int calcGesture() {
-            if (isDoubleTap()) {
+            /*if (isDoubleTap()) {
                 return DOUBLE_TAP_1;
+            }*/
+            if(numFingers == 1 && Math.abs(delY[0]) < 500 && Math.abs(delX[0]) < 500 && Math.abs(finalT-initialT) > 900){
+                return LONG_PRESS_1;
             }
-            else if (numFingers == 1) {
+            else if(numFingers == 1 && Math.abs(delY[0]) < 500 && Math.abs(delX[0]) < 500){
+                return SINGLE_TAP_1;
+            }
+            if (numFingers == 1) {
                 if ((-(delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
                     return SWIPE_1_UP;
                 } else if (((delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
@@ -146,12 +153,6 @@ public class Gesture {
                 } else if (((delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
                     return SWIPE_1_RIGHT;
                 }
-            }
-            else if(numFingers == 1 && Math.abs(delY[0]) < 20 && Math.abs(delX[0]) < 20 && Math.abs(finalT-initialT) > 900){
-                return LONG_PRESS_1;
-            }
-            else if(numFingers == 1 && Math.abs(delY[0]) < 20 && Math.abs(delX[0]) < 20){
-                return SINGLE_TAP_1;
             }
             if (numFingers == 2) {
                 if(Math.abs(delX[0]) <20 && Math.abs(delY[0])<20 && Math.abs(delX[1])<20 && Math.abs(delY[1])<20){
