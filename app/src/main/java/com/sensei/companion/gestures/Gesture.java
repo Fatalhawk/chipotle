@@ -13,7 +13,6 @@ import android.view.MotionEvent;
  * @since 0.1 12/04/14
  */
 public class Gesture {
-    private final GestureDetectorCompat gDetect;
     private static final String DEBUG_TAG = "appMonitor";
     public static final boolean DEBUG = true;
     // Finished gestures flags
@@ -35,7 +34,7 @@ public class Gesture {
     public static final int SWIPE_4_LEFT = 43;
     public static final int SWIPE_4_RIGHT = 44;
     public static final int LONG_PRESS_1 = 109;
-
+    public static final int TAP_2 = 110;
     public static final int PINCH_2 = 25;
     public static final int UNPINCH_2 = 26;
     public static final int PINCH_3 = 35;
@@ -57,17 +56,17 @@ public class Gesture {
     public static final int PINCHING = 205;
     public static final int UNPINCHING = 206;
     private static final String TAG = "GestureAnalyser";
-    private double[] initialX = new double[5];
-    private double[] initialY = new double[5];
-    private double[] finalX = new double[5];
-    private double[] finalY = new double[5];
+    public double[] initialX = new double[5];
+    public double[] initialY = new double[5];
+    public double[] finalX = new double[5];
+    public double[] finalY = new double[5];
     private double[] currentX = new double[5];
     private double[] currentY = new double[5];
     private double[] delX = new double[5];
     private double[] delY = new double[5];
 
     private int numFingers = 0;
-    private long initialT, finalT, currentT;
+    public long initialT, finalT, currentT;
 
     private long prevInitialT, prevFinalT;
 
@@ -134,9 +133,19 @@ public class Gesture {
     }
 
     private int calcGesture() {
-        if(numFingers >= 2){
             if (isDoubleTap()) {
                 return DOUBLE_TAP_1;
+            }
+            else if (numFingers == 1) {
+                if ((-(delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
+                    return SWIPE_1_UP;
+                } else if (((delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
+                    return SWIPE_1_DOWN;
+                } else if ((-(delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
+                    return SWIPE_1_LEFT;
+                } else if (((delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
+                    return SWIPE_1_RIGHT;
+                }
             }
             else if(numFingers == 1 && Math.abs(delY[0]) < 20 && Math.abs(delX[0]) < 20 && Math.abs(finalT-initialT) > 900){
                 return LONG_PRESS_1;
@@ -144,40 +153,26 @@ public class Gesture {
             else if(numFingers == 1 && Math.abs(delY[0]) < 20 && Math.abs(delX[0]) < 20){
                 return SINGLE_TAP_1;
             }
-            if (numFingers == 1) {
-                if ((-(delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
-                    return SWIPE_1_UP;
-                }
-
-                if (((delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
-                    return SWIPE_1_DOWN;
-                }
-
-                if ((-(delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
-                    return SWIPE_1_LEFT;
-                }
-
-                if (((delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
-                    return SWIPE_1_RIGHT;
-                }
-            }
             if (numFingers == 2) {
-                if (((-delY[0]) > (swipeSlopeIntolerance * Math.abs(delX[0]))) && ((-delY[1]) > (swipeSlopeIntolerance * Math.abs(delX[1])))) {
+                if(Math.abs(delX[0]) <20 && Math.abs(delY[0])<20 && Math.abs(delX[1])<20 && Math.abs(delY[1])<20){
+                    return TAP_2;
+                }
+                else if (((-delY[0]) > (swipeSlopeIntolerance * Math.abs(delX[0]))) && ((-delY[1]) > (swipeSlopeIntolerance * Math.abs(delX[1])))) {
                     return SWIPE_2_UP;
                 }
-                if (((delY[0]) > (swipeSlopeIntolerance * Math.abs(delX[0]))) && ((delY[1]) > (swipeSlopeIntolerance * Math.abs(delX[1])))) {
+                else if (((delY[0]) > (swipeSlopeIntolerance * Math.abs(delX[0]))) && ((delY[1]) > (swipeSlopeIntolerance * Math.abs(delX[1])))) {
                     return SWIPE_2_DOWN;
                 }
-                if (((-delX[0]) > (swipeSlopeIntolerance * Math.abs(delY[0]))) && ((-delX[1]) > (swipeSlopeIntolerance * Math.abs(delY[1])))) {
+                else if (((-delX[0]) > (swipeSlopeIntolerance * Math.abs(delY[0]))) && ((-delX[1]) > (swipeSlopeIntolerance * Math.abs(delY[1])))) {
                     return SWIPE_2_LEFT;
                 }
-                if (((delX[0]) > (swipeSlopeIntolerance * Math.abs(delY[0]))) && ((delX[1]) > (swipeSlopeIntolerance * Math.abs(delY[1])))) {
+                else if (((delX[0]) > (swipeSlopeIntolerance * Math.abs(delY[0]))) && ((delX[1]) > (swipeSlopeIntolerance * Math.abs(delY[1])))) {
                     return SWIPE_2_RIGHT;
                 }
-                if (finalFingDist(0, 1) > 2 * (initialFingDist(0, 1))) {
+                else if (finalFingDist(0, 1) > 2 * (initialFingDist(0, 1))) {
                     return UNPINCH_2;
                 }
-                if (finalFingDist(0, 1) < 0.5 * (initialFingDist(0, 1))) {
+                else if (finalFingDist(0, 1) < 0.5 * (initialFingDist(0, 1))) {
                     return PINCH_2;
                 }
             }
@@ -254,10 +249,6 @@ public class Gesture {
                 }
             }
             return 0;
-        }
-        else{
-
-        }
     }
 
     private double initialFingDist(int fingNum1, int fingNum2) {

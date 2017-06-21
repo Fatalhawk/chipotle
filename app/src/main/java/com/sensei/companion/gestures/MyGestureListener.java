@@ -10,17 +10,16 @@ public class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 
     @Override
     public boolean onDown(MotionEvent event) {
-
         return true;
     }
     public boolean onSingleTapConfirmed(MotionEvent event){
         Log.i(DEBUG_TAG, "single tap " + event.toString());
-        return true;
+        return false;
     }
 
     public boolean onDoubleTap(MotionEvent event){
         Log.i(DEBUG_TAG, "double tap " + event.toString());
-        return true;
+        return false;
     }
 
     public void onLongPress(MotionEvent e){
@@ -29,7 +28,7 @@ public class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY){
         Log.i(DEBUG_TAG, "scroll " + e1.toString() + "    " + e2.toString());
-        return true;
+        return false;
     }
 
     @Override

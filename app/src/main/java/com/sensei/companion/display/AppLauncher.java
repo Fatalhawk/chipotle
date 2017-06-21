@@ -36,11 +36,12 @@ public class AppLauncher extends AppCompatActivity {
         setContentView(R.layout.activity_app_launcher);
         View v = findViewById(android.R.id.content);
         setUpGestures(v);
-        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+        //setUpMoreGestures(v);
+       // mDetector = new GestureDetectorCompat(this, new MyGestureListener());
     }
 
     public boolean onTouchEvent(MotionEvent event){
-        this.mDetector.onTouchEvent(event);
+        //this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 
@@ -50,12 +51,12 @@ public class AppLauncher extends AppCompatActivity {
 
 
     public void setUpGestures(View v){
-        GestureManager mySfg = new GestureManager();
+        GestureManager mySfg = new GestureManager(this);
         mySfg.setDebug(true);
-        mySfg.setConsumeTouchEvents(false);
+        mySfg.setConsumeTouchEvents(true);
         mySfg.setOnFingerGestureListener(new GestureManager.OnFingerGestureListener() {
             @Override
-            public boolean onSwipeUp(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onSwipeUp(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
                 if(fingers == 1){
                     Log.i(DEBUG_TAG, "swipe up with " + fingers + " fingers");
                     //action
@@ -75,7 +76,7 @@ public class AppLauncher extends AppCompatActivity {
             }
 
             @Override
-            public boolean onSwipeDown(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onSwipeDown(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
                 if(fingers == 1){
                     Log.i(DEBUG_TAG, "swipe down with " + fingers + " fingers");
                     //action
@@ -95,7 +96,7 @@ public class AppLauncher extends AppCompatActivity {
             }
 
             @Override
-            public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onSwipeLeft(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
                 if(fingers == 1){
                     Log.i(DEBUG_TAG, "swipe left with " + fingers + " fingers");
                     //action
@@ -115,7 +116,7 @@ public class AppLauncher extends AppCompatActivity {
             }
 
             @Override
-            public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onSwipeRight(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
                 if(fingers == 1){
                     Log.i(DEBUG_TAG, "swipe right with " + fingers + " fingers");
                     //action
@@ -135,7 +136,7 @@ public class AppLauncher extends AppCompatActivity {
             }
 
             @Override
-            public boolean onPinch(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onPinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
                 if(fingers == 2){
                     //action
                     Log.i(DEBUG_TAG, "pinch in with " + fingers + " fingers");
@@ -151,7 +152,7 @@ public class AppLauncher extends AppCompatActivity {
             }
 
             @Override
-            public boolean onUnpinch(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onUnpinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
                 if(fingers == 2){
                     //action
                     Log.i(DEBUG_TAG, "pinch out with " + fingers + " fingers");
@@ -167,7 +168,7 @@ public class AppLauncher extends AppCompatActivity {
             }
 
             @Override
-            public boolean onDoubleTap(int fingers) {
+            public boolean onDoubleTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
                 if(fingers == 1){
                     Log.i(DEBUG_TAG, "double tap with " + fingers + " fingers");
                 }
@@ -181,13 +182,18 @@ public class AppLauncher extends AppCompatActivity {
                 return false;
             }
 
-            public boolean onSingleTap(int fingers){
+            /*public boolean onSingleTap(int fingers){
                 Log.i(DEBUG_TAG, "Single tap with " + fingers + " fingers");
+                return false;
+            }*/
+
+            public boolean onLongPress(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
+                Log.i(DEBUG_TAG, "long press");
                 return false;
             }
 
-            public boolean onLongPress(){
-                Log.i(DEBUG_TAG, "long press");
+            public boolean onTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
+                Log.i(DEBUG_TAG, "tap");
                 return false;
             }
         });
@@ -203,59 +209,73 @@ public class AppLauncher extends AppCompatActivity {
 
             @Override public void onThreeFingerSingleTap() {
                 // Three fingers single tap
-                Log.i(DEBUG_TAG, "tap with " + 3 + " fingers");
+                //Log.i(DEBUG_TAG, "tap with " + 3 + " fingers");
             }
 
             @Override public void onDoubleTap() {
                 // Double tap
+                Log.i(DEBUG_TAG, "double tap");
             }
 
             @Override public void onScroll(int scrollDirection) {
-                switch (scrollDirection) {
+                /*switch (scrollDirection) {
                     case TouchTypeDetector.SCROLL_DIR_UP:
                         // Scrolling Up
+                        Log.i(DEBUG_TAG, "scroll up");
                         break;
                     case TouchTypeDetector.SCROLL_DIR_DOWN:
                         // Scrolling Down
+                        Log.i(DEBUG_TAG, "scroll down");
                         break;
                     case TouchTypeDetector.SCROLL_DIR_LEFT:
                         // Scrolling Left
+                        Log.i(DEBUG_TAG, "scroll left");
                         break;
                     case TouchTypeDetector.SCROLL_DIR_RIGHT:
                         // Scrolling Right
+                        Log.i(DEBUG_TAG, "scroll right");
                         break;
                     default:
                         // Do nothing
+                        Log.i(DEBUG_TAG, "nothing");
                         break;
-                }
+                }*/
             }
 
             @Override public void onSingleTap() {
                 // Single tap
+                Log.i(DEBUG_TAG, "single tap");
+
             }
 
             @Override public void onSwipe(int swipeDirection) {
                 switch (swipeDirection) {
                     case TouchTypeDetector.SWIPE_DIR_UP:
                         // Swipe Up
+                        Log.i(DEBUG_TAG, "swipe up");
                         break;
                     case TouchTypeDetector.SWIPE_DIR_DOWN:
                         // Swipe Down
+                        Log.i(DEBUG_TAG, "swipe down");
                         break;
                     case TouchTypeDetector.SWIPE_DIR_LEFT:
                         // Swipe Left
+                        Log.i(DEBUG_TAG, "swipe left");
                         break;
                     case TouchTypeDetector.SWIPE_DIR_RIGHT:
                         // Swipe Right
+                        Log.i(DEBUG_TAG, "swipe right");
                         break;
                     default:
                         //do nothing
+                        Log.i(DEBUG_TAG, "nothing");
                         break;
                 }
             }
 
             @Override public void onLongPress() {
                 // Long press
+                Log.i(DEBUG_TAG, "long press");
             }
         };
         Sensey.getInstance().startTouchTypeDetection(this,touchTypListener);
