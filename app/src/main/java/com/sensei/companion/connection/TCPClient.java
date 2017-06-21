@@ -11,23 +11,23 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class TCPClient {
+class TCPClient {
 
     private final String DEBUG_TAG = "appMonitor";
 
-    private String ipNumber, incomingMessage;
+    private String ipNumber;
     private BufferedReader in;
     private PrintWriter out;
-    private MessageCallback messageListener = null;
+    private MessageCallback messageListener;
     private boolean connected = false;
     private int portNumber = 4444; //CHANGE LATER
 
-    public TCPClient (String ipNumber, MessageCallback messageListener) {
+    TCPClient (String ipNumber, MessageCallback messageListener) {
         this.messageListener = messageListener;
         this.ipNumber = ipNumber;
     }
 
-    public void sendMessage (String message) {
+    void sendMessage (String message) {
         if (out == null || out.checkError()) {
             Log.d (DEBUG_TAG, "error sending message");
         }
@@ -38,27 +38,28 @@ public class TCPClient {
         }
     }
 
-    public void stopClient () {
+    boolean isRunning () {
+        return connected;
+    }
+
+    void stopClient () {
         Log.i (DEBUG_TAG, "Client stopped!");
         connected = false;
     }
 
-    public void run() {
-        connected = true;
+    void run() {
         try {
             InetAddress serverAddress = InetAddress.getByName (ipNumber);
             Log.i (DEBUG_TAG, "Connecting...");
             Socket socket = new Socket (serverAddress, portNumber);
-
+            connected = true;
             try {
                 out = new PrintWriter (new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 Log.i (DEBUG_TAG, "In/Out created");
-
                 //this.sendMessage (...)
-
                 while (connected) {
-                    incomingMessage = in.readLine ();
+                    String incomingMessage = in.readLine ();
                     if (incomingMessage != null && messageListener != null) {
                         Log.i(DEBUG_TAG, "Received Message: " + incomingMessage);
                         messageListener.callbackMessageReceiver (incomingMessage);
@@ -66,7 +67,6 @@ public class TCPClient {
                     else {
                         Log.d (DEBUG_TAG, "Null error");
                     }
-                    incomingMessage = null;
                 }
             }
             catch (IOException e) {
@@ -86,7 +86,7 @@ public class TCPClient {
         }
     }
 
-    public interface MessageCallback {
-        public void callbackMessageReceiver (String message);
+    interface MessageCallback {
+        void callbackMessageReceiver (String message);
     }
 }
