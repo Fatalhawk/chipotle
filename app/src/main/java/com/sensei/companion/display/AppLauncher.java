@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import com.sensei.companion.gestures.*;
 
 import com.github.nisrulz.sensey.Sensey;
 import com.github.nisrulz.sensey.TouchTypeDetector;
@@ -16,11 +17,15 @@ import android.util.Log;
 public class AppLauncher extends AppCompatActivity {
     private static final String DEBUG_TAG = "appMonitor";
     public GestureDetectorCompat mDetector;
+    private TapGesture tapDetection;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         // Setup onTouchEvent for detecting type of touch gesture
-        Sensey.getInstance().setupDispatchTouchEvent(ev);
+       // Sensey.getInstance().setupDispatchTouchEvent(ev);
+        if (tapDetection != null) {
+            tapDetection.onTouchEvent(ev);
+        }
         return super.dispatchTouchEvent(ev);
     }
 
@@ -30,19 +35,13 @@ public class AppLauncher extends AppCompatActivity {
         setContentView(R.layout.activity_app_launcher);
         View v = findViewById(android.R.id.content);
         setUpGestures(v);
-        setUpMoreGestures(v);
-       //mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
     }
 
     public boolean onTouchEvent(MotionEvent event){
-        //this.mDetector.onTouchEvent(event);
+        this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
-
-
-
-
-
 
     public void setUpGestures(View v){
         NewGestureManager mySfg = new NewGestureManager();
@@ -192,45 +191,10 @@ public class AppLauncher extends AppCompatActivity {
             }
         });
         v.setOnTouchListener(mySfg);
-        TouchTypeDetector.TouchTypListener touchTypListener=new TouchTypeDetector.TouchTypListener() {
-            @Override public void onTwoFingerSingleTap() {
-                // Two fingers single tap
-                //Log.i(DEBUG_TAG, "sensey tap with " + 2 + " fingers");
-            }
-
-            @Override public void onThreeFingerSingleTap() {
-                // Three fingers single tap
-                //Log.i(DEBUG_TAG, " sensey tap with " + 3 + " fingers");
-            }
-
+        TapGesture.TouchTypListener touchTypListener=new TapGesture.TouchTypListener() {
             @Override public void onDoubleTap() {
                 // Double tap
                 Log.i(DEBUG_TAG, "sensey double tap");
-            }
-
-            @Override public void onScroll(int scrollDirection) {
-                /*switch (scrollDirection) {
-                    case TouchTypeDetector.SCROLL_DIR_UP:
-                        // Scrolling Up
-                        Log.i(DEBUG_TAG, "scroll up");
-                        break;
-                    case TouchTypeDetector.SCROLL_DIR_DOWN:
-                        // Scrolling Down
-                        Log.i(DEBUG_TAG, "scroll down");
-                        break;
-                    case TouchTypeDetector.SCROLL_DIR_LEFT:
-                        // Scrolling Left
-                        Log.i(DEBUG_TAG, "scroll left");
-                        break;
-                    case TouchTypeDetector.SCROLL_DIR_RIGHT:
-                        // Scrolling Right
-                        Log.i(DEBUG_TAG, "scroll right");
-                        break;
-                    default:
-                        // Do nothing
-                        Log.i(DEBUG_TAG, "nothing");
-                        break;
-                }*/
             }
 
             @Override public void onSingleTap() {
@@ -239,41 +203,13 @@ public class AppLauncher extends AppCompatActivity {
 
             }
 
-            @Override public void onSwipe(int swipeDirection) {
-               /* switch (swipeDirection) {
-                    case TouchTypeDetector.SWIPE_DIR_UP:
-                        // Swipe Up
-                        Log.i(DEBUG_TAG, "swipe up");
-                        break;
-                    case TouchTypeDetector.SWIPE_DIR_DOWN:
-                        // Swipe Down
-                        Log.i(DEBUG_TAG, "swipe down");
-                        break;
-                    case TouchTypeDetector.SWIPE_DIR_LEFT:
-                        // Swipe Left
-                        Log.i(DEBUG_TAG, "swipe left");
-                        break;
-                    case TouchTypeDetector.SWIPE_DIR_RIGHT:
-                        // Swipe Right
-                        Log.i(DEBUG_TAG, "swipe right");
-                        break;
-                    default:
-                        //do nothing
-                        Log.i(DEBUG_TAG, "nothing");
-                        break;
-                }*/
-            }
-
             @Override public void onLongPress(){
                 // Long press
                 Log.i(DEBUG_TAG, "sensey long press");
             }
         };
-        Sensey.getInstance().startTouchTypeDetection(this,touchTypListener);
-    }
-
-    public void setUpMoreGestures(View v){
-
+        tapDetection = new TapGesture(this, touchTypListener);
+        //Sensey.getInstance().startTouchTypeDetection(this, touchTypListener);
     }
 
 
@@ -281,6 +217,7 @@ public class AppLauncher extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //tapDetection = null;
         Sensey.getInstance().stopTouchTypeDetection();
         Sensey.getInstance().stop();
     }

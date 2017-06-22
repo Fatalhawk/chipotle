@@ -25,16 +25,4 @@ public class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
     public void onLongPress(MotionEvent e){
         Log.i(DEBUG_TAG, "long press " + e.toString());
     }
-
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY){
-        Log.i(DEBUG_TAG, "scroll " + e1.toString() + "    " + e2.toString());
-        return false;
-    }
-
-    @Override
-    public boolean onFling(MotionEvent event1, MotionEvent event2,
-                           float velocityX, float velocityY) {
-        Log.d(DEBUG_TAG, "onFling: " + event1.toString()+event2.toString());
-        return true;
-    }
 }
