@@ -4,6 +4,9 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Internal API class to analyse the recorded gestures.
  *
@@ -11,34 +14,37 @@ import android.view.MotionEvent;
  * @version 0.2
  * @since 0.1 12/04/14
  */
-public class NewGesture {
+class NewGesture {
     private static final String DEBUG_TAG = "appMonitor";
     public static final boolean DEBUG = true;
     // Finished gestures flags
-    public static final int SWIPE_1_UP = 11;
-    public static final int SWIPE_1_DOWN = 12;
-    public static final int SWIPE_1_LEFT = 13;
-    public static final int SWIPE_1_RIGHT = 14;
-    public static final int SWIPE_2_UP = 21;
-    public static final int SWIPE_2_DOWN = 22;
-    public static final int SWIPE_2_LEFT = 23;
-    public static final int SWIPE_2_RIGHT = 24;
-    public static final int SWIPE_3_UP = 31;
-    public static final int SWIPE_3_DOWN = 32;
-    public static final int SWIPE_3_LEFT = 33;
-    public static final int SWIPE_3_RIGHT = 34;
-    public static final int SWIPE_4_UP = 41;
-    public static final int SWIPE_4_DOWN = 42;
-    public static final int SWIPE_4_LEFT = 43;
-    public static final int SWIPE_4_RIGHT = 44;
-    public static final int PINCH_2 = 25;
-    public static final int UNPINCH_2 = 26;
-    public static final int PINCH_3 = 35;
-    public static final int UNPINCH_3 = 36;
-    public static final int PINCH_4 = 45;
-    public static final int UNPINCH_4 = 46;
-    public static final int SINGLE_TAP = 51;
-    public static final int DOUBLE_TAP_1 = 107;
+    static final int SWIPE_1_UP = 11;
+    static final int SWIPE_1_DOWN = 12;
+    static final int SWIPE_1_LEFT = 13;
+    static final int SWIPE_1_RIGHT = 14;
+    static final int SWIPE_2_UP = 21;
+    static final int SWIPE_2_DOWN = 22;
+    static final int SWIPE_2_LEFT = 23;
+    static final int SWIPE_2_RIGHT = 24;
+    static final int SWIPE_3_UP = 31;
+    static final int SWIPE_3_DOWN = 32;
+    static final int SWIPE_3_LEFT = 33;
+    static final int SWIPE_3_RIGHT = 34;
+    static final int SWIPE_4_UP = 41;
+    static final int SWIPE_4_DOWN = 42;
+    static final int SWIPE_4_LEFT = 43;
+    static final int SWIPE_4_RIGHT = 44;
+    static final int PINCH_2 = 25;
+    static final int UNPINCH_2 = 26;
+    static final int PINCH_3 = 35;
+    static final int UNPINCH_3 = 36;
+    static final int PINCH_4 = 45;
+    static final int UNPINCH_4 = 46;
+    static final int SINGLE_TAP = 51;
+    static final int LONG_PRESS = 52;
+    static final int DOUBLE_TAP_1 = 107;
+    static final int TAP_2_FINGERS = 53;
+    static boolean doubleTapOccured = false;
 
     //Ongoing gesture flags
     public static final int SWIPING_1_UP = 101;
@@ -52,17 +58,17 @@ public class NewGesture {
     public static final int PINCHING = 205;
     public static final int UNPINCHING = 206;
     private static final String TAG = "GestureAnalyser";
-    public double[] initialX = new double[5];
-    public double[] initialY = new double[5];
-    public double[] finalX = new double[5];
-    public double[] finalY = new double[5];
+    double[] initialX = new double[5];
+    double[] initialY = new double[5];
+    double[] finalX = new double[5];
+    double[] finalY = new double[5];
     private double[] currentX = new double[5];
     private double[] currentY = new double[5];
     private double[] delX = new double[5];
     private double[] delY = new double[5];
 
     private int numFingers = 0;
-    public long initialT, finalT, currentT;
+    private long initialT, finalT, currentT;
 
     private long prevInitialT, prevFinalT;
 
@@ -71,17 +77,17 @@ public class NewGesture {
     private long doubleTapMaxDelayMillis;
     private long doubleTapMaxDownMillis;
 
-    public NewGesture() {
-        this(3, 500, 100);
+    NewGesture() {
+        this(3, 500, 125);
     }
 
-    public NewGesture(int swipeSlopeIntolerance, int doubleTapMaxDelayMillis, int doubleTapMaxDownMillis) {
+    NewGesture(int swipeSlopeIntolerance, int doubleTapMaxDelayMillis, int doubleTapMaxDownMillis) {
         this.swipeSlopeIntolerance = swipeSlopeIntolerance;
         this.doubleTapMaxDownMillis = doubleTapMaxDownMillis;
         this.doubleTapMaxDelayMillis = doubleTapMaxDelayMillis;
     }
 
-    public void trackGesture(MotionEvent ev) {
+    void trackGesture(MotionEvent ev) {
         int n = ev.getPointerCount();
         for (int i = 0; i < n; i++) {
             initialX[i] = ev.getX(i);
@@ -91,13 +97,13 @@ public class NewGesture {
         initialT = SystemClock.uptimeMillis();
     }
 
-    public void untrackGesture() {
+    void untrackGesture() {
         numFingers = 0;
         prevFinalT = SystemClock.uptimeMillis();
         prevInitialT = initialT;
     }
 
-    public GestureType getGesture(MotionEvent ev) {
+    GestureType getGesture(MotionEvent ev) {
         double averageDistance = 0.0;
         for (int i = 0; i < numFingers; i++) {
             finalX[i] = ev.getX(i);
@@ -133,7 +139,22 @@ public class NewGesture {
             return DOUBLE_TAP_1;
         }
         if (numFingers == 1) {
-            if(Math.abs(delY[0]) < 10 && Math.abs(delX[0]) < 10){
+            if(Math.abs(delY[0]) < 25 && Math.abs(delX[0]) < 25 && (finalT-initialT) > 700){
+                return LONG_PRESS;
+            }
+            if(Math.abs(delY[0]) < 25 && Math.abs(delX[0]) < 25){
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    public void run() {
+                        if(doubleTapOccured == true){
+                            Log.i(DEBUG_TAG, "dont display");
+                        }
+                        else{
+                        }
+                    }
+
+                }, 500);
+
                 return SINGLE_TAP;
             }
             else if ((-(delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
@@ -153,6 +174,9 @@ public class NewGesture {
             }
         }
         if (numFingers == 2) {
+            if(Math.abs(delY[0]) < 25 && Math.abs(delX[0]) < 25 && Math.abs(delY[1]) < 25 && Math.abs(delX[1]) < 25){
+                return TAP_2_FINGERS;
+            }
             if (((-delY[0]) > (swipeSlopeIntolerance * Math.abs(delX[0]))) && ((-delY[1]) > (swipeSlopeIntolerance * Math.abs(delX[1])))) {
                 return SWIPE_2_UP;
             }
@@ -259,34 +283,30 @@ public class NewGesture {
                 + Math.pow((finalY[fingNum1] - finalY[fingNum2]), 2));
     }
 
-    public boolean isDoubleTap() {
-        if (initialT - prevFinalT < doubleTapMaxDelayMillis && finalT - initialT < doubleTapMaxDownMillis && prevFinalT - prevInitialT < doubleTapMaxDownMillis) {
-            return true;
-        } else {
-            return false;
-        }
+    private boolean isDoubleTap() {
+        return initialT - prevFinalT < doubleTapMaxDelayMillis && initialT - prevFinalT > 25 && finalT - initialT < doubleTapMaxDownMillis && prevFinalT - prevInitialT < doubleTapMaxDownMillis;
     }
 
-    public class GestureType {
+    class GestureType {
         private int gestureFlag;
         private long gestureDuration;
 
-        private double gestureDistance;
+        double gestureDistance;
 
-        public long getGestureDuration() {
+        long getGestureDuration() {
             return gestureDuration;
         }
 
-        public void setGestureDuration(long gestureDuration) {
+        void setGestureDuration(long gestureDuration) {
             this.gestureDuration = gestureDuration;
         }
 
 
-        public int getGestureFlag() {
+        int getGestureFlag() {
             return gestureFlag;
         }
 
-        public void setGestureFlag(int gestureFlag) {
+        void setGestureFlag(int gestureFlag) {
             this.gestureFlag = gestureFlag;
         }
 
@@ -295,7 +315,7 @@ public class NewGesture {
             return gestureDistance;
         }
 
-        public void setGestureDistance(double gestureDistance) {
+        void setGestureDistance(double gestureDistance) {
             this.gestureDistance = gestureDistance;
         }
     }

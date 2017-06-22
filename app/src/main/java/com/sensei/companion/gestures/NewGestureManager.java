@@ -19,7 +19,7 @@ public class NewGestureManager implements View.OnTouchListener {
     public static final long GESTURE_SPEED_MEDIUM = 1000;
     public static final long GESTURE_SPEED_FAST = 500;
     private static final String TAG = "SimpleFingerGestures";
-    protected boolean tracking[] = {false, false, false, false, false};
+    private boolean tracking[] = {false, false, false, false, false};
     private NewGesture ga;
     private OnFingerGestureListener onFingerGestureListener;
 
@@ -178,6 +178,12 @@ public class NewGestureManager implements View.OnTouchListener {
             case NewGesture.SINGLE_TAP:
                 onFingerGestureListener.onSingleTap(ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
+            case NewGesture.LONG_PRESS:
+                onFingerGestureListener.onLongPress(ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
+                break;
+            case NewGesture.TAP_2_FINGERS:
+                onFingerGestureListener.onTwoFingerTap(ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
+                break;
         }
     }
 
@@ -194,68 +200,26 @@ public class NewGestureManager implements View.OnTouchListener {
     }
 
 
-    /**
-     * Interface definition for the callback to be invoked when 2-finger gestures are performed
-     */
+
     public interface OnFingerGestureListener {
 
-        /**
-         * Called when user swipes <b>up</b> with two fingers
-         *
-         * @param fingers         number of fingers involved in this gesture
-         * @param gestureDuration duration in milliSeconds
-         * @return
-         */
-        public boolean onSwipeUp(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onSwipeUp(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        /**
-         * Called when user swipes <b>down</b> with two fingers
-         *
-         * @param fingers         number of fingers involved in this gesture
-         * @param gestureDuration duration in milliSeconds
-         * @return
-         */
-        public boolean onSwipeDown(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onSwipeDown(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onSwipeLeft(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        /**
-         * Called when user swipes <b>left</b> with two fingers
-         *
-         * @param fingers         number of fingers involved in this gesture
-         * @param gestureDuration duration in milliSeconds
-         * @return
-         */
-        public boolean onSwipeLeft(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onSwipeRight(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        /**
-         * Called when user swipes <b>right</b> with two fingers
-         *
-         * @param fingers         number of fingers involved in this gesture
-         * @param gestureDuration duration in milliSeconds
-         * @return
-         */
-        public boolean onSwipeRight(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onPinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        /**
-         * Called when user <b>pinches</b> with two fingers (bring together)
-         *
-         * @param fingers         number of fingers involved in this gesture
-         * @param gestureDuration duration in milliSeconds
-         * @return
-         */
-        public boolean onPinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onUnpinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        /**
-         * Called when user <b>un-pinches</b> with two fingers (take apart)
-         *
-         * @param fingers         number of fingers involved in this gesture
-         * @param gestureDuration duration in milliSeconds
-         * @return
-         */
-        public boolean onUnpinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onDoubleTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        public boolean onDoubleTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onSingleTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
-        public boolean onSingleTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+        boolean onLongPress(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
+        boolean onTwoFingerTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
     }
 }

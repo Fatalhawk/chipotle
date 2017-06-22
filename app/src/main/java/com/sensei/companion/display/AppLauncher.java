@@ -5,19 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.github.nisrulz.sensey.Sensey;
-import com.github.nisrulz.sensey.ShakeDetector;
 import com.github.nisrulz.sensey.TouchTypeDetector;
 import com.sensei.companion.R;
-import com.sensei.companion.gestures.GestureManager;
 import com.sensei.companion.gestures.*;
 
 import android.util.Log;
-
-import in.championswimmer.sfg.lib.SimpleFingerGestures;
 
 public class AppLauncher extends AppCompatActivity {
     private static final String DEBUG_TAG = "appMonitor";
@@ -26,7 +20,7 @@ public class AppLauncher extends AppCompatActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         // Setup onTouchEvent for detecting type of touch gesture
-        //  Sensey.getInstance().setupDispatchTouchEvent(ev);
+        Sensey.getInstance().setupDispatchTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }
 
@@ -36,7 +30,7 @@ public class AppLauncher extends AppCompatActivity {
         setContentView(R.layout.activity_app_launcher);
         View v = findViewById(android.R.id.content);
         setUpGestures(v);
-        //setUpMoreGestures(v);
+        setUpMoreGestures(v);
        //mDetector = new GestureDetectorCompat(this, new MyGestureListener());
     }
 
@@ -170,7 +164,7 @@ public class AppLauncher extends AppCompatActivity {
             @Override
             public boolean onDoubleTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
                 if(fingers == 1){
-                  Log.i(DEBUG_TAG, "double tap with " + fingers + " fingers");
+                 // Log.i(DEBUG_TAG, "double tap with " + fingers + " fingers");
                 }
                 else if(fingers == 2){
                     Log.i(DEBUG_TAG, "double tap with " + fingers + " fingers");
@@ -183,31 +177,21 @@ public class AppLauncher extends AppCompatActivity {
             }
 
             public boolean onSingleTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
-                Log.i(DEBUG_TAG, "single tap");
+               // Log.i(DEBUG_TAG, "single tap");
                 return false;
             }
 
-            /*public boolean onSingleTap(int fingers){
-                Log.i(DEBUG_TAG, "Single tap with " + fingers + " fingers");
+            public boolean onLongPress(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
+                //Log.i(DEBUG_TAG, "long press");
                 return false;
-            }*/
+            }
 
-           // public boolean onLongPress(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
-               //Log.i(DEBUG_TAG, "long press");
-          //      return false;
-          //  }
-
-          //  public boolean onTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
-        //       if(fingers >= 2){
-       //            Log.i(DEBUG_TAG, "tap with " + fingers + " fingers");
-       //        }
-       //         return false;
-      //      }
+            public boolean onTwoFingerTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
+                Log.i(DEBUG_TAG, "two finger tap");
+                return false;
+            }
         });
         v.setOnTouchListener(mySfg);
-    }
-
-    public void setUpMoreGestures(View v){
         TouchTypeDetector.TouchTypListener touchTypListener=new TouchTypeDetector.TouchTypListener() {
             @Override public void onTwoFingerSingleTap() {
                 // Two fingers single tap
@@ -280,12 +264,16 @@ public class AppLauncher extends AppCompatActivity {
                 }*/
             }
 
-            @Override public void onLongPress() {
+            @Override public void onLongPress(){
                 // Long press
                 Log.i(DEBUG_TAG, "sensey long press");
             }
         };
         Sensey.getInstance().startTouchTypeDetection(this,touchTypListener);
+    }
+
+    public void setUpMoreGestures(View v){
+
     }
 
 
