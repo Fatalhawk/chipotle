@@ -41,7 +41,7 @@ public class AppLauncher extends AppCompatActivity {
 
     public void setUpGestures(View v){
         NewGestureManager mySfg = new NewGestureManager();
-        mySfg.setDebug(true);
+        mySfg.setDebug(false);
         mySfg.setConsumeTouchEvents(true);
         mySfg.setOnFingerGestureListener(new NewGestureManager.OnFingerGestureListener() {
             @Override
