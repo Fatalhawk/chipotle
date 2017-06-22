@@ -7,21 +7,26 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 
 public class ConnectManager {
 
+    private final String DEBUG_TAG = "appMonitor";
     private static final int EXAMPLE_MESSAGE = 1;
 
-    private ConnectService mService;
+    private static ConnectService mService;
     private boolean isBound = false;
 
     public void initConnection (Context context) {
         Intent intent = new Intent (context, ConnectService.class);
         context.bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
 
-        mService.init (new MessageHandler());
+    public static void sendMessageToPC (String message) {
+        if (mService != null)
+            mService.sendMessageToPC(message);
     }
 
     private static class MessageHandler extends Handler {
@@ -48,6 +53,8 @@ public class ConnectManager {
             ConnectService.MyLocalBinder binder = (ConnectService.MyLocalBinder) service;
             mService = binder.getService ();
             isBound = true;
+            Log.i (DEBUG_TAG, "Connection service bound");
+            mService.init (new MessageHandler());
         }
 
         @Override

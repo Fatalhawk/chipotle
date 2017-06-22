@@ -20,7 +20,7 @@ class TCPClient {
     private PrintWriter out;
     private MessageCallback messageListener;
     private boolean connected = false;
-    private int portNumber = 4444; //CHANGE LATER
+    private int portNumber = 65000; //CHANGE LATER
 
     TCPClient (String ipNumber, MessageCallback messageListener) {
         this.messageListener = messageListener;
@@ -57,16 +57,16 @@ class TCPClient {
                 out = new PrintWriter (new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 Log.i (DEBUG_TAG, "In/Out created");
-                //this.sendMessage (...)
+                this.sendMessage ("Yoooooo<EC>");
                 while (connected) {
                     String incomingMessage = in.readLine ();
                     if (incomingMessage != null && messageListener != null) {
-                        Log.i(DEBUG_TAG, "Received Message: " + incomingMessage);
+                        //Log.i(DEBUG_TAG, "Received Message: " + incomingMessage);
                         messageListener.callbackMessageReceiver (incomingMessage);
                     }
-                    else {
-                        Log.d (DEBUG_TAG, "Null error");
-                    }
+                    //else {
+                    //    Log.d (DEBUG_TAG, "Null error");
+                    //}
                 }
             }
             catch (IOException e) {
