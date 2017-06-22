@@ -4,29 +4,20 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * @author championswimmer
- * @version 0.2
- * @since 0.1 12/04/14
- */
 public class NewGestureManager implements View.OnTouchListener {
 
     private boolean debug = true;
     private boolean consumeTouchEvents = false;
 
-    // Will see if these need to be used. For now just returning duration in milliS
+    public static final String DEBUG_TAG = "appMonitor";
     public static final long GESTURE_SPEED_SLOW = 1500;
     public static final long GESTURE_SPEED_MEDIUM = 1000;
     public static final long GESTURE_SPEED_FAST = 500;
-    private static final String TAG = "SimpleFingerGestures";
     private boolean tracking[] = {false, false, false, false, false};
     private NewGesture ga;
     private OnFingerGestureListener onFingerGestureListener;
 
 
-    /**
-     * Constructor that creates an internal {@link in.championswimmer.sfg.lib.GestureAnalyser } object as well
-     */
     public NewGestureManager() {
         ga = new NewGesture();
     }
@@ -47,16 +38,7 @@ public class NewGestureManager implements View.OnTouchListener {
         this.consumeTouchEvents = consumeTouchEvents;
     }
 
-    /**
-     * Register a callback to be invoked when multi-finger gestures take place
-     * <p/>
-     * <br></br>
-     * <p>
-     * For the callbacks implemented via this, check the interface {@link in.championswimmer.sfg.lib.SimpleFingerGestures.OnFingerGestureListener}
-     * </p>
-     *
-     * @param omfgl The callback that will run
-     */
+
     public void setOnFingerGestureListener(OnFingerGestureListener omfgl) {
         onFingerGestureListener = omfgl;
     }
@@ -64,15 +46,14 @@ public class NewGestureManager implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
-        if (debug) Log.d(TAG, "onTouch");
+        if (debug) Log.i(DEBUG_TAG, "onTouch");
         switch (ev.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                if (debug) Log.d(TAG, "ACTION_DOWN");
                 startTracking(0);
                 ga.trackGesture(ev);
                 return consumeTouchEvents;
             case MotionEvent.ACTION_UP:
-                if (debug) Log.d(TAG, "ACTION_UP");
+                if (debug) Log.i(DEBUG_TAG, "ACTION_UP");
                 if (tracking[0]) {
                     doCallBack(ga.getGesture(ev));
                 }
@@ -80,12 +61,12 @@ public class NewGestureManager implements View.OnTouchListener {
                 ga.untrackGesture();
                 return consumeTouchEvents;
             case MotionEvent.ACTION_POINTER_DOWN:
-                if (debug) Log.d(TAG, "ACTION_POINTER_DOWN" + " " + "num" + ev.getPointerCount());
+                if (debug) Log.i(DEBUG_TAG, "ACTION_POINTER_DOWN" + " " + "num" + ev.getPointerCount());
                 startTracking(ev.getPointerCount() - 1);
                 ga.trackGesture(ev);
                 return consumeTouchEvents;
             case MotionEvent.ACTION_POINTER_UP:
-                if (debug) Log.d(TAG, "ACTION_POINTER_UP" + " " + "num" + ev.getPointerCount());
+                if (debug) Log.i(DEBUG_TAG, "ACTION_POINTER_UP" + " " + "num" + ev.getPointerCount());
                 if (tracking[1]) {
                     doCallBack(ga.getGesture(ev));
                 }
@@ -93,10 +74,10 @@ public class NewGestureManager implements View.OnTouchListener {
                 ga.untrackGesture();
                 return consumeTouchEvents;
             case MotionEvent.ACTION_CANCEL:
-                if (debug) Log.d(TAG, "ACTION_CANCEL");
+                if (debug) Log.i(DEBUG_TAG, "ACTION_CANCEL");
                 return true;
             case MotionEvent.ACTION_MOVE:
-                if (debug) Log.d(TAG, "ACTION_MOVE");
+                if (debug) Log.i(DEBUG_TAG, "ACTION_MOVE");
                 return consumeTouchEvents;
         }
         return consumeTouchEvents;

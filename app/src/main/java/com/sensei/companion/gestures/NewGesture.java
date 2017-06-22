@@ -1,16 +1,11 @@
 package com.sensei.companion.gestures;
 
-/* NOTE: A portion of the code in this file is a modified version of the "SimpleFingerGestures" API,
- version: 0.2, author: championswimmer.
-  */
-
 import android.os.SystemClock;
 import android.view.MotionEvent;
 
 
 class NewGesture {
     private static final String DEBUG_TAG = "appMonitor";
-    public static final boolean DEBUG = true;
     static final int SWIPE_1_UP = 11;
     static final int SWIPE_1_DOWN = 12;
     static final int SWIPE_1_LEFT = 13;
@@ -97,20 +92,22 @@ class NewGesture {
 
     private int calcGesture() {
         if (numFingers == 1) {
-            if ((-(delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
-                return SWIPE_1_UP;
-            }
+            if(Math.abs(delY[0]) > 150 || Math.abs(delX[0]) > 150){
+                if ((-(delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
+                    return SWIPE_1_UP;
+                }
 
-            else if (((delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
-                return SWIPE_1_DOWN;
-            }
+                else if (((delY[0])) > (swipeSlopeIntolerance * (Math.abs(delX[0])))) {
+                    return SWIPE_1_DOWN;
+                }
 
-            else if ((-(delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
-                return SWIPE_1_LEFT;
-            }
+                else if ((-(delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
+                    return SWIPE_1_LEFT;
+                }
 
-            if (((delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
-                return SWIPE_1_RIGHT;
+                if (((delX[0])) > (swipeSlopeIntolerance * (Math.abs(delY[0])))) {
+                    return SWIPE_1_RIGHT;
+                }
             }
         }
         if (numFingers == 2) {
