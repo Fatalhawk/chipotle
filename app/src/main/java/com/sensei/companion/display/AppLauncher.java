@@ -7,10 +7,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import com.sensei.companion.gestures.*;
 
-import com.github.nisrulz.sensey.Sensey;
-import com.github.nisrulz.sensey.TouchTypeDetector;
+
 import com.sensei.companion.R;
-import com.sensei.companion.gestures.*;
+
 
 import android.util.Log;
 
