@@ -23,8 +23,11 @@ public class AppLauncher extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         // Setup onTouchEvent for detecting type of touch gesture
        // Sensey.getInstance().setupDispatchTouchEvent(ev);
-        if (tapDetection != null) {
+       /* if (tapDetection != null) {
             tapDetection.onTouchEvent(ev);
+        }*/
+        if(mDetector != null){
+            mDetector.onTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
     }
@@ -35,7 +38,7 @@ public class AppLauncher extends AppCompatActivity {
         setContentView(R.layout.activity_app_launcher);
         View v = findViewById(android.R.id.content);
         setUpGestures(v);
-         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
     }
 
     public boolean onTouchEvent(MotionEvent event){
@@ -191,7 +194,7 @@ public class AppLauncher extends AppCompatActivity {
             }
         });
         v.setOnTouchListener(mySfg);
-        TapGesture.TouchTypListener touchTypListener=new TapGesture.TouchTypListener() {
+        /*TapGesture.TouchTypListener touchTypListener=new TapGesture.TouchTypListener() {
             @Override public void onDoubleTap() {
                 // Double tap
                 Log.i(DEBUG_TAG, "sensey double tap");
@@ -208,7 +211,7 @@ public class AppLauncher extends AppCompatActivity {
                 Log.i(DEBUG_TAG, "sensey long press");
             }
         };
-        tapDetection = new TapGesture(this, touchTypListener);
+        tapDetection = new TapGesture(this, touchTypListener); */
         //Sensey.getInstance().startTouchTypeDetection(this, touchTypListener);
     }
 
