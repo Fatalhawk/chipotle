@@ -31,8 +31,8 @@ public class NewGestureManager implements View.OnTouchListener {
         ga = new NewGesture();
     }
 
-    public NewGestureManager(int swipeSlopeIntolerance, int doubleTapMaxDelayMillis, int doubleTapMaxDownMillis) {
-        ga = new NewGesture(swipeSlopeIntolerance, doubleTapMaxDelayMillis, doubleTapMaxDownMillis);
+    public NewGestureManager(int swipeSlopeIntolerance) {
+        ga = new NewGesture(swipeSlopeIntolerance);
     }
 
     public void setDebug(boolean debug) {
@@ -172,15 +172,6 @@ public class NewGestureManager implements View.OnTouchListener {
                 break;
             case NewGesture.UNPINCH_4:
                 onFingerGestureListener.onUnpinch(4, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
-            case NewGesture.DOUBLE_TAP_1:
-                onFingerGestureListener.onDoubleTap(1, ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
-                break;
-            case NewGesture.SINGLE_TAP:
-                onFingerGestureListener.onSingleTap(ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
-                break;
-            case NewGesture.LONG_PRESS:
-                onFingerGestureListener.onLongPress(ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
-                break;
             case NewGesture.TAP_2_FINGERS:
                 onFingerGestureListener.onTwoFingerTap(ga.initialX, ga.initialY, ga.finalX, ga.finalY, mGt.getGestureDuration());
                 break;
@@ -202,10 +193,10 @@ public class NewGestureManager implements View.OnTouchListener {
 
 
     public interface OnFingerGestureListener {
-
         boolean onSwipeUp(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         boolean onSwipeDown(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
+
         boolean onSwipeLeft(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         boolean onSwipeRight(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
@@ -213,12 +204,6 @@ public class NewGestureManager implements View.OnTouchListener {
         boolean onPinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         boolean onUnpinch(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
-
-        boolean onDoubleTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
-
-        boolean onSingleTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
-
-        boolean onLongPress(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
 
         boolean onTwoFingerTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration);
     }

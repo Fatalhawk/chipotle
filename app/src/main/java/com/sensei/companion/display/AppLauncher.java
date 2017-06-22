@@ -17,15 +17,9 @@ import android.util.Log;
 public class AppLauncher extends AppCompatActivity {
     private static final String DEBUG_TAG = "appMonitor";
     public GestureDetectorCompat mDetector;
-    private TapGesture tapDetection;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        // Setup onTouchEvent for detecting type of touch gesture
-       // Sensey.getInstance().setupDispatchTouchEvent(ev);
-       /* if (tapDetection != null) {
-            tapDetection.onTouchEvent(ev);
-        }*/
         if(mDetector != null){
             mDetector.onTouchEvent(ev);
         }
@@ -162,66 +156,15 @@ public class AppLauncher extends AppCompatActivity {
                 }
                 return false;
             }
-
-            @Override
-            public boolean onDoubleTap(int fingers, double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration) {
-                if(fingers == 1){
-                 // Log.i(DEBUG_TAG, "double tap with " + fingers + " fingers");
-                }
-                else if(fingers == 2){
-                    Log.i(DEBUG_TAG, "double tap with " + fingers + " fingers");
-                }
-                else if(fingers == 3){
-                    Log.i(DEBUG_TAG, "double tap with " + fingers + " fingers");
-                }
-                //doubleTapStuff(fingers);
-                return false;
-            }
-
-            public boolean onSingleTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
-               // Log.i(DEBUG_TAG, "single tap");
-                return false;
-            }
-
-            public boolean onLongPress(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
-                //Log.i(DEBUG_TAG, "long press");
-                return false;
-            }
-
             public boolean onTwoFingerTap(double[] initialX, double[] initialY, double[] finalX, double[] finalY, long gestureDuration){
                 Log.i(DEBUG_TAG, "two finger tap");
                 return false;
             }
         });
         v.setOnTouchListener(mySfg);
-        /*TapGesture.TouchTypListener touchTypListener=new TapGesture.TouchTypListener() {
-            @Override public void onDoubleTap() {
-                // Double tap
-                Log.i(DEBUG_TAG, "sensey double tap");
-            }
-
-            @Override public void onSingleTap() {
-                // Single tap
-                Log.i(DEBUG_TAG, "sensey single tap");
-
-            }
-
-            @Override public void onLongPress(){
-                // Long press
-                Log.i(DEBUG_TAG, "sensey long press");
-            }
-        };
-        tapDetection = new TapGesture(this, touchTypListener); */
-        //Sensey.getInstance().startTouchTypeDetection(this, touchTypListener);
     }
-
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //tapDetection = null;
-        Sensey.getInstance().stopTouchTypeDetection();
-        Sensey.getInstance().stop();
     }
 }

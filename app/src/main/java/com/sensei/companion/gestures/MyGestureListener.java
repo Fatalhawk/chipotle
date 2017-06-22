@@ -13,16 +13,16 @@ public class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         return true;
     }
     public boolean onSingleTapConfirmed(MotionEvent event){
-        Log.i(DEBUG_TAG, "single tap " + event.toString());
+        Log.i(DEBUG_TAG, "single tap ");
         return false;
     }
 
     public boolean onDoubleTap(MotionEvent event){
-        Log.i(DEBUG_TAG, "double tap " + event.toString());
+        Log.i(DEBUG_TAG, "double tap ");
         return false;
     }
 
     public void onLongPress(MotionEvent e){
-        Log.i(DEBUG_TAG, "long press " + e.toString());
+        Log.i(DEBUG_TAG, "long press ");
     }
 }
