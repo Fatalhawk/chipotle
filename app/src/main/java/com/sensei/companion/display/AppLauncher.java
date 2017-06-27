@@ -33,6 +33,7 @@ public class AppLauncher extends AppCompatActivity {
             }
         }
         catch (SocketException e) {
+
         }
 
 

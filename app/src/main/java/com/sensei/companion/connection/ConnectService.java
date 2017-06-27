@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -29,16 +30,40 @@ public class ConnectService extends Service {
     public ConnectService() {
     }
 
+    private String checkHosts (InetAddress deviceAddress){
+        byte[] ip = deviceAddress.getAddress();
+        String output = "";
+        for (int i = 1; i <= 254; i++) {
+            try {
+                ip[3] = (byte) i;
+                InetAddress address = InetAddress.getByAddress(ip);
+
+                if (address.isReachable(100)) {
+                    output = address.getHostAddress();
+                    System.out.print(output + " is on the network");
+                    return output;
+                }
+            } catch (Exception e) {
+            }
+        }
+        return null;
+    }
+
     public void init (final Handler mHandler) {
         this.mHandler = mHandler;
 
+
         deviceIpAddress = getLocalIpAddress();
+
         if (deviceIpAddress == null) {
             Log.d (DEBUG_TAG, "Could not find IP Address");
         }
         else {
-            Log.i (DEBUG_TAG, "Local IP Address: " + deviceIpAddress);
+            Log.i (DEBUG_TAG, "Local IP Address: " + deviceIpAddress.getHostAddress() + "/" + networkPrefixLength);
         }
+
+        serverIpAddress = checkHosts(deviceIpAddress);
+        Log.i (DEBUG_TAG, "Server address: " + serverIpAddress);
 
         //serverIpAddress = "100.64.188.96";
 
@@ -100,9 +125,12 @@ public class ConnectService extends Service {
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress()) {
-                        networkPrefixLength = intf.getInterfaceAddresses().get(1).getNetworkPrefixLength();
-                        Log.i (DEBUG_TAG, "" + networkPrefixLength);
-                        return inetAddress;
+                        for(InterfaceAddress address: intf.getInterfaceAddresses()){
+                            if(address.getNetworkPrefixLength() < 24){
+                                networkPrefixLength = address.getNetworkPrefixLength();
+                                return inetAddress;  //.getHostAddress for string version
+                            }
+                        }
                     }
                 }
             }
