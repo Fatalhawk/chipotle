@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sensei.companion.R;
+import com.sensei.companion.display.TouchBarFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +19,7 @@ import com.sensei.companion.R;
  * Use the {@link GenericProgramManager#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GenericProgramManager extends Fragment {
+public class GenericProgramManager extends TouchBarFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";

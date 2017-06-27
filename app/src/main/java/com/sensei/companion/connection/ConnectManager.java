@@ -11,20 +11,26 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.sensei.companion.display.PcManager;
+import com.sensei.companion.display.TouchBarActivity;
+
 import java.lang.ref.WeakReference;
 
 public class ConnectManager {
 
     private final String DEBUG_TAG = "appMonitor";
-    private static final int EXAMPLE_MESSAGE = 1;
+    private static final int EXAMPLE_MESSAGE = 0;
+    public static final int INIT_TOUCHBAR = 1;
     private TextView textView;
     private Button button;
+    private PcManager pcManager;
 
     private static ConnectService mService;
     private boolean isBound = false;
     private Context context;
 
-    public void initConnection (Context context, TextView textView, Button button) {
+    public void initConnection (Context context, TextView textView, Button button, PcManager pcManager) {
+        this.pcManager = pcManager;
         this.textView = textView;
         this.button = button;
         this.context = context;
@@ -37,21 +43,27 @@ public class ConnectManager {
             mService.sendMessageToPC(message);
     }
 
-    private static class MessageHandler extends Handler {
-        /* TODO: this code will provide access to the Activity with the UI that needs to be updated based on the incoming messages
-        private final WeakReference<MyActivity> mActivity;
+    public static class MessageHandler extends Handler {
+        // TODO: this code will provide access to the Activity with the UI that needs to be updated based on the incoming messages
+        private WeakReference<PcManager> mPcManagerActivity = null;
+        private static WeakReference<TouchBarActivity> mTouchBarActivity = null;
 
-        MessageHandler (MyActivity activity) {
-            mActivity = new WeakReference<MyActivity> (activity);
-        } */
+        MessageHandler (PcManager activity) {
+            mPcManagerActivity = new WeakReference<PcManager> (activity);
+        }
 
         @Override
         public void handleMessage(Message msg) {
-            //MyActivity activity = mActivity.get ();
-
-            if (msg.what == EXAMPLE_MESSAGE) {
-                //update UI through activity;
+            if (msg.what == INIT_TOUCHBAR) {
+                PcManager activity = mPcManagerActivity.get();
+                Intent i = new Intent (activity, TouchBarActivity.class);
+                activity.startActivity (i);
+                mPcManagerActivity = null;
             }
+        }
+
+        public static void setActivityReferenceToTouchBar (TouchBarActivity touchBarActivity) {
+            mTouchBarActivity = new WeakReference <TouchBarActivity>(touchBarActivity);
         }
     }
 
@@ -62,7 +74,7 @@ public class ConnectManager {
             mService = binder.getService ();
             isBound = true;
             Log.i (DEBUG_TAG, "Connection service bound");
-            mService.init (new MessageHandler(), textView, button);
+            mService.init (new MessageHandler(pcManager), textView, button);
         }
 
         @Override

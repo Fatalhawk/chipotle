@@ -40,6 +40,7 @@ public class ConnectService extends Service {
     private String s = null;
     private TextView serverStatus;
     private Button connectButton;
+    private int counter = 0;
 
     private String checkHosts (InetAddress deviceAddress){
         byte[] ip = deviceAddress.getAddress();
@@ -64,14 +65,18 @@ public class ConnectService extends Service {
      * Listen on socket for responses, timing out after TIMEOUT_MS
      */
     private void listenForBroadcasts(DatagramSocket socket) {
-        Log.i (DEBUG_TAG, "Listening");
+        counter ++;
+        Log.i (DEBUG_TAG, "Listening " + counter);
         byte[] buf = new byte[1024];
         try {
             while (true) {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-                s = new String(packet.getData(), 0, packet.getLength());
-                Log.d(DEBUG_TAG, "Received response " + s);
+                //s = new String(packet.getData(), 0, packet.getLength());
+                s = "IP: " + packet.getAddress().getHostAddress();
+                serverIpAddress = packet.getAddress().getHostAddress();
+                Log.i (DEBUG_TAG, serverIpAddress);
+                //Log.d(DEBUG_TAG, "Received response " + s + " from IP: " + socket.getInetAddress().getHostAddress());
             }
         } catch (SocketTimeoutException e) {
             Log.d(DEBUG_TAG, "Receive timed out");
@@ -83,6 +88,9 @@ public class ConnectService extends Service {
 
     public void init (final Handler mHandler, TextView textView, Button button) {
         this.mHandler = mHandler;
+
+        //serverIpAddress = "192.168.2.96";
+        //s = "IP: " + serverIpAddress;
 
         /*
         deviceIpAddress = getLocalIpAddress();
@@ -126,23 +134,36 @@ public class ConnectService extends Service {
                         serverStatus.setText("Found PC: " + s);
                         connectButton.setOnClickListener(new Button.OnClickListener() {
                             public void onClick(View v) {
-
-                                tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
-                                    @Override
-                                    public void callbackMessageReceiver(String message) {
-                                        Log.i (DEBUG_TAG, "Received message: " + message);
-                                        //TODO: filter and use received information
-                                        //example below:
-                                        //if (message == important event occurred)
-                                        //  mHandler.sendEmptyMessageDelayed (ConnectManager.EXAMPLE_MESSAGE, 2000);
-                                    }
-                                });
-
-                                tcpClient.run ();
+                                mHandler.sendEmptyMessageDelayed (ConnectManager.INIT_TOUCHBAR, 2000);
+                                connectToPc();
                             }
                         });
                     }
                 });
+            }
+        });
+        networkThread.start ();
+    }
+
+    public void connectToPc () {
+        Thread networkThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
+                    @Override
+                    public void callbackMessageReceiver(String message) {
+                        Log.i (DEBUG_TAG, "Received message: " + message);
+                        //TODO: filter and use received information
+                        //example below:
+                        //if (message == important event occurred)
+                        //  mHandler.sendEmptyMessageDelayed (ConnectManager.EXAMPLE_MESSAGE, 2000);
+                    }
+                    @Override
+                    public void restartConnection () {
+                        connectToPc();
+                    }
+                });
+                tcpClient.run ();
             }
         });
         networkThread.start ();

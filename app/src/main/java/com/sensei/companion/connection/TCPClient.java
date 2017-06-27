@@ -78,6 +78,7 @@ class TCPClient {
                 in.close();
                 socket.close();
                 Log.i(DEBUG_TAG, "Socket Closed");
+                messageListener.restartConnection ();
             }
         }
         catch (IOException e) {
@@ -88,5 +89,6 @@ class TCPClient {
 
     interface MessageCallback {
         void callbackMessageReceiver (String message);
+        void restartConnection ();
     }
 }

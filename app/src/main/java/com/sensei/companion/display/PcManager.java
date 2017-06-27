@@ -22,10 +22,7 @@ public class PcManager extends AppCompatActivity {
         setContentView(R.layout.activity_pc_manager);
 
         mConnectManager = new ConnectManager();
-        mConnectManager.initConnection (this, (TextView) findViewById(R.id.searchStatus), (Button) findViewById(R.id.connectButton));
+        mConnectManager.initConnection (this, (TextView) findViewById(R.id.searchStatus), (Button) findViewById(R.id.connectButton), this);
     }
 
-    public void connectToPc (View view) {
-
-    }
 }
