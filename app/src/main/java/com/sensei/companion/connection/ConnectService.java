@@ -1,18 +1,27 @@
 package com.sensei.companion.connection;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -24,11 +33,13 @@ public class ConnectService extends Service {
     private TCPClient tcpClient;
     private String serverIpAddress;
     private InetAddress deviceIpAddress;
-    private Handler mHandler;
+    private static Handler mHandler;
     private int networkPrefixLength;
-
-    public ConnectService() {
-    }
+    private static final int DISCOVERY_PORT = 4444;
+    private static final int TIMEOUT_MS = 500;
+    private String s = null;
+    private TextView serverStatus;
+    private Button connectButton;
 
     private String checkHosts (InetAddress deviceAddress){
         byte[] ip = deviceAddress.getAddress();
@@ -49,40 +60,89 @@ public class ConnectService extends Service {
         return null;
     }
 
-    public void init (final Handler mHandler) {
+    /**
+     * Listen on socket for responses, timing out after TIMEOUT_MS
+     */
+    private void listenForBroadcasts(DatagramSocket socket) {
+        Log.i (DEBUG_TAG, "Listening");
+        byte[] buf = new byte[1024];
+        try {
+            while (true) {
+                DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                socket.receive(packet);
+                s = new String(packet.getData(), 0, packet.getLength());
+                Log.d(DEBUG_TAG, "Received response " + s);
+            }
+        } catch (SocketTimeoutException e) {
+            Log.d(DEBUG_TAG, "Receive timed out");
+        }
+        catch (IOException e) {
+            Log.e (DEBUG_TAG, "IOEXCEPTION", e);
+        }
+    }
+
+    public void init (final Handler mHandler, TextView textView, Button button) {
         this.mHandler = mHandler;
 
-
+        /*
         deviceIpAddress = getLocalIpAddress();
-
         if (deviceIpAddress == null) {
             Log.d (DEBUG_TAG, "Could not find IP Address");
         }
         else {
             Log.i (DEBUG_TAG, "Local IP Address: " + deviceIpAddress.getHostAddress() + "/" + networkPrefixLength);
         }
-
         serverIpAddress = checkHosts(deviceIpAddress);
         Log.i (DEBUG_TAG, "Server address: " + serverIpAddress);
-
         //serverIpAddress = "100.64.188.96";
+         */
+
+        final TextView serverStatus = textView;
+        final Button connectButton = button;
 
         Toast.makeText (this, "My Service Created", Toast.LENGTH_LONG).show();
         Thread networkThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
+
+                DatagramSocket socket = null;
+                try {
+                    socket = new DatagramSocket(DISCOVERY_PORT);
+                    socket.setBroadcast(true);
+                    socket.setSoTimeout(TIMEOUT_MS);
+                }
+                catch (IOException e) {
+                    Log.e(DEBUG_TAG, "Could not send discovery request", e);
+                }
+
+                Log.i (DEBUG_TAG, "socket created");
+                while (s == null) {
+                    listenForBroadcasts(socket);
+                }
+
+                mHandler.post(new Runnable() {
                     @Override
-                    public void callbackMessageReceiver(String message) {
-                        Log.i (DEBUG_TAG, "Received message: " + message);
-                        //TODO: filter and use received information
-                        //example below:
-                        //if (message == important event occurred)
-                        //  mHandler.sendEmptyMessageDelayed (ConnectManager.EXAMPLE_MESSAGE, 2000);
+                    public void run() {
+                        serverStatus.setText("Found PC: " + s);
+                        connectButton.setOnClickListener(new Button.OnClickListener() {
+                            public void onClick(View v) {
+
+                                tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
+                                    @Override
+                                    public void callbackMessageReceiver(String message) {
+                                        Log.i (DEBUG_TAG, "Received message: " + message);
+                                        //TODO: filter and use received information
+                                        //example below:
+                                        //if (message == important event occurred)
+                                        //  mHandler.sendEmptyMessageDelayed (ConnectManager.EXAMPLE_MESSAGE, 2000);
+                                    }
+                                });
+
+                                tcpClient.run ();
+                            }
+                        });
                     }
                 });
-
-                tcpClient.run ();
             }
         });
         networkThread.start ();

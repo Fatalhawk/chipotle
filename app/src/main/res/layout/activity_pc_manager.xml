@@ -7,7 +7,7 @@
     tools:context="com.sensei.companion.display.PcManager">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/searchStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/connectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="146dp"

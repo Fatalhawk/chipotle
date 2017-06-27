@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.sensei.companion.R;
 
-public class TouchBarActivity extends AppCompatActivity implements TouchBarFragment.OnTouchbarInteractionListener{
+public class TouchBarActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

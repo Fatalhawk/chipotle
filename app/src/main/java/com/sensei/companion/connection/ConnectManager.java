@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 
@@ -15,11 +17,17 @@ public class ConnectManager {
 
     private final String DEBUG_TAG = "appMonitor";
     private static final int EXAMPLE_MESSAGE = 1;
+    private TextView textView;
+    private Button button;
 
     private static ConnectService mService;
     private boolean isBound = false;
+    private Context context;
 
-    public void initConnection (Context context) {
+    public void initConnection (Context context, TextView textView, Button button) {
+        this.textView = textView;
+        this.button = button;
+        this.context = context;
         Intent intent = new Intent (context, ConnectService.class);
         context.bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -54,7 +62,7 @@ public class ConnectManager {
             mService = binder.getService ();
             isBound = true;
             Log.i (DEBUG_TAG, "Connection service bound");
-            mService.init (new MessageHandler());
+            mService.init (new MessageHandler(), textView, button);
         }
 
         @Override

@@ -1,5 +1,6 @@
 package com.sensei.companion.display;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -18,14 +19,24 @@ import java.util.Enumeration;
 
 public class AppLauncher extends AppCompatActivity {
 
-    private ConnectManager mConnectManager;
     private final String DEBUG_TAG = "appMonitor";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_launcher);
+        //setContentView(R.layout.activity_app_launcher);
 
+        //print network stuff
+
+        startProgram ();
+    }
+
+    public void startProgram () {
+        Intent i = new Intent (this, PcManager.class);
+        startActivity (i);
+    }
+
+    public void printNetworkStuff () {
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
             for (NetworkInterface netint : Collections.list (nets)) {
@@ -34,10 +45,6 @@ public class AppLauncher extends AppCompatActivity {
         }
         catch (SocketException e) {
         }
-
-
-        //mConnectManager = new ConnectManager();
-        //mConnectManager.initConnection (this);
     }
 
     void displayInterfaceInformation(NetworkInterface netint) throws SocketException {
