@@ -35,29 +35,4 @@ public class AppLauncher extends AppCompatActivity {
         Intent i = new Intent (this, PcManager.class);
         startActivity (i);
     }
-
-    public void printNetworkStuff () {
-        try {
-            Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-            for (NetworkInterface netint : Collections.list (nets)) {
-                displayInterfaceInformation(netint);
-            }
-        }
-        catch (SocketException e) {
-        }
-    }
-
-    void displayInterfaceInformation(NetworkInterface netint) throws SocketException {
-        Log.i(DEBUG_TAG, "Display name: " + netint.getDisplayName() + "\n");
-        Log.i(DEBUG_TAG, "Name: " + netint.getName() + "\n");
-        Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
-        for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-            Log.i(DEBUG_TAG, "InetAddress: " + inetAddress + "\n");
-            for (InterfaceAddress x: netint.getInterfaceAddresses()) {
-                int networkPrefixLength = x.getNetworkPrefixLength();
-                Log.i(DEBUG_TAG, "" + networkPrefixLength + "\n");
-            }
-        }
-        Log.i(DEBUG_TAG, "\n \n");
-    }
 }
