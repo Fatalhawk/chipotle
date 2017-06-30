@@ -27,6 +27,7 @@
         <activity android:name=".display.TouchBarActivity" />
         <activity android:name=".display.TrackpadActivity" />
         <activity android:name=".display.PcManager"></activity>
+        <activity android:name=".display.GestureActivity"></activity>
     </application>
 
 </manifest>
