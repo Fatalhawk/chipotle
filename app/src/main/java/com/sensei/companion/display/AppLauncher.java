@@ -13,7 +13,7 @@ import com.sensei.companion.R;
 import android.util.Log;
 
 public class AppLauncher extends AppCompatActivity {
-    private static final String DEBUG_TAG = "appMonitor";
+    private final String DEBUG_TAG = "appMonitor";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
