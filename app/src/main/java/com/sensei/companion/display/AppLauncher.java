@@ -1,13 +1,11 @@
 package com.sensei.companion.display;
 
 import android.content.Intent;
-import android.support.v4.view.GestureDetectorCompat;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
-import com.sensei.companion.gestures.*;
-
+import android.util.Log;
 
 import com.sensei.companion.R;
 
