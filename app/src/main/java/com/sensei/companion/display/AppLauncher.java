@@ -32,7 +32,5 @@ public class AppLauncher extends AppCompatActivity {
     }
 
     public void startProgram () {
-        Intent i = new Intent (this, PcManager.class);
-        startActivity (i);
     }
 }
