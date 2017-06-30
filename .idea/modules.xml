@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CompanionAndroid.iml" filepath="$PROJECT_DIR$/CompanionAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/compCompanion.iml" filepath="$PROJECT_DIR$/compCompanion.iml" />
       <module fileurl="file://$PROJECT_DIR$/companion.iml" filepath="$PROJECT_DIR$/companion.iml" />
     </modules>
   </component>
