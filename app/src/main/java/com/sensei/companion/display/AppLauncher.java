@@ -14,15 +14,6 @@ import android.util.Log;
 
 public class AppLauncher extends AppCompatActivity {
     private static final String DEBUG_TAG = "appMonitor";
-    public GestureDetectorCompat mDetector;
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if(mDetector != null){
-            mDetector.onTouchEvent(ev);
-        }
-        return super.dispatchTouchEvent(ev);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
