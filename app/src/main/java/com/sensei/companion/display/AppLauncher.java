@@ -8,11 +8,21 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.sensei.companion.R;
+import com.sensei.companion.connection.ConnectManager;
+
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collections;
+import java.util.Enumeration;
 
 
 import android.util.Log;
 
 public class AppLauncher extends AppCompatActivity {
+    private final String DEBUG_TAG = "appMonitor";
+
     private final String DEBUG_TAG = "appMonitor";
 
     @Override

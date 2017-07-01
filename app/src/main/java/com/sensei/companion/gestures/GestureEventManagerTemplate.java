@@ -1,5 +1,8 @@
 package com.sensei.companion.gestures;
 
+import android.app.IntentService;
+
+
 import android.view.MotionEvent;
 import android.view.View;
 
