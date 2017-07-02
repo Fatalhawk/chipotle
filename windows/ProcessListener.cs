@@ -30,17 +30,5 @@ namespace Networking
             pollTimer.Elapsed += new ElapsedEventHandler(pHandler.pollProcessList); //add invoked (to-be) method to event handler
             pollTimer.Start(); //start timer
         }
-
-        /**
-         * Empty for now 
-         * Used just to keep code running and not make Timer obsolete
-        **/
-        public void run()
-        {
-            while (true)
-            {
-
-            }
-        }
     }
 }

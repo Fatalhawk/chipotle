@@ -16,11 +16,11 @@ namespace Networking
         {
             ProcessHandler processHandler = new ProcessHandler();
             processHandler.printProcessList();
-            ProcessListener processListener = new ProcessListener(processHandler);
-            Thread s = new Thread(processListener.run);
-            s.Start();
-            
 
+            processHandler.killProcess(Convert.ToInt32(Console.ReadLine()));
+            
+            ProcessListener processListener = new ProcessListener(processHandler);
+                      
             //default loop-back IP
             IPAddress local_IP = IPAddress.Parse("127.0.0.1");
 
