@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace CompCompanionApp //TO-DO: Use Nircmd to set particular volume, or settle with core audio
+namespace CompCompanionApp 
 {
     public static class Utility
     {
