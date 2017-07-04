@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="SoHTS_2">#c1ce96</color>
+    <color name="RedSmooth_1">#E7E8D1</color>
+    <color name="RedSmooth_2">#D3CEAA</color>
+    <color name="RedSmooth_3">#FBF7E4</color>
+    <color name="RedSmooth_4">#424242</color>
+    <color name="RedSmooth_5">#8E001C</color>
 </resources>
