@@ -23,7 +23,7 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/chat_icon"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="11dp"
         android:background="@color/RedSmooth_3"
         android:layout_above="@+id/imageButton3"
         android:layout_alignLeft="@+id/imageButton3"
@@ -67,6 +67,7 @@
         android:layout_alignLeft="@+id/seekBar2"
         android:layout_alignStart="@+id/seekBar2" />
 
+
     <ImageButton
         android:id="@+id/imageButton6"
         android:layout_width="200dp"
@@ -75,10 +76,12 @@
         android:background="@color/RedSmooth_3"
         android:cropToPadding="true"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/cortana_696x392_InvariantCulture_Default"
-        android:layout_below="@+id/imageButton2"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        app:srcCompat="@drawable/cortana_icon"
+        android:layout_below="@+id/imageView5"
+        android:layout_toRightOf="@+id/imageView5"
+        android:layout_toEndOf="@+id/imageView5"
+        android:layout_marginLeft="235dp"
+        android:layout_marginStart="235dp" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -109,20 +112,70 @@
         android:layout_toStartOf="@+id/seekBar2"
         android:layout_marginTop="14dp" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:background="@android:color/transparent"
-        android:gravity="center"
-        android:text="@string/cortana"
-        android:layout_below="@+id/imageButton6"
-        android:layout_toRightOf="@+id/imageView5"
-        android:layout_toEndOf="@+id/imageView5"
-        android:layout_marginLeft="237dp"
-        android:layout_marginStart="237dp"
-        android:layout_marginTop="10dp" />
+
+    <RelativeLayout
+        android:background="@drawable/rrectangle"
+        android:layout_width="280dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="160dp"
+        android:orientation="horizontal"
+        android:id="@+id/relativeLayout">
+
+
+        <ImageButton
+            android:id="@+id/imageButton7"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/RedSmooth_3"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="65dp"
+            app:srcCompat="@drawable/play" />
+        <ImageButton
+            android:id="@+id/imageButton8"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@color/RedSmooth_3"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/forward"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="3dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageButton
+            android:id="@+id/imageButton9"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:rotation="180"
+            android:background="@color/RedSmooth_3"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/forward"
+            android:layout_alignTop="@+id/imageButton8"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="250dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:progressDrawable="@drawable/progress"
+            android:thumb="@drawable/thumb" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Song"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="7dp"
+            android:textSize="17dp">
+
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
