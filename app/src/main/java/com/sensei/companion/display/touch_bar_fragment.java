@@ -24,12 +24,10 @@ public class touch_bar_fragment extends Fragment{
             public void onClick(View v){
                 //once I set the play.png and pause.png properly I'm good for the touchbar fragment
                 if(imageButton7.getTag() != null && imageButton7.getTag().toString().equals("pause.png")){
-                    int drawableId = getResources().getIdentifier("play.png", "drawable", getActivity().getPackageName());
-                    imageButton7.setImageResource(drawableId);
+                    imageButton7.setImageResource(R.drawable.play);
                     imageButton7.setTag("play.png");
                 } else {
-                    int drawableId = getResources().getIdentifier("pause.png", "drawable", getActivity().getPackageName());
-                    imageButton7.setImageResource(drawableId);
+                    imageButton7.setImageResource(R.drawable.pause);
                     imageButton7.setTag("pause.png");
                 }
             }
