@@ -17,7 +17,7 @@ public class touch_bar_fragment extends Fragment{
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {return super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.touch_bar_fragment, container, false);
         final ImageButton imageButton7 =  (ImageButton) view.findViewById(R.id.imageButton7);
         imageButton7.setOnClickListener(new View.OnClickListener(){
