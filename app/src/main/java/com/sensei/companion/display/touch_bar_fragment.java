@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.graphics.drawable.Drawable;
 
+import com.sensei.companion.R;
+
 
 public class touch_bar_fragment extends Fragment{
 
@@ -27,7 +29,7 @@ public class touch_bar_fragment extends Fragment{
                     imageButton7.setTag("play.png");
                 } else {
                     int drawableId = getResources().getIdentifier("pause.png", "drawable", getActivity().getPackageName());
-                    imageButton7.setImageResource(R.drawable.pause.png);
+                    imageButton7.setImageResource(drawableId);
                     imageButton7.setTag("pause.png");
                 }
             }
@@ -35,6 +37,7 @@ public class touch_bar_fragment extends Fragment{
 
 
         });
+        return view;
 
     }
 }
