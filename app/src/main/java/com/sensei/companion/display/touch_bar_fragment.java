@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.graphics.drawable.Drawable;
-import android.
+
 
 public class touch_bar_fragment extends Fragment{
 
@@ -22,9 +22,11 @@ public class touch_bar_fragment extends Fragment{
             public void onClick(View v){
                 //once I set the play.png and pause.png properly I'm good for the touchbar fragment
                 if(imageButton7.getTag() != null && imageButton7.getTag().toString().equals("pause.png")){
-                    imageButton7.setImageResource(R.drawable.play.png);
+                    int drawableId = getResources().getIdentifier("play.png", "drawable", getActivity().getPackageName());
+                    imageButton7.setImageResource(drawableId);
                     imageButton7.setTag("play.png");
                 } else {
+                    int drawableId = getResources().getIdentifier("pause.png", "drawable", getActivity().getPackageName());
                     imageButton7.setImageResource(R.drawable.pause.png);
                     imageButton7.setTag("pause.png");
                 }
