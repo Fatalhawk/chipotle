@@ -7,12 +7,21 @@
     android:background="@color/RedSmooth_4"
     tools:context="com.sensei.companion.display.AppLauncher">
 
-    <fragment
-        android:id="@+id/fragment"
-        android:name="com.sensei.companion.display.touch_bar_fragment"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout="@layout/touch_bar_fragment" />
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+    </RelativeLayout>
+
+    <fragment
+        android:id="@+id/fragment4"
+        android:name="com.sensei.companion.display.dtop_management"
+        android:layout_width="578dp"
+        android:layout_height="173dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="46dp"
+        tools:layout="@layout/dtop_management" />
+
 </android.support.constraint.ConstraintLayout>

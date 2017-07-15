@@ -1,20 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/RedSmooth_3">
-
+    android:layout_width="match_parent" android:layout_height="220dp"
+    android:background="@color/RedSmooth_3"
+    android:orientation="vertical"
+    android:weightSum="4">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:layout_weight="1">
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         android:background="@color/RedSmooth_3"
         app:srcCompat="@drawable/control_panel_icon"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/imageButton2"
-        android:layout_alignStart="@+id/imageButton2" />
+        />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:layout_Weight="0.5"
+            android:layout_marginLeft="@id/seekBar2"
+            android:layout_marginStart="@id/seekBar2"
+
+            app:srcCompat="@drawable/volume_icon"
+
+            />
+
+        <SeekBar
+            android:id="@+id/seekBar2"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:progressDrawable="@drawable/progress"
+            android:thumb="@drawable/thumb"
+            android:layout_weight="5"
+
+          />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:layout_weight="1">
+
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="34dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/file_explorer_icon"
+        android:background="@color/RedSmooth_3"
+
+       />
+
+
+
+    <SeekBar
+        android:id="@+id/seekBar4"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/progress"
+        android:thumb="@drawable/thumb"
+        android:layout_weight="6"
+         />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/brightness_icon"
+
+            android:layout_weight="1"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:layout_weight="1">
+        <ImageButton
+        android:id="@+id/imageButton6"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:background="@color/RedSmooth_3"
+        android:cropToPadding="true"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/cortana_icon"
+         />
+
+
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -25,100 +121,14 @@
         app:srcCompat="@drawable/chat_icon"
         android:layout_marginBottom="11dp"
         android:background="@color/RedSmooth_3"
-        android:layout_above="@+id/imageButton3"
-        android:layout_alignLeft="@+id/imageButton3"
-        android:layout_alignStart="@+id/imageButton3" />
+        />
 
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:layout_marginBottom="34dp"
-        app:srcCompat="@drawable/file_explorer_icon"
-        android:background="@color/RedSmooth_3"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="14dp"
-        android:layout_marginStart="14dp" />
-
-    <SeekBar
-        android:id="@+id/seekBar2"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:progressDrawable="@drawable/progress"
-        android:thumb="@drawable/thumb"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="18dp"
-        android:layout_marginEnd="18dp" />
-
-    <SeekBar
-        android:id="@+id/seekBar4"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:progressDrawable="@drawable/progress"
-        android:thumb="@drawable/thumb"
-        android:layout_alignTop="@+id/imageButton2"
-        android:layout_alignLeft="@+id/seekBar2"
-        android:layout_alignStart="@+id/seekBar2" />
-
-
-    <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:adjustViewBounds="true"
-        android:background="@color/RedSmooth_3"
-        android:cropToPadding="true"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/cortana_icon"
-        android:layout_below="@+id/imageView5"
-        android:layout_toRightOf="@+id/imageView5"
-        android:layout_toEndOf="@+id/imageView5"
-        android:layout_marginLeft="235dp"
-        android:layout_marginStart="235dp" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/brightness_icon"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/seekBar2"
-        android:layout_toLeftOf="@+id/seekBar4"
-        android:layout_alignBottom="@+id/imageButton2"
-        android:layout_alignLeft="@+id/imageButton"
-        android:layout_alignStart="@+id/imageButton"
-        android:layout_marginLeft="95dp"
-        android:layout_marginStart="95dp"
-        android:layout_marginBottom="61dp" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/volume_icon"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/seekBar2"
-        android:layout_toStartOf="@+id/seekBar2"
-        android:layout_marginTop="14dp" />
-
+    </LinearLayout>
 
     <RelativeLayout
         android:background="@drawable/rrectangle"
         android:layout_width="280dp"
         android:layout_height="150dp"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="160dp"
         android:orientation="horizontal"
         android:id="@+id/relativeLayout">
 
@@ -131,7 +141,6 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="65dp"
             app:srcCompat="@drawable/play" />
         <ImageButton
             android:id="@+id/imageButton8"
@@ -141,10 +150,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/forward"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="3dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            />
 
         <ImageButton
             android:id="@+id/imageButton9"
@@ -171,11 +177,10 @@
             android:layout_height="wrap_content"
             android:text="Current Song"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="7dp"
             android:textSize="17dp"/>
 
 
 
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

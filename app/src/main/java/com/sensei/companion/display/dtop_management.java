@@ -39,8 +39,8 @@ public class dtop_management extends Fragment  {
     } **/
 
     //can only have 10 desktops maximum, need to discuss with the team later or make array dynamic
-   private ImageButton[] imageButtons = new ImageButton[10];
-    private int imagetracker = 0;  // 0th ImageButton, ImageButton at zeroeth index
+    private ImageButton[] imageButtons = new ImageButton[10];
+    private int image_tracker = 1;  //only 1 image here
 
 
 
@@ -51,17 +51,23 @@ public class dtop_management extends Fragment  {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view1 = inflater.inflate(R.layout.dtop_management, container, false);
         final ImageButton addDesktopButton =  (ImageButton) view1.findViewById(R.id.addDesktopButton);
-        addDesktopButton.setTag(Integer.toString(imagetracker));
+        addDesktopButton.setTag(Integer.toString(image_tracker));
         final ImageButton first_desktop = (ImageButton) view1.findViewById(R.id.first_desktop);
-        LinearLayout desktops_layout = (LinearLayout) view1.findViewById(R.id.desktops_layout);
+        final LinearLayout desktops_layout = (LinearLayout) view1.findViewById(R.id.desktops_layout);
         //just put onclick listener here makes your life easier
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         addDesktopButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                imagetracker++;
-                imageButtons[imagetracker] = new ImageButton(); //fix this line tomorrow then work on trackpad
+                ImageButton nImageButton = new ImageButton(getActivity());
+                nImageButton.setLayoutParams(params);
+                //need to set ImageButton's image
+                desktops_layout.addView(nImageButton);
 
+
+                imageButtons[image_tracker] = nImageButton;
+                image_tracker++;
+                addDesktopButton.setTag(Integer.toString(image_tracker));
             }
         });
 
