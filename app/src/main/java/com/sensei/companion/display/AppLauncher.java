@@ -23,8 +23,6 @@ import android.util.Log;
 public class AppLauncher extends AppCompatActivity {
     private final String DEBUG_TAG = "appMonitor";
 
-    private final String DEBUG_TAG = "appMonitor";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
