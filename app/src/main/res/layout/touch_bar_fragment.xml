@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="220dp"
+    android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/RedSmooth_3"
     android:orientation="vertical"
     android:weightSum="4">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         android:weightSum="8"
-        android:layout_weight="1">
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="2.5"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:background="@color/RedSmooth_3"
-        app:srcCompat="@drawable/control_panel_icon"
-        />
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:background="@color/RedSmooth_3">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="@color/RedSmooth_3"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/cpanelicon" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:layout_Weight="0.5"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
             android:layout_marginLeft="@id/seekBar2"
             android:layout_marginStart="@id/seekBar2"
 
@@ -38,124 +40,148 @@
 
         <SeekBar
             android:id="@+id/seekBar2"
-            android:layout_width="400dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
+
             android:progressDrawable="@drawable/progress"
             android:thumb="@drawable/thumb"
-            android:layout_weight="5"
+            android:layout_weight="6"
 
           />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="8"
-        android:layout_weight="1">
-
-
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:layout_marginBottom="34dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        app:srcCompat="@drawable/file_explorer_icon"
-        android:background="@color/RedSmooth_3"
-
-       />
-
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="8">
 
 
-    <SeekBar
-        android:id="@+id/seekBar4"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:progressDrawable="@drawable/progress"
-        android:thumb="@drawable/thumb"
-        android:layout_weight="6"
-         />
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="@color/RedSmooth_3"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/feicon"
+
+            />
+
 
         <ImageView
             android:id="@+id/imageView5"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@id/seekBar4"
+            android:layout_marginStart="@id/seekBar4"
+            android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/brightness_icon"
 
+            app:srcCompat="@drawable/brightness_icon" />
+
+        <SeekBar
+            android:id="@+id/seekBar4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:gravity="center_vertical"
+            android:progressDrawable="@drawable/progress"
+            android:thumb="@drawable/thumb" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:layout_weight="1"
+        android:gravity="center_horizontal">
+
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="11dp"
             android:layout_weight="1"
-        />
+            android:adjustViewBounds="true"
+            android:background="@color/RedSmooth_3"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/acenter" />
+
+
+
+        <RelativeLayout
+            android:background="@drawable/rrectangle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/relativeLayout"
+            android:layout_weight="7"
+          >
+
+
+
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="250dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:progressDrawable="@drawable/progress"
+                android:thumb="@drawable/thumb" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Song"
+                android:layout_centerHorizontal="true"
+                android:textSize="17sp"/>
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="horizontal"
-        android:weightSum="8"
-        android:layout_weight="1">
-        <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:adjustViewBounds="true"
-        android:background="@color/RedSmooth_3"
-        android:cropToPadding="true"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/cortana_icon"
-         />
+        android:weightSum="9"
+        android:layout_weight="1"
+        android:gravity="center">
 
 
+        <ImageView
+            android:id="@+id/bspace1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"/>
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/chat_icon"
-        android:layout_marginBottom="11dp"
-        android:background="@color/RedSmooth_3"
-        />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:background="@drawable/rrectangle"
-        android:layout_width="280dp"
-        android:layout_height="150dp"
-        android:orientation="horizontal"
-        android:id="@+id/relativeLayout">
-
-
-        <ImageButton
-            android:id="@+id/imageButton7"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@color/RedSmooth_3"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:layout_centerHorizontal="true"
-            app:srcCompat="@drawable/play" />
-        <ImageButton
-            android:id="@+id/imageButton8"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@color/RedSmooth_3"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/forward"
-            />
 
         <ImageButton
             android:id="@+id/imageButton9"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:rotation="180"
             android:background="@color/RedSmooth_3"
             android:adjustViewBounds="true"
@@ -164,23 +190,50 @@
             android:layout_alignTop="@+id/imageButton8"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="250dp"
+
+        <ImageButton
+            android:id="@+id/imageButton7"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/RedSmooth_3"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:progressDrawable="@drawable/progress"
-            android:thumb="@drawable/thumb" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Current Song"
-            android:layout_centerHorizontal="true"
-            android:textSize="17dp"/>
+            app:srcCompat="@drawable/play" />
 
 
+        <ImageButton
+            android:id="@+id/imageButton8"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/RedSmooth_3"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/forward"
+            />
 
-    </RelativeLayout>
+        <ImageView
+            android:id="@+id/bspace2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/imageButton6"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@color/RedSmooth_3"
+            android:cropToPadding="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/cortana_icon" />
+
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
