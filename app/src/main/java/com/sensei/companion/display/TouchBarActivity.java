@@ -9,18 +9,11 @@ import com.sensei.companion.connection.ConnectManager;
 
 public class TouchBarActivity extends AppCompatActivity{
 
-    private int counter = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_touch_bar);
-
         ConnectManager.MessageHandler.setActivityReferenceToTouchBar(this);
     }
 
-    public void sendMessage (View v) {
-        counter ++;
-        ConnectManager.sendMessageToPC("YOOOOO<EC> #" + counter);
-    }
 }

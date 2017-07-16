@@ -1,4 +1,4 @@
-package com.sensei.companion.display;
+package com.sensei.companion.display.program_managers;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,20 +12,13 @@ import com.sensei.companion.R;
 
 public class TouchBarFragment extends Fragment {
 
-    private OnTouchbarInteractionListener mListener;
+    OnTouchbarInteractionListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_touch_bar, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -45,7 +38,7 @@ public class TouchBarFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnTouchbarInteractionListener {
+    interface OnTouchbarInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
