@@ -20,20 +20,18 @@ public class ConnectManager {
 
     private final String DEBUG_TAG = "appMonitor";
     private static final int EXAMPLE_MESSAGE = 0;
-    public static final int INIT_TOUCHBAR = 1;
     private TextView textView;
     private Button button;
     private PcManager pcManager;
-
     private static ConnectService mService;
     private boolean isBound = false;
-    private Context context;
+
+    static final int INIT_TOUCHBAR = 1;
 
     public void initConnection (Context context, TextView textView, Button button, PcManager pcManager) {
         this.pcManager = pcManager;
         this.textView = textView;
         this.button = button;
-        this.context = context;
         Intent intent = new Intent (context, ConnectService.class);
         context.bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -49,7 +47,7 @@ public class ConnectManager {
         private static WeakReference<TouchBarActivity> mTouchBarActivity = null;
 
         MessageHandler (PcManager activity) {
-            mPcManagerActivity = new WeakReference<PcManager> (activity);
+            mPcManagerActivity = new WeakReference<> (activity);
         }
 
         @Override
@@ -63,7 +61,7 @@ public class ConnectManager {
         }
 
         public static void setActivityReferenceToTouchBar (TouchBarActivity touchBarActivity) {
-            mTouchBarActivity = new WeakReference <TouchBarActivity>(touchBarActivity);
+            mTouchBarActivity = new WeakReference <>(touchBarActivity);
         }
     }
 
