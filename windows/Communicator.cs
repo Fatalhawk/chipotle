@@ -1,34 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿/**
+ * Author(s): Takahiro Tow
+ * Last updated: July 6, 2017
+ **/
+
+using System;
 using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
-using System.Threading;
 
 namespace Networking
 {
-    class PhoneListener
+    /**
+     * Static class used to communicate with device
+     * static because program should only have one communication point between phone and computer
+     * ensures no conflicts in sending or recieving messages concurrently     * 
+     **/
+    static class Communicator
     {
 
         public static string data;
         static TcpListener tcpListener;
-        ProcessHandler phObj;
+        static Stream s;
+        static StreamWriter sw;
+        static StreamReader sr;
+        public delegate void commandRecieved(string cmd);
+        public static commandRecieved sendCommand;
 
         /**
          * Constructor
          * initializes connection between phone and computer
          * creates socket to listen for requests from phone
         **/
-        public PhoneListener(IPAddress ip_addr, ProcessHandler phObj)
-        {            
-            this.phObj = phObj;
+        static Communicator()
+        {
             sendInitialBroadcast();
-            tcpListener = new TcpListener(ip_addr, 65000);
+            tcpListener = initListener();
             tcpListener.Start();
-            Console.WriteLine("Server listening to port 65000");
+        }
+
+        /**
+         * initializes a TcpListener by obtaining local IP address and port
+         * @return: main TcpListener to foster communications
+         **/
+        private static TcpListener initListener()
+        {
+            //default loop-back IP
+            IPAddress local_IP = IPAddress.Parse("127.0.0.1");
+
+            //look through DNS to find local IP address
+            foreach (var addr in Dns.GetHostEntry(string.Empty).AddressList)
+            {
+                if (addr.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    local_IP = addr;
+                }
+                //Console.WriteLine(addr.ToString());
+            }
+
+            return new TcpListener(local_IP, 65000);
         }
 
         /**
@@ -37,7 +67,7 @@ namespace Networking
          * creates socket for broadcast to initially communicate local machine's IPAddress
          * closes socket upon completion
         **/
-        private void sendInitialBroadcast()
+        private static void sendInitialBroadcast()
         {
             //Create socket to send out signal 
             Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Dgram,
@@ -57,7 +87,7 @@ namespace Networking
             try
             {
                 s.SendTo(sendbuf, ep);
-                Console.WriteLine("Success");
+                //Console.WriteLine("Success");
             }
             catch (SocketException e)
             {
@@ -73,18 +103,20 @@ namespace Networking
          * Description:
          * establishes thread between computer and phone
          * Connects to one endpoint at a time and constantly listens for requests from endpoint
-        **/ 
+        **/
         public static void listenForRequests()
         {
-            Console.WriteLine("Waiting for request from Phone...");
+            sendCommand("Waiting for request from Phone...");
+            sendCommand("Waiting for requests from Phone...");
             Socket handler = tcpListener.AcceptSocket();
-            Console.WriteLine("Recieved connection from phone at {0}", handler.RemoteEndPoint);
+            string rCfP = string.Format("Recieved connection from phone at {0}", handler.RemoteEndPoint);
+            sendCommand(rCfP);//"Recieved connection from phone at {0}", handler.RemoteEndPoint);
             try
             {
                 data = null;
-                Stream s = new NetworkStream(handler);
-                StreamWriter sw = new StreamWriter(s);
-                StreamReader sr = new StreamReader(s);
+                s = new NetworkStream(handler);
+                sw = new StreamWriter(s);
+                sr = new StreamReader(s);
                 sw.AutoFlush = true;
                 while (true)
                 {
@@ -94,15 +126,17 @@ namespace Networking
                         Console.WriteLine(data);
                         if (data.IndexOf("<EC>") > -1)
                         {
+                            sendCommand(data);
                             sw.WriteLine("shut the fuck up");
                         }
-                    } catch (SocketException e)
+                    }
+                    catch (SocketException e)
                     {
-                        Console.WriteLine("Error occured");
-                        Console.WriteLine(e.ToString());
+                        //Console.WriteLine("Error occured");
+                        //Console.WriteLine(e.ToString());
                         break;
                     }
-                    catch(NullReferenceException e)
+                    catch (NullReferenceException e)
                     {
                         Console.WriteLine("Socket closed or not available. Establishing new thread...");
                         handler = tcpListener.AcceptSocket();
@@ -119,13 +153,14 @@ namespace Networking
                         Console.WriteLine(e.ToString());
                         break;
                     }
-                    
+
                 }
                 s.Close();
                 Console.WriteLine("Exiting Listen");
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
-                    Console.WriteLine(e.ToString());
+                Console.WriteLine(e.ToString());
             }
             finally
             {
@@ -135,4 +170,3 @@ namespace Networking
         }
     }
 }
-

@@ -1,17 +1,20 @@
-﻿using System;
+﻿/**
+ * Author(s): Takahiro Tow
+ * Last updated: July 6, 2017
+ **/
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
-using System.Timers;
 
 namespace Networking
 {
-    public class ProcessHandler
+    public static class ProcessHandler
     {
         /**
          * Attribute List
         **/ 
-        private static List<ProcessInterface> processList; //main list to store currrently-running processes
+        private static IDictionary<int,ProcessInterface> processDict;
+        private static List<string> processListNames;
         private static ProcessInterface currentProcess; //Process in focus
         
         /**
@@ -19,11 +22,16 @@ namespace Networking
          * initializes processList and currentProcess
          * @return: all Processes in List format
         **/
-        public ProcessHandler()
+        static ProcessHandler()
         {
-            processList = updateProcessList();
+            //processList = new List<ProcessInterface>();
+            processDict = new Dictionary<int, ProcessInterface>();
+            processListNames = new List<string>();
+            updateProcessListNames();
             currentProcess = null;
+            determineForegroundWindow();
         }
+
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
@@ -31,88 +39,99 @@ namespace Networking
         [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr Processid);
 
+
         /**
-         * updates process list 
-         * @return: list of all processes currently running on local machine
-        **/
-        public List<ProcessInterface> updateProcessList()
+         * determines the foreground window on computer
+         **/
+        private static void determineForegroundWindow()
         {
-
             IntPtr currentForeground = GetForegroundWindow();
-            IntPtr currentPID = IntPtr.Zero;
-            ProcessInterface pInterface = null;
-            GetWindowThreadProcessId(currentForeground, currentPID);
-            List<ProcessInterface> processList = new List<ProcessInterface>();
-            foreach (Process process in Process.GetProcesses())
+            Console.WriteLine("{0}",currentForeground.ToString());
+            foreach(int key in processDict.Keys)
             {
-                //process.EnableRaisingEvents = true;                
-                //process.Exited += new EventHandler(ProcessExited);
-                if (process.MainWindowHandle.ToInt32() != 0) //!String.IsNullOrEmpty(process.MainWindowTitle)
+                //determine foreground process
+                if (processDict[key].ProcessProp.MainWindowHandle == currentForeground)
                 {
-                    pInterface = new ProcessInterface(process);
-                    pInterface.findWindow();
-                    processList.Add(pInterface);
-
-                    //determine foreground process
-                    if (process.Id == currentPID.ToInt32())
-                    {
-                        currentProcess = pInterface;
-                        Console.WriteLine("Current window is {0}", process.MainWindowTitle);
-                    }
+                    currentProcess = processDict[key];
+                    break;
+                    //Console.WriteLine("Current window is {0}", pInterface.ProcessProp.MainWindowTitle);
                 }
             }
-            if (currentPID.ToInt32() == 0)
-            {
-                currentProcess = processList[0];
-            }
-            return processList;
         }
 
         /**
-         * function to be called if event triggered
-         * called every two seconds by timer elapsed event in ProcessListener class
-        **/ 
-        public void pollProcessList(object sender, EventArgs e)
+         * updates the list of process names 
+         **/
+        public static void updateProcessListNames()
         {
-            List<ProcessInterface> newList = updateProcessList();
-            if (!newList.SequenceEqual(processList))
+            processListNames.Clear();
+            foreach(int key in processDict.Keys)
             {
-                processList.Clear();
-                processList = newList;
-                Console.Clear();
-                printProcessList();
+                processListNames.Add(processDict[key].getTitle());
+            }
+
+        }
+
+        public static void addProcess(int key, ProcessInterface pInt)
+        {
+            processDict.Add(key, pInt);
+            //send phone update on process
+        }
+
+        public static void removeProcess(int key)
+        {
+            processDict.Remove(key);
+        }
+
+        /**
+         * FOR TESTING PURPOSES ONLY
+         * calls killProcess method of process specified by user
+         **/
+        public static void killProcess(int key)
+        {
+            if (!processDict[key].killApp())
+            {
+                removeProcess(key);
+                //Console.WriteLine("Could not kill process");
             }
         }
 
-        public void killProcess(int x)
+        /**
+         * main method to be called upon recieving instructions
+         * will direct instruction to the appropriate process object
+         **/
+        public static void performAction()
         {
-            processList[x].killApp();
-            try
-            {
-                currentProcess.setForegroundApp();
-            }
-            catch(NullReferenceException e)
-            {
 
-            }
         }
 
-        public void setForeGroundApp(int x)
+        private static void setForeGroundApp(int key)
         {
-            currentProcess = processList[x];
+            currentProcess = processDict[key];
             currentProcess.setForegroundApp();
         }
 
         /**
          * Displays to console list of currently running processes in processList variable
         **/ 
-        public void printProcessList()
+        public static void printProcessList()
         {
-            Console.WriteLine("Current Processes on {0}", System.Environment.MachineName);
-            foreach (ProcessInterface process in processList)
+            //Console.WriteLine("Current Processes on {0}", System.Environment.MachineName);
+            foreach (int key in processDict.Keys)
             {
-                process.printProcessInfo();
+                processDict[key].printProcessInfo();
             }
+            Console.WriteLine("###########################################\n\n");
+        }
+
+        public static List<string> getProcessListNames()
+        {
+            return processListNames;
+        }
+
+        public static IDictionary<int, ProcessInterface> getProcessDict()
+        {
+            return processDict;
         }
     }
 }
