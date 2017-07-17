@@ -1,0 +1,16 @@
+C:\Users\takat\Documents\Visual Studio 2015\Projects\Networking\bin\Debug\Networking.exe.config
+C:\Users\takat\Documents\Visual Studio 2015\Projects\Networking\bin\Debug\Networking.exe
+C:\Users\takat\Documents\Visual Studio 2015\Projects\Networking\bin\Debug\Networking.pdb
+C:\Users\takat\Documents\Visual Studio 2015\Projects\Networking\obj\Debug\Networking.csprojResolveAssemblyReference.cache
+C:\Users\takat\Documents\Visual Studio 2015\Projects\Networking\obj\Debug\Networking.TestGUI.resources
+C:\Users\takat\Documents\Visual Studio 2015\Projects\Networking\obj\Debug\Networking.csproj.GenerateResource.Cache
+C:\Users\takat\Documents\Visual Studio 2015\Projects\Networking\obj\Debug\Networking.exe
+C:\Users\takat\Documents\Visual Studio 2015\Projects\Networking\obj\Debug\Networking.pdb
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Networking.exe.config
+C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.exe
+C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.pdb
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Networking.exe
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Networking.pdb
+C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.csprojResolveAssemblyReference.cache
+C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.TestGUI.resources
+C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.csproj.GenerateResource.Cache

@@ -1,41 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Management;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-
+﻿using System.Threading;
+using System.Windows.Forms;
+/**
+* Author(s): Takahiro Tow
+* Last updated: July 6, 2017
+**/
 namespace Networking
-{    
+{
     class Program
     {
         static void Main(string[] args)
         {
-            ProcessHandler processHandler = new ProcessHandler();
-            processHandler.printProcessList();
-
-            processHandler.killProcess(Convert.ToInt32(Console.ReadLine()));
-            
-            ProcessListener processListener = new ProcessListener(processHandler);
-                      
-            //default loop-back IP
-            IPAddress local_IP = IPAddress.Parse("127.0.0.1");
-
-            //look through DNS to find local IP address
-            foreach (var addr in Dns.GetHostEntry(string.Empty).AddressList)
-            {
-                if (addr.AddressFamily == AddressFamily.InterNetwork) {
-                    local_IP = addr;
-                }
-                //Console.WriteLine(addr.ToString());
-            }
-
-            //PhoneListener pListener = new PhoneListener(local_IP, processHandler);
-            //Thread t = new Thread(PhoneListener.listenForRequests);
+            TestGUI tGUI = new TestGUI();
+            ProcessListener pListener = new ProcessListener(tGUI);
+            //tGUI.updateGridView(ProcessHandler.getProcessList());
+            //ProcessHandler.setProcessList(pListener.updateProcessList());
+            //Thread t = new Thread(Communicator.listenForRequests);
             //t.Start();
+            Application.Run(tGUI);
+            //Initializes ProcessHandler (main flow control of program)
+            //ProcessHandler.printProcessList();   
         }
     }
 }
