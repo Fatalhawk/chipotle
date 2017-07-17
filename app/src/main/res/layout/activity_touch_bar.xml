@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.sensei.companion.display.TouchBarActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="Touchbar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <fragment
+        android:id="@+id/fragment7"
+        android:name="com.sensei.companion.display.ScreenSelectorFragment"
+        android:layout_width="500dp"
+        android:layout_height="75dp"
+        tools:layout="@layout/fragment_screen_selector"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="12dp"
+        android:layout_alignRight="@+id/fragment_container"
+        android:layout_alignEnd="@+id/fragment_container"
+        android:layout_alignLeft="@+id/fragment_container"
+        android:layout_alignStart="@+id/fragment_container" />
 
-    <Button
-        android:id="@+id/clickToSendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="sendMessage"
-        android:text="Send Message"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="40dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintHorizontal_bias="0.501" />
-</android.support.constraint.ConstraintLayout>
+    <FrameLayout
+        android:layout_width="565dp"
+        android:layout_height="200dp"
+        android:layout_above="@+id/fragment7"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp"
+        android:id="@+id/fragment_container">
+
+        <fragment
+            android:id="@+id/fragment"
+            android:name="com.sensei.companion.display.program_managers.GenericProgramManager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_generic_program_manager" />
+    </FrameLayout>
+</RelativeLayout>

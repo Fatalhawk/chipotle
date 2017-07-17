@@ -14,9 +14,10 @@ public class AppLauncher extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_app_launcher);
 
-        //print network stuff
+        //startProgram ();
 
-        startProgram ();
+        Intent i = new Intent (this, TouchBarActivity.class);
+        startActivity (i);
     }
 
     public void startProgram () {
