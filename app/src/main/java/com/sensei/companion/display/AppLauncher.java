@@ -30,7 +30,12 @@ public class AppLauncher extends AppCompatActivity {
 
         //print network stuff
 
-        startProgram ();
+        Log.i (DEBUG_TAG, command.toString());
+        Log.i (DEBUG_TAG, "" + (Command.valueOf(command.toString()) == Command.OPEN));
+
+
+
+        //startProgram ();
     }
 
     public void startProgram () {

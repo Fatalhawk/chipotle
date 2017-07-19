@@ -110,4 +110,9 @@ namespace CompCompanionApp
             Console.WriteLine(p.StandardOutput.ReadToEnd());
         }
     }
+
+    static void Main()
+    {
+        ControlPanel();
+    }
 }
