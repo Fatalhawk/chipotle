@@ -1,39 +1,31 @@
 package com.sensei.companion.connection.pc_data;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 public class CommandsData {
 
-    private Hashtable<Program, Class<? extends Enum>> programEnums = new Hashtable<>();
+    private final String DEBUG_TAG = "appMonitor";
+    private Hashtable<Program, Class<? extends CommandReceiver>> programEnums = new Hashtable<>();
 
     public CommandsData () {
-        programEnums.put (Program.UNSUPPORTED, WindowsCommand.class);
-        programEnums.put (Program.MICROSOFT_WORD, WordCommand.class);
+        programEnums.put (Program.UNSUPPORTED, DesktopCommandReceiver.class);
+        programEnums.put (Program.WINDOWS, WindowsCommandReceiver.class);
     }
 
-    public enum Program {
-        UNSUPPORTED, MICROSOFT_WORD, MICROSOFT_EXCEL, MICROSOFT_POWERPOINT, MICROSOFT_OUTLOOK,
+    private enum Program {
+        WINDOWS, UNSUPPORTED, MICROSOFT_WORD, MICROSOFT_EXCEL, MICROSOFT_POWERPOINT, MICROSOFT_OUTLOOK,
         SPOTIFY, PHOTOSHOP, ADOBE_ACROBT, SKYPE, CONTROL_PANEL, FILE_EXPLORER, NOTEPAD,
         MICROSOFT_PAINT, MICROSOFT_PAINT3D, MICROSOFT_PHOTOS, CORTANA, CHROME, FIREFOX,
         MICROSOFT_EDGE
-    }
-
-    ////////////////////////////////// Enums: Program Commands ///////////////////////////////////
-
-    public enum WindowsCommand {
-        CLOSE, OPEN, VOLUME, BRIGHTNESS, BRIGHTNESS_UP, BRIGHTNESS_DOWN, VOLUME_UP, VOLUME_DOWN,
-        MUTE
-    }
-
-    public enum WordCommand {
-
     }
 
     /////////////////////////////////// Utility Methods /////////////////////////////////////////
@@ -41,14 +33,18 @@ public class CommandsData {
     /*
     For messages in the form "[environment] [command]"
      */
-    public void interpretMessage (String message) {
+    public void interpretCommand (String message) {
         StringTokenizer st = new StringTokenizer (message);
-        String environment =
+        try {
+            Program environment = Enum.valueOf(Program.class, st.nextToken());
+            Class <? extends CommandReceiver> receiver = programEnums.get(environment).asSubclass(CommandReceiver.class);
+            try {
+                receiver.newInstance().interpretCommand(st.nextToken());
+            } catch (Exception e) {
+                Log.e (DEBUG_TAG, "Error creating instance", e);
+            }
+        } catch (NoSuchElementException e) {
+            Log.e (DEBUG_TAG, "Error with message: " + message, e);
+        }
     }
-
-    public interface AcknowledgeCommand <T extends Enum<T>> {
-        public abstract void doCommand (T command);
-    }
-
-
 }
