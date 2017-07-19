@@ -112,7 +112,7 @@ namespace chrometest
 
         static void Main(string[] args)
         {
-            if (Console.ReadLine() == "f")
+            if (Console.ReadLine() == "playpause")
             {
                 System.Threading.Thread.Sleep(5000);
                 forward();
