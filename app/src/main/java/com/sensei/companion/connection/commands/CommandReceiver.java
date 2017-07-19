@@ -1,6 +1,6 @@
-package com.sensei.companion.connection.pc_data;
+package com.sensei.companion.connection.commands;
 
-public abstract class CommandReceiver <T extends Enum<T>> {
+abstract class CommandReceiver <T extends Enum<T>> {
     public abstract void interpretCommand (String command);
     public abstract void doCommand (T command);
 }

@@ -1,14 +1,9 @@
-package com.sensei.companion.connection.pc_data;
+package com.sensei.companion.connection.commands;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class CommandsData {
@@ -33,7 +28,7 @@ public class CommandsData {
     /*
     For messages in the form "[environment] [command]"
      */
-    public void interpretCommand (String message) {
+    public void handleCommand (String message) {
         StringTokenizer st = new StringTokenizer (message);
         try {
             Program environment = Enum.valueOf(Program.class, st.nextToken());
