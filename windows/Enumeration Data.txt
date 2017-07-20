@@ -1,0 +1,11 @@
+enum DesktopCommand {
+        BRIGHTNESS_UP, BRIGHTNESS_DOWN, VOLUME_UP, VOLUME_DOWN
+}
+
+enum WindowsCommand {
+        CLOSE, OPEN
+}
+
+enum Program {
+	WINDOWS, UNSUPPORTED
+}
