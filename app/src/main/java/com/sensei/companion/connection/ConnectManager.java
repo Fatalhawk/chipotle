@@ -19,7 +19,7 @@ import java.lang.ref.WeakReference;
 public class ConnectManager {
 
     private final String DEBUG_TAG = "appMonitor";
-    private static final int EXAMPLE_MESSAGE = 0;
+    public static final int INIT_TOUCHBAR = 1;
     private TextView textView;
     private Button button;
     private PcManager pcManager;
