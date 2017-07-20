@@ -22,6 +22,11 @@ or
 "companion_data
  [Program] [data] "
 
+or
+
+"open_programs
+ [Program] [Program] [Program]... " where the first [Program] entry is the currently active program
+
 Possible messages from Android to PC:
 
 "companion_command
@@ -32,3 +37,4 @@ Possible messages from Android to PC:
 Message subjects:
 "companion_command" for commands
 "companion_data" for data
+"open_programs" for indicating which programs are opened on the pc when the app is started
