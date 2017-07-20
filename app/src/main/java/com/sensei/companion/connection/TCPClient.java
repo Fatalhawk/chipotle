@@ -14,17 +14,15 @@ import java.net.Socket;
 class TCPClient {
 
     private final String DEBUG_TAG = "appMonitor";
-
-    private String ipNumber;
+    private String serverIpNumber;
     private BufferedReader in;
     private PrintWriter out;
     private MessageCallback messageListener;
     private boolean connected = false;
-    private int portNumber = 65000; //CHANGE LATER
 
     TCPClient (String ipNumber, MessageCallback messageListener) {
         this.messageListener = messageListener;
-        this.ipNumber = ipNumber;
+        this.serverIpNumber = ipNumber;
     }
 
     void sendMessage (String message) {
@@ -34,7 +32,7 @@ class TCPClient {
         else {
             out.println (message);
             out.flush();
-            Log.i (DEBUG_TAG, "Sent Message: " + message);
+            Log.i (DEBUG_TAG, "Sent message: " + message);
         }
     }
 
@@ -48,10 +46,12 @@ class TCPClient {
     }
 
     void run() {
+        final int PORT_NUMBER = 65000; //CHANGE LATER
+
         try {
-            InetAddress serverAddress = InetAddress.getByName (ipNumber);
+            InetAddress serverAddress = InetAddress.getByName (serverIpNumber);
             Log.i (DEBUG_TAG, "Connecting...");
-            Socket socket = new Socket (serverAddress, portNumber);
+            Socket socket = new Socket (serverAddress, PORT_NUMBER);
             connected = true;
             try {
                 out = new PrintWriter (new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);

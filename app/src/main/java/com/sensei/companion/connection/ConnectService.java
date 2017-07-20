@@ -1,10 +1,8 @@
 package com.sensei.companion.connection;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -16,15 +14,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.Enumeration;
 
 public class ConnectService extends Service {
 
@@ -32,34 +22,10 @@ public class ConnectService extends Service {
     private final IBinder connectBinder = new MyLocalBinder ();
     private TCPClient tcpClient;
     private String serverIpAddress;
-    private InetAddress deviceIpAddress;
-    private static Handler mHandler;
-    private int networkPrefixLength;
-    private static final int DISCOVERY_PORT = 4444;
+    private static final int DISCOVERY_PORT = 4444; //CHANGE LATER
     private static final int TIMEOUT_MS = 500;
     private String s = null;
-    private TextView serverStatus;
-    private Button connectButton;
     private int counter = 0;
-
-    private String checkHosts (InetAddress deviceAddress){
-        byte[] ip = deviceAddress.getAddress();
-        String output = "";
-        for (int i = 1; i <= 254; i++) {
-            try {
-                ip[3] = (byte) i;
-                InetAddress address = InetAddress.getByAddress(ip);
-
-                if (address.isReachable(100)) {
-                    output = address.getHostAddress();
-                    System.out.print(output + " is on the network");
-                    return output;
-                }
-            } catch (Exception e) {
-            }
-        }
-        return null;
-    }
 
     /**
      * Listen on socket for responses, timing out after TIMEOUT_MS
@@ -80,31 +46,12 @@ public class ConnectService extends Service {
             }
         } catch (SocketTimeoutException e) {
             Log.d(DEBUG_TAG, "Receive timed out");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e (DEBUG_TAG, "IOEXCEPTION", e);
         }
     }
 
     public void init (final Handler mHandler, TextView textView, Button button) {
-        this.mHandler = mHandler;
-
-        //serverIpAddress = "192.168.2.96";
-        //s = "IP: " + serverIpAddress;
-
-        /*
-        deviceIpAddress = getLocalIpAddress();
-        if (deviceIpAddress == null) {
-            Log.d (DEBUG_TAG, "Could not find IP Address");
-        }
-        else {
-            Log.i (DEBUG_TAG, "Local IP Address: " + deviceIpAddress.getHostAddress() + "/" + networkPrefixLength);
-        }
-        serverIpAddress = checkHosts(deviceIpAddress);
-        Log.i (DEBUG_TAG, "Server address: " + serverIpAddress);
-        //serverIpAddress = "100.64.188.96";
-         */
-
         final TextView serverStatus = textView;
         final Button connectButton = button;
 
@@ -112,7 +59,6 @@ public class ConnectService extends Service {
         Thread networkThread = new Thread(new Runnable() {
             @Override
             public void run() {
-
                 DatagramSocket socket = null;
                 try {
                     socket = new DatagramSocket(DISCOVERY_PORT);
@@ -122,8 +68,8 @@ public class ConnectService extends Service {
                 catch (IOException e) {
                     Log.e(DEBUG_TAG, "Could not send discovery request", e);
                 }
-
                 Log.i (DEBUG_TAG, "socket created");
+
                 while (s == null) {
                     listenForBroadcasts(socket);
                 }
@@ -184,42 +130,7 @@ public class ConnectService extends Service {
         }
     }
 
-    public void checkHosts(String subnet){
-        int timeout=1000;
-        for (int i=1;i<255;i++){
-            String host = subnet + "." + i;
-            try {
-                if (InetAddress.getByName(host).isReachable(timeout)) {
-                    Log.i (DEBUG_TAG, host + " is reachable");
-                }
-            }
-            catch (Exception e) {
-            }
-        }
-    }
-
-    // GETS THE IP ADDRESS OF YOUR PHONE'S NETWORK
-    private InetAddress getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress()) {
-                        for(InterfaceAddress address: intf.getInterfaceAddresses()){
-                            if(address.getNetworkPrefixLength() < 24){
-                                networkPrefixLength = address.getNetworkPrefixLength();
-                                return inetAddress;  //.getHostAddress for string version
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            Log.e(DEBUG_TAG, ex.toString());
-        }
-        return null;
-    }
+    //////////////////////////////////////// BINDER STUFF ////////////////////////////////////////
 
     @Override
     public IBinder onBind(Intent intent) {

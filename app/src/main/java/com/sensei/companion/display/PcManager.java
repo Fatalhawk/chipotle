@@ -20,9 +20,12 @@ public class PcManager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.i (DEBUG_TAG, "hi");
         setContentView(R.layout.activity_pc_manager);
+        connect();
+    }
 
+    private void connect () {
+        ConnectManager mConnectManager;
         mConnectManager = new ConnectManager();
         mConnectManager.initConnection (this, (TextView) findViewById(R.id.searchStatus), (Button) findViewById(R.id.connectButton), this);
     }
-
 }
