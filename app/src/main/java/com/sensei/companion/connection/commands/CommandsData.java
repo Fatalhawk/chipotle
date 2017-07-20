@@ -1,5 +1,6 @@
 package com.sensei.companion.connection.commands;
 
+import android.os.Handler;
 import android.util.Log;
 
 import java.util.Hashtable;
@@ -8,10 +9,10 @@ import java.util.StringTokenizer;
 
 public class CommandsData {
 
-    private final String DEBUG_TAG = "appMonitor";
-    private Hashtable<Program, Class<? extends CommandReceiver>> programEnums = new Hashtable<>();
+    private static final String DEBUG_TAG = "appMonitor";
+    private static Hashtable<Program, Class<? extends CommandReceiver>> programEnums = new Hashtable<>();
 
-    public CommandsData () {
+    static {
         programEnums.put (Program.UNSUPPORTED, DesktopCommandReceiver.class);
         programEnums.put (Program.WINDOWS, WindowsCommandReceiver.class);
     }
@@ -26,20 +27,28 @@ public class CommandsData {
     /////////////////////////////////// Utility Methods /////////////////////////////////////////
 
     /*
-    For messages in the form "[environment] [command]"
+    For messages in the form "[Program] [Command]"
      */
-    public void handleCommand (String message) {
+    public static void handleCommand (Handler mHandler, String message) {
         StringTokenizer st = new StringTokenizer (message);
         try {
             Program environment = Enum.valueOf(Program.class, st.nextToken());
             Class <? extends CommandReceiver> receiver = programEnums.get(environment).asSubclass(CommandReceiver.class);
             try {
-                receiver.newInstance().interpretCommand(st.nextToken());
+                receiver.newInstance().interpretCommand(mHandler, st.nextToken());
             } catch (Exception e) {
                 Log.e (DEBUG_TAG, "Error creating instance", e);
             }
         } catch (NoSuchElementException e) {
             Log.e (DEBUG_TAG, "Error with message: " + message, e);
         }
+    }
+
+    /*
+    For messages in the form "[Program] [Program] [Program]..." where the first [Program] is the
+    currently active program
+     */
+    public static void openPrograms (Handler mHandler, String message) {
+
     }
 }

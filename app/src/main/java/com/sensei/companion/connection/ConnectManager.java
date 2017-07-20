@@ -25,7 +25,9 @@ public class ConnectManager {
     private static ConnectService mService;
     private boolean isBound = false;
 
-    static final int INIT_TOUCHBAR = 1;
+    enum HandlerMessage {
+        INIT_TOUCHBAR, COMMAND_MESSAGE, DATA_MESSAGE
+    }
 
     public void initConnection (Context context, TextView textView, Button button, PcManager pcManager) {
         this.pcManager = pcManager;
@@ -51,7 +53,7 @@ public class ConnectManager {
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == INIT_TOUCHBAR) {
+            if (msg.what == HandlerMessage.INIT_TOUCHBAR.ordinal()) {
                 PcManager activity = mPcManagerActivity.get();
                 Intent i = new Intent (activity, TouchBarActivity.class);
                 activity.startActivity (i);

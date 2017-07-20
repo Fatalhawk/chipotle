@@ -59,14 +59,15 @@ class TCPClient {
                 Log.i (DEBUG_TAG, "In/Out created");
                 this.sendMessage ("Yoooooo<EC>");
                 while (connected) {
-                    String incomingMessage = in.readLine ();
-                    if (incomingMessage != null && messageListener != null) {
-                        //Log.i(DEBUG_TAG, "Received Message: " + incomingMessage);
-                        messageListener.callbackMessageReceiver (incomingMessage);
+                    try {
+                        String messageSubject = in.readLine ();
+                        String messageContent = in.readLine ();
+                        if (messageSubject != null && messageContent != null && messageListener != null) {
+                            messageListener.callbackMessageReceiver(messageSubject, messageContent);
+                        }
+                    } catch (Exception e) {
+                        Log.e (DEBUG_TAG, "Message Error", e);
                     }
-                    //else {
-                    //    Log.d (DEBUG_TAG, "Null error");
-                    //}
                 }
             }
             catch (IOException e) {
@@ -88,7 +89,7 @@ class TCPClient {
     }
 
     interface MessageCallback {
-        void callbackMessageReceiver (String message);
+        void callbackMessageReceiver (String messageSubject, String messageContent);
         void restartConnection ();
     }
 }

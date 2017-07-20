@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sensei.companion.connection.commands.CommandsData;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -26,6 +28,8 @@ public class ConnectService extends Service {
     private static final int TIMEOUT_MS = 500;
     private String s = null;
     private int counter = 0;
+    private Handler mHandler;
+    final int HANDLER_MESSAGE_DELAY = 500;
 
     /**
      * Listen on socket for responses, timing out after TIMEOUT_MS
@@ -55,6 +59,8 @@ public class ConnectService extends Service {
         final TextView serverStatus = textView;
         final Button connectButton = button;
 
+        this.mHandler = mHandler;
+
         Toast.makeText (this, "My Service Created", Toast.LENGTH_LONG).show();
         Thread networkThread = new Thread(new Runnable() {
             @Override
@@ -80,7 +86,7 @@ public class ConnectService extends Service {
                         serverStatus.setText("Found PC: " + s);
                         connectButton.setOnClickListener(new Button.OnClickListener() {
                             public void onClick(View v) {
-                                mHandler.sendEmptyMessageDelayed (ConnectManager.INIT_TOUCHBAR, 2000);
+                                mHandler.sendEmptyMessageDelayed (ConnectManager.HandlerMessage.INIT_TOUCHBAR.ordinal(), HANDLER_MESSAGE_DELAY);
                                 connectToPc();
                             }
                         });
@@ -92,17 +98,24 @@ public class ConnectService extends Service {
     }
 
     public void connectToPc () {
+        final String COMMAND_MESSAGE = "companion_command";
+        final String DATA_MESSAGE = "companion_data";
+        final String OPEN_PROGRAMS = "open_programs";
+
         Thread networkThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
                     @Override
-                    public void callbackMessageReceiver(String message) {
-                        Log.i (DEBUG_TAG, "Received message: " + message);
-                        //TODO: filter and use received information
-                        //example below:
-                        //if (message == important event occurred)
-                        //  mHandler.sendEmptyMessageDelayed (ConnectManager.EXAMPLE_MESSAGE, 2000);
+                    public void callbackMessageReceiver(String messageSubject, String messageContent) {
+                        Log.i (DEBUG_TAG, "Received message:\n" + messageSubject + "\n" + messageContent);
+                        if (messageSubject.equals (COMMAND_MESSAGE)) {
+                            CommandsData.handleCommand(mHandler, messageContent);
+                        } else if (messageSubject.equals (OPEN_PROGRAMS)) {
+                            CommandsData.openPrograms (mHandler, messageContent);
+                        } else {
+                            //TODO: Add more messages
+                        }
                     }
                     @Override
                     public void restartConnection () {
