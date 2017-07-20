@@ -9,3 +9,26 @@ enum WindowsCommand {
 enum Program {
 	WINDOWS, UNSUPPORTED
 }
+
+
+
+Possible messages from PC to Android:
+
+"companion_command
+ [Program] [Command] "
+
+or
+
+"companion_data
+ [Program] [data] "
+
+Possible messages from Android to PC:
+
+"companion_command
+ [Program] [Command] "
+
+
+
+Message subjects:
+"companion_command" for commands
+"companion_data" for data
