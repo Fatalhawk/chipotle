@@ -17,7 +17,7 @@
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:background="@color/RedSmooth_3"
@@ -27,10 +27,10 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:layout_weight="1"
+            android:layout_weight="0.86"
             android:layout_marginLeft="@id/seekBar2"
             android:layout_marginStart="@id/seekBar2"
 
@@ -64,7 +64,7 @@
         <ImageButton
             android:id="@+id/imageButton3"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:background="@color/RedSmooth_3"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@id/seekBar4"
             android:layout_marginStart="@id/seekBar4"
-            android:layout_weight="1"
+            android:layout_weight="0.85"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
 
@@ -122,26 +122,27 @@
             android:id="@+id/bspace3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"/>
+            android:layout_weight="1.05"/>
 
         <RelativeLayout
-            android:background="@drawable/rrectangle"
+            android:background="@color/RedSmooth_3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="bottom"
             android:orientation="horizontal"
             android:id="@+id/relativeLayout"
             android:layout_weight="5"
           >
 
 
-
-
             <SeekBar
                 android:id="@+id/seekBar"
-                android:layout_width="250dp"
-                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="35dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:progressDrawable="@drawable/progress"
                 android:thumb="@drawable/thumb" />
             <TextView
@@ -180,13 +181,12 @@
             android:id="@+id/bspace1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"/>
-
+            android:layout_weight="1.9"/>
 
         <ImageButton
             android:id="@+id/imageButton9"
             android:layout_width="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:rotation="180"
             android:background="@color/RedSmooth_3"
@@ -201,7 +201,7 @@
         <ImageButton
             android:id="@+id/imageButton7"
             android:layout_width="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:background="@color/RedSmooth_3"
             android:adjustViewBounds="true"
@@ -214,7 +214,7 @@
         <ImageButton
             android:id="@+id/imageButton8"
             android:layout_width="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:background="@color/RedSmooth_3"
             android:adjustViewBounds="true"
@@ -233,11 +233,10 @@
             android:id="@+id/imageButton6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="3.4"
+            android:layout_gravity="end"
+            android:layout_weight="1.8"
             android:adjustViewBounds="true"
             android:background="@color/RedSmooth_3"
-            android:cropToPadding="true"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/cortana_icon" />
 
