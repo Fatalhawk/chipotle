@@ -103,7 +103,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        android:weightSum="8"
         android:layout_weight="1"
         android:gravity="center_horizontal">
 
@@ -119,7 +118,11 @@
             android:scaleType="fitXY"
             app:srcCompat="@drawable/acenter" />
 
-
+        <ImageView
+            android:id="@+id/bspace3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
 
         <RelativeLayout
             android:background="@drawable/rrectangle"
@@ -127,7 +130,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:id="@+id/relativeLayout"
-            android:layout_weight="7"
+            android:layout_weight="5"
           >
 
 
@@ -153,7 +156,11 @@
         </RelativeLayout>
 
 
-
+        <ImageView
+            android:id="@+id/bspace4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.9"/>
 
 
 
@@ -165,7 +172,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        android:weightSum="9"
         android:layout_weight="1"
         android:gravity="center">
 
@@ -174,14 +180,14 @@
             android:id="@+id/bspace1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"/>
+            android:layout_weight="5"/>
 
 
         <ImageButton
             android:id="@+id/imageButton9"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
             android:rotation="180"
             android:background="@color/RedSmooth_3"
             android:adjustViewBounds="true"
@@ -189,42 +195,46 @@
             app:srcCompat="@drawable/forward"
             android:layout_alignTop="@+id/imageButton8"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_gravity="right"/>
 
         <ImageButton
             android:id="@+id/imageButton7"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
             android:background="@color/RedSmooth_3"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:layout_centerHorizontal="true"
-            app:srcCompat="@drawable/play" />
+            app:srcCompat="@drawable/play"
+            android:layout_gravity="right"/>
 
 
         <ImageButton
             android:id="@+id/imageButton8"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
             android:background="@color/RedSmooth_3"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/forward"
+            android:layout_gravity="right"
             />
 
         <ImageView
             android:id="@+id/bspace2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight=""/>
 
         <ImageButton
             android:id="@+id/imageButton6"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3.4"
             android:adjustViewBounds="true"
             android:background="@color/RedSmooth_3"
             android:cropToPadding="true"
