@@ -17,13 +17,14 @@ namespace chrometest
 {
     class spotifyApp
     {
-        private static SpotifyLocalAPI _spotify;
+        private static SpotifyLocalAPI _spotify = new SpotifyLocalAPI();
 
-        public spotifyApp()
+        public static void Main()
         {
-            _spotify = new SpotifyLocalAPI();
-            _spotify.ListenForEvents = true;
-            //Make synchronizing object
+            spotifyApp s = new spotifyApp();
+            _spotify.Connect();
+            Console.WriteLine(s.TrackName() + " " + s.PlayingPosition().ToString() + " " + s.ArtistName());
+            Console.WriteLine(s.IsAd().ToString());
         }
         
 
@@ -42,10 +43,6 @@ namespace chrometest
         public string ClientVersion() { return _spotify.GetStatus().ClientVersion; }
 
         public bool Playing() { return _spotify.GetStatus().Playing; }
-
-        public bool Shuffle() { return _spotify.GetStatus().Shuffle; }
-
-        public bool Repeat() { return _spotify.GetStatus().Repeat; }
 
         public bool PlayEnabled() { return _spotify.GetStatus().PlayEnabled; }
 
@@ -114,13 +111,16 @@ namespace chrometest
             return _spotify.GetStatus().Track.GetAlbumArt(size);
         }
 
-        public void OnPlayStateChange()
+        public int trackLength()
         {
-
+            return _spotify.GetStatus().Track.Length;
         }
-        /*public void OnTrackChange 
+
+        /*public void OnPlayStateChange();
+        public void OnTrackChange 
         public void OnTrackTimeChange 
         public void OnVolumeChange*/
+
 
         [DllImport("user32.dll")]
         static extern void keybd_event(byte bVk, byte bScan, UInt32 dwFlags, IntPtr dwExtraInfo);
@@ -138,6 +138,8 @@ namespace chrometest
         private const byte VK_RIGHT = 0x27;
         private const UInt32 KEYEVENTF_EXTENDEDKEY = 0x0001;
         private const UInt32 KEYEVENTF_KEYUP = 0x0002;
+        private const int VK_KEY_R = 0x52;
+        private const int VK_KEY_S = 0x53;
 
         private static void volUp()
         {
@@ -154,6 +156,24 @@ namespace chrometest
             keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, handle);
             keybd_event(VK_DOWN, 0, KEYEVENTF_EXTENDEDKEY, handle);
             keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, handle);
+            keybd_event(VK_LCONTROL, 0, KEYEVENTF_KEYUP, handle);
+        }
+
+        private static void shuffle()
+        {
+            IntPtr handle = FindWindowByCaption(IntPtr.Zero, "spotify");
+            keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, handle);
+            keybd_event(VK_KEY_S, 0, KEYEVENTF_EXTENDEDKEY, handle);
+            keybd_event(VK_KEY_S, 0, KEYEVENTF_KEYUP, handle);
+            keybd_event(VK_LCONTROL, 0, KEYEVENTF_KEYUP, handle);
+        }
+
+        private static void repeat()
+        {
+            IntPtr handle = FindWindowByCaption(IntPtr.Zero, "spotify");
+            keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, handle);
+            keybd_event(VK_KEY_R, 0, KEYEVENTF_EXTENDEDKEY, handle);
+            keybd_event(VK_KEY_R, 0, KEYEVENTF_KEYUP, handle);
             keybd_event(VK_LCONTROL, 0, KEYEVENTF_KEYUP, handle);
         }
 
