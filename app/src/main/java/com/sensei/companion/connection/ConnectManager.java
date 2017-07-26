@@ -54,7 +54,7 @@ public class ConnectManager {
     public static class MessageHandler extends Handler {
         // TODO: this code will provide access to the Activity with the UI that needs to be updated based on the incoming messages
         private WeakReference<PcManager> mPcManagerActivity = null;
-        private static WeakReference<TouchBarActivity> mTouchBarActivity = null;
+        public static WeakReference<TouchBarActivity> mTouchBarActivity = null;
 
         MessageHandler (PcManager activity) {
             mPcManagerActivity = new WeakReference<> (activity);
