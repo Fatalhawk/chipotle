@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.graphics.drawable.Drawable;
 import android.widget.LinearLayout;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
+
 
 import com.sensei.companion.R;
 
@@ -49,25 +52,43 @@ public class dtop_management extends Fragment  {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
+        /** at the beginning all the programs will be loaded into dtop_management, load all pictures and names
+        during program, every time one of the imagebuttons, it should switch the fragment of the touch bar (Salar has this done)
+         I can assume the pictures and names will be given
+         For desktops, similar story **/
+        //swipe up to delete desktops
+
+
         View view1 = inflater.inflate(R.layout.dtop_management, container, false);
+        HorizontalScrollView scrollView = (HorizontalScrollView) view1.findViewById(R.id.h_scroll);
         final ImageButton addDesktopButton =  (ImageButton) view1.findViewById(R.id.addDesktopButton);
         addDesktopButton.setTag(Integer.toString(image_tracker));
-        final ImageButton first_desktop = (ImageButton) view1.findViewById(R.id.first_desktop);
+        ImageButton first_desktop = (ImageButton) view1.findViewById(R.id.first_desktop);
         final LinearLayout desktops_layout = (LinearLayout) view1.findViewById(R.id.desktops_layout);
         //just put onclick listener here makes your life easier
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         addDesktopButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+
                 ImageButton nImageButton = new ImageButton(getActivity());
                 nImageButton.setLayoutParams(params);
+                nImageButton.setId(image_tracker + 1);
                 //need to set ImageButton's image
+                nImageButton.setImageResource(R.drawable.desktop);
+
                 desktops_layout.addView(nImageButton);
 
 
                 imageButtons[image_tracker] = nImageButton;
+
                 image_tracker++;
+                System.out.println(Integer.toString(image_tracker));
                 addDesktopButton.setTag(Integer.toString(image_tracker));
+
             }
         });
 

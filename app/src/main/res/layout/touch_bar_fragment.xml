@@ -31,8 +31,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:layout_weight="0.86"
-            android:layout_marginLeft="@id/seekBar2"
-            android:layout_marginStart="@id/seekBar2"
+
 
             app:srcCompat="@drawable/volume_icon"
 
@@ -78,8 +77,6 @@
             android:id="@+id/imageView5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@id/seekBar4"
-            android:layout_marginStart="@id/seekBar4"
             android:layout_weight="0.85"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"

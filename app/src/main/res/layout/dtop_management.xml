@@ -11,13 +11,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:id="@+id/h_scroll"
         android:background="@color/RedSmooth_3">
 
         <LinearLayout
             android:id="@+id/desktops_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
 
             <ImageButton
                 android:id="@+id/first_desktop"
@@ -25,6 +26,8 @@
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/desktop"
                 android:background="@color/RedSmooth_3"/>
+
+
         </LinearLayout>
     </HorizontalScrollView>
 

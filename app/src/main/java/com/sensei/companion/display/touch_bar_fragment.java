@@ -14,6 +14,10 @@ import com.sensei.companion.R;
 
 public class touch_bar_fragment extends Fragment{
 
+    /**
+        Make icons consistent
+     */
+
 
     @Nullable
     @Override
