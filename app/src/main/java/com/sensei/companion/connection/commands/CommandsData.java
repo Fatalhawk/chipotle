@@ -1,5 +1,6 @@
 package com.sensei.companion.connection.commands;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.Log;
 
@@ -29,7 +30,8 @@ public class CommandsData {
     /*
     For messages in the form "[Program] [Command]"
      */
-    public static void handleCommand (Handler mHandler, String message) {
+    public static void handleCommand (Handler mHandler, byte[] messageBytes) {
+        String message = new String (messageBytes);
         StringTokenizer st = new StringTokenizer (message);
         try {
             Program environment = Enum.valueOf(Program.class, st.nextToken());
@@ -42,13 +44,5 @@ public class CommandsData {
         } catch (NoSuchElementException e) {
             Log.e (DEBUG_TAG, "Error with message: " + message, e);
         }
-    }
-
-    /*
-    For messages in the form "[Program] [Program] [Program]..." where the first [Program] is the
-    currently active program
-     */
-    public static void openPrograms (Handler mHandler, String message) {
-
     }
 }

@@ -2,9 +2,12 @@ package com.sensei.companion.connection;
 
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +32,6 @@ public class ConnectService extends Service {
     private String s = null;
     private int counter = 0;
     private Handler mHandler;
-    final int HANDLER_MESSAGE_DELAY = 500;
 
     /**
      * Listen on socket for responses, timing out after TIMEOUT_MS
@@ -86,7 +88,7 @@ public class ConnectService extends Service {
                         serverStatus.setText("Found PC: " + s);
                         connectButton.setOnClickListener(new Button.OnClickListener() {
                             public void onClick(View v) {
-                                mHandler.sendEmptyMessageDelayed (ConnectManager.HandlerMessage.INIT_TOUCHBAR.ordinal(), HANDLER_MESSAGE_DELAY);
+                                mHandler.sendEmptyMessage (ConnectManager.INIT_TOUCHBAR);
                                 connectToPc();
                             }
                         });
@@ -98,23 +100,35 @@ public class ConnectService extends Service {
     }
 
     public void connectToPc () {
-        final String COMMAND_MESSAGE = "companion_command";
-        final String DATA_MESSAGE = "companion_data";
-        final String OPEN_PROGRAMS = "open_programs";
-
         Thread networkThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
+                    /*
+                    For COMPANION_COMMAND messages
+                     */
                     @Override
-                    public void callbackMessageReceiver(String messageSubject, String messageContent) {
-                        Log.i (DEBUG_TAG, "Received message:\n" + messageSubject + "\n" + messageContent);
-                        if (messageSubject.equals (COMMAND_MESSAGE)) {
-                            CommandsData.handleCommand(mHandler, messageContent);
-                        } else if (messageSubject.equals (OPEN_PROGRAMS)) {
-                            CommandsData.openPrograms (mHandler, messageContent);
-                        } else {
-                            //TODO: Add more messages
+                    public void callbackMessageReceiver(byte[] messageContent) {
+                        Log.i (DEBUG_TAG, "Received message: " + new String (messageContent));
+                        CommandsData.handleCommand(mHandler, messageContent);
+                    }
+                    /*
+                    For NEW_PROGRAM_INFO messages in the form "[Program]"
+                     */
+                    @Override
+                    public void callbackMessageReceiver(byte[] programInfoBytes, byte[] imageBytes) {
+                        Log.i (DEBUG_TAG, "Received program info & pic: " + new String (programInfoBytes));
+
+                        Message myHandlerMessage = Message.obtain();
+                        Bundle myBundle = new Bundle ();
+                        myBundle.putByteArray (ConnectManager.PROGRAM_INFO, programInfoBytes);
+                        myBundle.putByteArray (ConnectManager.IMAGE_BYTES, imageBytes);
+                        myHandlerMessage.setData (myBundle);
+                        myHandlerMessage.what = ConnectManager.NEW_PROGRAM_INFO;
+
+                        boolean handlerSuccess = mHandler.sendMessage (myHandlerMessage);
+                        if (!handlerSuccess) {
+                            Log.d (DEBUG_TAG, "Handler message error: NEW_PROGRAM_INFO");
                         }
                     }
                     @Override
@@ -134,9 +148,9 @@ public class ConnectService extends Service {
         }
     }
 
-    public void sendMessageToPC (String message) {
+    public void sendMessageToPC (int messageSubject, String messageContent) {
         if (tcpClient != null && tcpClient.isRunning()) {
-            tcpClient.sendMessage (message);
+            tcpClient.sendMessage (messageSubject, messageContent);
         }
         else {
             Log.d (DEBUG_TAG, "Error sending");

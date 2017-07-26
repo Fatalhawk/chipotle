@@ -4,6 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -18,16 +21,22 @@ import java.lang.ref.WeakReference;
 
 public class ConnectManager {
 
-    private final String DEBUG_TAG = "appMonitor";
+    private static final String DEBUG_TAG = "appMonitor";
     private TextView textView;
     private Button button;
     private PcManager pcManager;
     private static ConnectService mService;
     private boolean isBound = false;
 
-    enum HandlerMessage {
-        INIT_TOUCHBAR, COMMAND_MESSAGE, DATA_MESSAGE
-    }
+    //PC message subject lines except for INIT_TOUCHBAR which is for Handler's Message.what
+    final static int INIT_TOUCHBAR = 0;
+    final static int COMPANION_COMMAND = 1;
+    final static int NEW_PROGRAM_INFO = 2;
+    //final static int COMPANION_DATA_<SUBJECT>
+
+    //Bundle keys for Handler messages
+    final static String PROGRAM_INFO = "program_info";
+    final static String IMAGE_BYTES = "image_bytes";
 
     public void initConnection (Context context, TextView textView, Button button, PcManager pcManager) {
         this.pcManager = pcManager;
@@ -37,9 +46,9 @@ public class ConnectManager {
         context.bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public static void sendMessageToPC (String message) {
+    public static void sendMessageToPC (int messageSubject, String messageContent) {
         if (mService != null)
-            mService.sendMessageToPC(message);
+            mService.sendMessageToPC(messageSubject, messageContent);
     }
 
     public static class MessageHandler extends Handler {
@@ -53,11 +62,24 @@ public class ConnectManager {
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == HandlerMessage.INIT_TOUCHBAR.ordinal()) {
+            if (msg.what == INIT_TOUCHBAR) {
                 PcManager activity = mPcManagerActivity.get();
                 Intent i = new Intent (activity, TouchBarActivity.class);
                 activity.startActivity (i);
                 mPcManagerActivity = null;
+            }
+            else if (msg.what == NEW_PROGRAM_INFO) { //For NEW_PROGRAM_INFO messages in the form "[Program]"
+                Bundle messageBundle = msg.getData();
+                byte [] programInfoBytes = messageBundle.getByteArray (PROGRAM_INFO);
+                byte [] imageBytes = messageBundle.getByteArray (IMAGE_BYTES);
+                if (programInfoBytes != null && imageBytes != null) {
+                    String programInfo = new String(programInfoBytes);
+                    Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                    //TODO: SEND THE PROGRAM INFO AND IMAGE BITMAP TO THE TOUCH_BAR_ACTIVITY
+                }
+                else {
+                    Log.d (DEBUG_TAG, "NEW_PROGRAM_INFO NULL ERROR IN HANDLER MESSAGE");
+                }
             }
         }
 
