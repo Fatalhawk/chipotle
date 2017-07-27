@@ -20,7 +20,7 @@ import android.support.design.widget.FloatingActionButton;
 
 import com.sensei.companion.R;
 
-
+//Margin for phones done now, can work on tablets margins later
 
 public class dtop_management extends Fragment  {
 
@@ -66,7 +66,7 @@ public class dtop_management extends Fragment  {
 
         View view1 = inflater.inflate(R.layout.dtop_management, container, false);
         HorizontalScrollView scrollView = (HorizontalScrollView) view1.findViewById(R.id.h_scroll);
-        final FloatingActionButton addDesktopButton =  (FloatingActionButton) view1.findViewById(R.id.addDesktopButton);
+        final ImageButton addDesktopButton =  (ImageButton) view1.findViewById(R.id.addDesktopButton);
         addDesktopButton.setTag(Integer.toString(image_tracker));
         ImageButton first_desktop = (ImageButton) view1.findViewById(R.id.first_desktop);
         final LinearLayout desktops_layout = (LinearLayout) view1.findViewById(R.id.desktops_layout);
@@ -74,7 +74,7 @@ public class dtop_management extends Fragment  {
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
         float scale = getResources().getDisplayMetrics().density;
-        final int ib_padding = (int) (56*scale + 0.5f); //56 is the size of a floating action button
+        final int ib_padding = (int) (28*scale + 0.5f); //56 is the size of a floating action button
 
         addDesktopButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -88,6 +88,8 @@ public class dtop_management extends Fragment  {
                 nImageButton.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
                 nImageButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.RedSmooth_3));
                 nImageButton.setPadding( 0, 0, ib_padding, 0);
+
+
 
                 desktops_layout.addView(nImageButton);
 
