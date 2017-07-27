@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,10 @@ public class dtop_management extends Fragment  {
         final LinearLayout desktops_layout = (LinearLayout) view1.findViewById(R.id.desktops_layout);
         //just put onclick listener here makes your life easier
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER;
+        float scale = getResources().getDisplayMetrics().density;
+        final int ib_padding = (int) (56*scale + 0.5f); //56 is the size of a floating action button
+
         addDesktopButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -82,6 +87,8 @@ public class dtop_management extends Fragment  {
                 //need to set ImageButton's image
                 nImageButton.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
                 nImageButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.RedSmooth_3));
+                nImageButton.setPadding( 0, 0, ib_padding, 0);
+
                 desktops_layout.addView(nImageButton);
 
 
