@@ -1,4 +1,4 @@
-package com.sensei.companion.display;
+package com.sensei.companion.display.user_interface;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
