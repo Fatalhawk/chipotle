@@ -4,5 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sensei.companion.display.AppLauncher">
+    tools:context="com.sensei.companion.display.PcSelectionActivity">
+
 </android.support.constraint.ConstraintLayout>

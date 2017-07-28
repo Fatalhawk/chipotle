@@ -15,6 +15,7 @@
         <activity android:name=".display.AppLauncher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,8 +27,9 @@
 
         <activity android:name=".display.TouchBarActivity" />
         <activity android:name=".display.TrackpadActivity" />
-        <activity android:name=".display.PcManager"></activity>
-        <activity android:name=".display.GestureActivity"></activity>
+        <activity android:name=".display.PcManager" />
+        <activity android:name=".display.GestureActivity" />
+        <activity android:name=".display.PcSelectionActivity"></activity>
     </application>
 
 </manifest>
