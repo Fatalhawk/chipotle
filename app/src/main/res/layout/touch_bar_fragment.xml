@@ -46,7 +46,7 @@
             android:thumb="@drawable/thumb"
             android:layout_weight="6"
 
-          />
+            />
 
 
     </LinearLayout>
