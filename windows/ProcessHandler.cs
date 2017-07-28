@@ -29,9 +29,7 @@ namespace Networking
             processListNames = new List<string>();
             updateProcessListNames();
             currentProcess = null;
-            determineForegroundWindow();
         }
-
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
@@ -39,23 +37,15 @@ namespace Networking
         [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr Processid);
 
-
         /**
          * determines the foreground window on computer
          **/
         private static void determineForegroundWindow()
         {
             IntPtr currentForeground = GetForegroundWindow();
-            Console.WriteLine("{0}",currentForeground.ToString());
-            foreach(int key in processDict.Keys)
+            if (processDict.Keys.Contains(currentForeground.ToInt32()))
             {
-                //determine foreground process
-                if (processDict[key].ProcessProp.MainWindowHandle == currentForeground)
-                {
-                    currentProcess = processDict[key];
-                    break;
-                    //Console.WriteLine("Current window is {0}", pInterface.ProcessProp.MainWindowTitle);
-                }
+                currentProcess = processDict[currentForeground.ToInt32()];
             }
         }
 
@@ -89,13 +79,19 @@ namespace Networking
          **/
         public static void killProcess(int key)
         {
-            if (!processDict[key].killApp())
+            if (processDict[key].killApp())
             {
-                removeProcess(key);
-                //Console.WriteLine("Could not kill process");
+                determineForegroundWindow();
             }
         }
 
+        public static void openProgram(int key)
+        {
+            if (processDict[key].setForegroundApp())
+            {
+                currentProcess = processDict[key];
+            }
+        }
         /**
          * main method to be called upon recieving instructions
          * will direct instruction to the appropriate process object
@@ -122,11 +118,6 @@ namespace Networking
                 processDict[key].printProcessInfo();
             }
             Console.WriteLine("###########################################\n\n");
-        }
-
-        public static List<string> getProcessListNames()
-        {
-            return processListNames;
         }
 
         public static IDictionary<int, ProcessInterface> getProcessDict()

@@ -9,7 +9,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Automation;
+using System.Text;
 
 namespace Networking
 {
@@ -26,10 +26,14 @@ namespace Networking
             set { process = value; }
         }
 
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+
         //process's main handle as observed by program
         private IntPtr handle;
         //process's icon
         private Icon processIcon;
+        private string windowTitle;
 
         //used for retrieving window handle
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
@@ -40,22 +44,12 @@ namespace Networking
          * Constructor
          * @param: Process that this object manages
          **/
-        public ProcessInterface(Process pObj)
+        public ProcessInterface(ref Process pObj, IntPtr hWnd, string title)
         {
+            windowTitle = title;
             process = pObj;
-            initProcessHandle();
+            handle = hWnd;
             initProcessIcon();
-        }
-
-        /**
-         * obtains the main window handle of the process
-         * used to be able to send windows system/app commands
-         **/
-        private void initProcessHandle()
-        {
-            // find window handle of Notepad
-            handle = process.MainWindowHandle;//FindWindow(process.MainWindowHandle, "");
-            if (!handle.Equals(IntPtr.Zero)){}
         }
 
         private void initProcessIcon()
@@ -94,6 +88,64 @@ namespace Networking
             return true;
         }
 
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowText",
+        ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetWindowText(IntPtr hWnd,
+            StringBuilder lpWindowText, int nMaxCount);
+
+        [DllImport("user32.dll", EntryPoint = "EnumDesktopWindows",
+        ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool EnumDesktopWindows(IntPtr hDesktop,
+            EnumDelegate lpEnumCallbackFunction, IntPtr lParam);
+
+        // Define the callback delegate's type.
+        private delegate bool EnumDelegate(IntPtr hWnd, int lParam);
+        private IntPtr confirmationHandle;
+
+        private bool filterCallBack(IntPtr hWnd, int lParam)
+        {
+            if (IsWindowVisible(hWnd))
+            {
+                confirmationHandle = hWnd;
+                return true;
+            }
+            return false;
+        }
+
+        private void getConfirmationHandle(out IntPtr conHandle)
+        {
+            conHandle = new IntPtr();
+            if (!EnumDesktopWindows(handle, filterCallBack, IntPtr.Zero))
+            {
+                conHandle = IntPtr.Zero;
+            }
+            else
+            {
+                conHandle = confirmationHandle;
+            }
+        }
+
+        private const UInt32 WM_CLOSE = 0x0010;
+        private const UInt32 WM_KEYDOWN = 0x0100;
+        private const UInt32 WM_SYSCOMMAND = 0x0112;
+        IntPtr SC_CLOSE = new IntPtr(0xF060);
+        private const int enterKey = 13;
+        private IntPtr VK_RETURN = new IntPtr(enterKey);
+
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
+
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+
         /**
          * terminates the process and closes the window of the process
          **/
@@ -101,18 +153,7 @@ namespace Networking
         {
             try
             {
-                //setForegroundApp();
-                process.CloseMainWindow();
-                process.Close();
-                if (!process.HasExited)
-                {
-                    AutomationElement element = AutomationElement.FromHandle(process.MainWindowHandle);
-                    if (element != null)
-                    {
-                        ((WindowPattern)element.GetCurrentPattern(WindowPattern.Pattern)).Close();
-                    }
-
-                }
+                PostMessage(handle, WM_SYSCOMMAND, SC_CLOSE, IntPtr.Zero);
                 return true;
             }
             catch (NullReferenceException e)
@@ -121,9 +162,8 @@ namespace Networking
             }
             catch (Exception e)
             {
-                //Console.WriteLine("Error: {0}", e.ToString());
-                return false;
                 process.Kill();
+                //Console.WriteLine("Error: {0}", e.ToString());
             }
             return true;
         }
@@ -138,7 +178,7 @@ namespace Networking
 
         public string getTitle()
         {
-            return process.MainWindowTitle;
+            return windowTitle;
         }
 
         public Icon getIcon()
@@ -161,6 +201,11 @@ namespace Networking
         public bool Equals(ProcessInterface otherPI)
         {
             return (process.Id == otherPI.process.Id);
+        }
+
+        public int getHandle()
+        {
+            return handle.ToInt32();
         }
     }
 }
