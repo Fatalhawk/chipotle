@@ -8,6 +8,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Drawing;
 
 namespace Networking
 {
@@ -22,6 +23,7 @@ namespace Networking
         public static string data;
         static TcpListener tcpListener;
         static Stream s;
+        static Socket handler;
         static StreamWriter sw;
         static StreamReader sr;
         public delegate void commandRecieved(string cmd);
@@ -99,6 +101,11 @@ namespace Networking
             }
         }
 
+        public static void sendMessage()
+        {
+
+        }
+
         /**
          * Description:
          * establishes thread between computer and phone
@@ -106,18 +113,18 @@ namespace Networking
         **/
         public static void listenForRequests()
         {
+            handler = tcpListener.AcceptSocket();
+            s = new NetworkStream(handler);
+            sw = new StreamWriter(s);
+            sr = new StreamReader(s);
+            sw.AutoFlush = true;
             sendCommand("Waiting for request from Phone...");
             sendCommand("Waiting for requests from Phone...");
-            Socket handler = tcpListener.AcceptSocket();
             string rCfP = string.Format("Recieved connection from phone at {0}", handler.RemoteEndPoint);
             sendCommand(rCfP);//"Recieved connection from phone at {0}", handler.RemoteEndPoint);
             try
             {
                 data = null;
-                s = new NetworkStream(handler);
-                sw = new StreamWriter(s);
-                sr = new StreamReader(s);
-                sw.AutoFlush = true;
                 while (true)
                 {
                     try
@@ -166,6 +173,32 @@ namespace Networking
             {
                 handler.Close();
                 Console.WriteLine("Exiting Program");
+            }
+        }
+        
+        public static void sendIcon(Icon pIcon)
+        {
+            Bitmap pBitmap = pIcon.ToBitmap();
+            MemoryStream ms = new MemoryStream();
+            pBitmap.Save(ms, pBitmap.RawFormat);
+            byte[] iconBytes = ms.GetBuffer();
+            pBitmap.Dispose();
+            ms.Close();
+
+            int total = 0;
+            int size = data.Length;
+            int dataleft = size;
+            int sent;
+
+            byte[] datasize = new byte[4];
+            datasize = BitConverter.GetBytes(size);
+            sent = handler.Send(datasize);
+
+            while (total < size)
+            {
+                sent = handler.Send(iconBytes, total, dataleft, SocketFlags.None);
+                total += sent;
+                dataleft -= sent;
             }
         }
     }

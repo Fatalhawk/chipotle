@@ -25,9 +25,11 @@ namespace Networking
             dataGridView1.Columns.Add(new DataGridViewImageColumn());
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
+            //dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView1.Columns[0].Name = "Icon";
             dataGridView1.Columns[1].Name = "Title";
             dataGridView1.Columns[2].Name = "ID";
+            //dataGridView1.Columns[3].Name = "Responding";
             Communicator.sendCommand = new Communicator.commandRecieved(updateTextbox);
         }
 
@@ -62,7 +64,8 @@ namespace Networking
                 dataGridView1.Rows.Clear();
                 foreach (int key in ProcessHandler.getProcessDict().Keys)
                 {
-                    dataGridView1.Rows.Add(new object[] { ProcessHandler.getProcessDict()[key].getIcon(), ProcessHandler.getProcessDict()[key].getProcessName(), key });
+                    dataGridView1.Rows.Add(new object[] { ProcessHandler.getProcessDict()[key].getIcon(), ProcessHandler.getProcessDict()[key].getTitle(),
+                        ProcessHandler.getProcessDict()[key].getHandle()});
                 }
             }
 
@@ -70,14 +73,14 @@ namespace Networking
 
         public void updateTextbox(string cmd)
         {
-            if (this.textBox1.InvokeRequired)
+            if (textBox1.InvokeRequired)
             {
                 updateTxtBoxDelegate d = new updateTxtBoxDelegate(updateTextbox);
-                this.Invoke(d, new object[] {cmd});
+                Invoke(d, new object[] {cmd});
             }
             else
             {
-                textBox1.AppendText(cmd + "\n");
+                textBox1.AppendText("\r\n" +cmd);
             }
         }
 
@@ -94,7 +97,8 @@ namespace Networking
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            ProcessHandler.openProgram((int)dataGridView1.SelectedRows[0].Cells[2].Value);
+            updateGridView2();
         }
 
         private void button2_Click(object sender, EventArgs e)
