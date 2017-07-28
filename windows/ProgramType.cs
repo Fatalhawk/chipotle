@@ -42,5 +42,11 @@ namespace Networking
         MUTE
     }
 
+    public enum CommandType
+    {
+        APP_COMMAND,
+
+    }
+
 
 }

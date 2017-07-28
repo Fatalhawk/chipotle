@@ -40,7 +40,7 @@ namespace Networking
             //result so far: ALL window creations (even non-top level) raise event so doing so might actually 
             //have inverse results and cause program to crash
             pollingCall();
-            pollTimer = new Timer(2000); //set polling rate to .5 Hz (every 2 seconds)
+            pollTimer = new Timer(5000); //set polling rate to .5 Hz (every 2 seconds)
             pollTimer.Enabled = true;
             pollTimer.Elapsed += new ElapsedEventHandler(pollProcessList); //add invoked (to-be) method to event handler
             pollTimer.Start(); //start timer
@@ -128,25 +128,6 @@ namespace Networking
         private void pollProcessList(object sender, EventArgs e)
         {
             pollingCall();
-            ////Dictionary<int, ProcessInterface> newDict = updateProcessDict();
-            //Dictionary<int,ProcessInterface> newDict;
-            //GetDesktopWindowHandlesAndTitles(out newDict);
-            //if (!dictEquals(newDict.Keys, ProcessHandler.getProcessDict().Keys))
-            //{
-            //    List<int> newProcesses = findNewProcesses(ProcessHandler.getProcessDict(), newDict);
-            //    foreach (int newProcess in newProcesses)
-            //    {
-            //        tObj.updateTextbox("Process " + newProcess + " initiated");
-            //        ProcessHandler.addProcess(newProcess, newDict[newProcess]);
-            //    }
-            //    List<int> killedProcesses = findKilledProcesses(ProcessHandler.getProcessDict(), newDict);
-            //    foreach (int killedID in killedProcesses)
-            //    {
-            //        tObj.updateTextbox("Process " + killedID + " terminated.");
-            //        ProcessHandler.removeProcess(killedID);
-            //    }
-            //    tObj.updateGridView2();
-            //}
         }
 
         private void pollingCall()
@@ -202,6 +183,9 @@ namespace Networking
             }
         }
 
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr GetParent(IntPtr hWnd);
+
         // We use this function to filter windows.
         // This version selects visible windows that have titles.
         private bool FilterCallback(IntPtr hWnd, int lParam)
@@ -213,7 +197,7 @@ namespace Networking
             Process pObj;
             uint processId;
             // If the window is visible and has a title, save it (and it's not Program Manager).
-            if (IsWindowVisible(hWnd) && !string.IsNullOrEmpty(title) && title != "Program Manager")//&& GetParent(hWnd).ToInt32() == 0 
+            if (IsWindowVisible(hWnd) && !string.IsNullOrEmpty(title) && title != "Program Manager")
             {
                 //tObj.updateTextbox(GetParent(hWnd).ToString());
                 GetWindowThreadProcessId(hWnd, out processId);

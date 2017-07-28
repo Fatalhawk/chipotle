@@ -88,47 +88,6 @@ namespace Networking
             return true;
         }
 
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool IsWindowVisible(IntPtr hWnd);
-
-        [DllImport("user32.dll", EntryPoint = "GetWindowText",
-        ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern int GetWindowText(IntPtr hWnd,
-            StringBuilder lpWindowText, int nMaxCount);
-
-        [DllImport("user32.dll", EntryPoint = "EnumDesktopWindows",
-        ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool EnumDesktopWindows(IntPtr hDesktop,
-            EnumDelegate lpEnumCallbackFunction, IntPtr lParam);
-
-        // Define the callback delegate's type.
-        private delegate bool EnumDelegate(IntPtr hWnd, int lParam);
-        private IntPtr confirmationHandle;
-
-        private bool filterCallBack(IntPtr hWnd, int lParam)
-        {
-            if (IsWindowVisible(hWnd))
-            {
-                confirmationHandle = hWnd;
-                return true;
-            }
-            return false;
-        }
-
-        private void getConfirmationHandle(out IntPtr conHandle)
-        {
-            conHandle = new IntPtr();
-            if (!EnumDesktopWindows(handle, filterCallBack, IntPtr.Zero))
-            {
-                conHandle = IntPtr.Zero;
-            }
-            else
-            {
-                conHandle = confirmationHandle;
-            }
-        }
-
         private const UInt32 WM_CLOSE = 0x0010;
         private const UInt32 WM_KEYDOWN = 0x0100;
         private const UInt32 WM_SYSCOMMAND = 0x0112;
