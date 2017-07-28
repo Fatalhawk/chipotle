@@ -1,5 +1,10 @@
 package com.sensei.companion.connection.commands;
 
+import android.os.Handler;
+
+import com.sensei.companion.connection.ConnectManager;
+import com.sensei.companion.display.TouchBarActivity;
+
 class WindowsCommandReceiver extends CommandReceiver<WindowsCommandReceiver.WindowsCommand>{
 
     enum WindowsCommand {
@@ -7,12 +12,13 @@ class WindowsCommandReceiver extends CommandReceiver<WindowsCommandReceiver.Wind
     }
 
     @Override
-    public void interpretCommand(String command) {
-        doCommand (Enum.valueOf(WindowsCommand.class, command));
+    public void interpretCommand(Handler mHandler, String command) {
+        doCommand (mHandler, Enum.valueOf(WindowsCommand.class, command));
     }
 
     @Override
-    public void doCommand (WindowsCommand command) {
-
+    public void doCommand (Handler mHandler, WindowsCommand command) {
+        TouchBarActivity mActivity = ConnectManager.MessageHandler.mTouchBarActivity.get();
+        //TODO: add command executions
     }
 }

@@ -1,13 +1,12 @@
 package com.sensei.companion.display;
 
-import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.sensei.companion.R;
+import com.sensei.companion.connection.ConnectManager;
 import com.sensei.companion.display.program_managers.*;
 
 import java.util.Hashtable;
@@ -16,27 +15,25 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
         ScreenSelectorFragment.OnScreenSelectorInteractionListener {
 
     private final String DEBUG_TAG = "appMonitor";
-    private final Hashtable<Integer, Class<? extends TouchBarFragment>> touchbarClass = new Hashtable <> ();
+    private static final Hashtable<Integer, Class<? extends TouchBarFragment>> touchbarClass = new Hashtable <> ();
     private int currentScreen;
 
     public static final int DESKTOP = 0;
     public static final int WORD = 1;
 
+    static {
+        touchbarClass.put (DESKTOP, GenericProgramManager.class);
+        touchbarClass.put (WORD, WordManager.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_touch_bar);
-        //TODO: UNCOMMENT THE LINE BELOW WHEN READY TO COMMUNICATE WITH PC
-        //ConnectManager.MessageHandler.setActivityReferenceToTouchBar(this);
-        initProgramTouchbarCorrespondance();
+
+        ConnectManager.MessageHandler.setActivityReferenceToTouchBar(this);
 
         currentScreen = 0; //TODO: REMOVE LATER
-    }
-
-    private void initProgramTouchbarCorrespondance () {
-        //Touchbar fragments corresponding to each windows program
-        touchbarClass.put (DESKTOP, GenericProgramManager.class);
-        touchbarClass.put (WORD, WordManager.class);
     }
 
     @Override
