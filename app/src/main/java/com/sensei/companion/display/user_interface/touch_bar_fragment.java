@@ -42,4 +42,6 @@ public class touch_bar_fragment extends Fragment{
         return view;
 
     }
+
+
 }
