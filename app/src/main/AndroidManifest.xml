@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -13,12 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".display.AppLauncher"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape">
+            android:name=".display.AppLauncher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,7 +34,7 @@
             android:name=".display.PcSelectionActivity"
             android:theme="@style/PcSelection"
             android:label="PC Selection"/>
-        <activity android:name=".display.user_interface.UIAppLauncher"></activity>
+        <activity android:name=".display.user_interface.UIAppLauncher"/>
     </application>
 
 </manifest>

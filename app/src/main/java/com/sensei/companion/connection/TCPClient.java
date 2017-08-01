@@ -80,6 +80,11 @@ class TCPClient {
                     byte [] messageSubjectBytes = new byte [4];
                     byte [] messageSizeBytes = new byte [4];
                     in.read (messageSubjectBytes);
+
+
+
+
+
                     in.read (messageSizeBytes);
                     int subject = ByteBuffer.wrap(messageSubjectBytes).asIntBuffer().get();
                     int size = ByteBuffer.wrap(messageSizeBytes).asIntBuffer().get();
@@ -102,6 +107,11 @@ class TCPClient {
                         } else {
                             //TODO: RECEIVE OTHER MESSAGE TYPES IF NECESSARY
                         }
+
+
+
+
+
                     } else {
                         Log.d (DEBUG_TAG, "NULL MESSAGE LISTENER");
                     }

@@ -1,5 +1,8 @@
 package com.sensei.companion.display;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +23,7 @@ public class PcManager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.i (DEBUG_TAG, "hi");
         setContentView(R.layout.activity_pc_manager);
+
         connect();
     }
 
