@@ -29,7 +29,7 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_touch_bar);
+        setContentView(R.layout.activity_touchbar_main);
 
         ConnectManager.MessageHandler.setActivityReferenceToTouchBar(this);
 

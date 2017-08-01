@@ -24,18 +24,19 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".display.TouchBarActivity" />
-        <activity android:name=".display.TrackpadActivity" />
-        <activity android:name=".display.PcManager" />
-        <activity android:name=".display.GestureActivity" />
-        <activity android:name=".display.PcSelectionActivity" />
-        <activity android:name=".display.user_interface.UIAppLauncher">
+        <activity android:name=".display.TouchBarActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".display.TrackpadActivity" />
+        <activity android:name=".display.PcManager" />
+        <activity android:name=".display.GestureActivity" />
+        <activity android:name=".display.PcSelectionActivity" />
+        <activity android:name=".display.user_interface.UIAppLauncher"/>
     </application>
 
 </manifest>

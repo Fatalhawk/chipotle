@@ -19,7 +19,7 @@ public class GestureActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_launcher);
+        setContentView(R.layout.activity_touchbar_main);
         View v = findViewById(android.R.id.content);
         setUpGestures(v);
         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
