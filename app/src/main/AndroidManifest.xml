@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    />
 
     <application
         android:allowBackup="true"
@@ -16,11 +17,6 @@
             android:name=".display.AppLauncher"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service
@@ -33,7 +29,13 @@
         <activity android:name=".display.PcManager" />
         <activity android:name=".display.GestureActivity" />
         <activity android:name=".display.PcSelectionActivity" />
-        <activity android:name=".display.user_interface.UIAppLauncher"></activity>
+        <activity android:name=".display.user_interface.UIAppLauncher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
