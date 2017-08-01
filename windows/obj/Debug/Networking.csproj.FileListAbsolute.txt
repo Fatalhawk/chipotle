@@ -5,3 +5,4 @@ C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.TestGUI.re
 C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.csproj.GenerateResource.Cache
 C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.exe
 C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.pdb
+C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.csproj.ResolveComReference.cache

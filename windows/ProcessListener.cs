@@ -40,7 +40,7 @@ namespace Networking
             //result so far: ALL window creations (even non-top level) raise event so doing so might actually 
             //have inverse results and cause program to crash
             pollingCall();
-            pollTimer = new Timer(2000); //set polling rate to .5 Hz (every 2 seconds)
+            pollTimer = new Timer(5000); //set polling rate to .5 Hz (every 2 seconds)
             pollTimer.Enabled = true;
             pollTimer.Elapsed += new ElapsedEventHandler(pollProcessList); //add invoked (to-be) method to event handler
             pollTimer.Start(); //start timer
@@ -128,25 +128,6 @@ namespace Networking
         private void pollProcessList(object sender, EventArgs e)
         {
             pollingCall();
-            ////Dictionary<int, ProcessInterface> newDict = updateProcessDict();
-            //Dictionary<int,ProcessInterface> newDict;
-            //GetDesktopWindowHandlesAndTitles(out newDict);
-            //if (!dictEquals(newDict.Keys, ProcessHandler.getProcessDict().Keys))
-            //{
-            //    List<int> newProcesses = findNewProcesses(ProcessHandler.getProcessDict(), newDict);
-            //    foreach (int newProcess in newProcesses)
-            //    {
-            //        tObj.updateTextbox("Process " + newProcess + " initiated");
-            //        ProcessHandler.addProcess(newProcess, newDict[newProcess]);
-            //    }
-            //    List<int> killedProcesses = findKilledProcesses(ProcessHandler.getProcessDict(), newDict);
-            //    foreach (int killedID in killedProcesses)
-            //    {
-            //        tObj.updateTextbox("Process " + killedID + " terminated.");
-            //        ProcessHandler.removeProcess(killedID);
-            //    }
-            //    tObj.updateGridView2();
-            //}
         }
 
         private void pollingCall()
@@ -202,6 +183,11 @@ namespace Networking
             }
         }
 
+        [DllImport("user32.dll", ExactSpelling = true)]
+        static extern IntPtr GetAncestor(IntPtr hwnd, GetAncestorFlags flags);
+
+        private const long WS_EX_APPWINDOW = 0x00040000L;
+
         // We use this function to filter windows.
         // This version selects visible windows that have titles.
         private bool FilterCallback(IntPtr hWnd, int lParam)
@@ -210,26 +196,147 @@ namespace Networking
             StringBuilder sb_title = new StringBuilder(256);
             int length = GetWindowText(hWnd, sb_title, sb_title.Capacity);
             string title = sb_title.ToString();
+            var lShellWindow = GetShellWindow();
             Process pObj;
             uint processId;
-            // If the window is visible and has a title, save it (and it's not Program Manager).
-            if (IsWindowVisible(hWnd) && !string.IsNullOrEmpty(title) && title != "Program Manager")//&& GetParent(hWnd).ToInt32() == 0 
+
+            if (!isTopLevel(hWnd, lShellWindow))
             {
-                //tObj.updateTextbox(GetParent(hWnd).ToString());
-                GetWindowThreadProcessId(hWnd, out processId);
-                pObj = Process.GetProcessById(checked((int)processId));
-                //ApplicationFrameHost allows stock windows app to be interacted with through GUI
-                //but causes additional problems such as creating hidden top-level windows to Mail, Photos, and Groove Music open
-                //while checking for updates to those software in WinStoreApp
-                if (pObj.ProcessName != "ApplicationFrameHost") // can fix this to use title of window instead?
-                {
-                    newPDict.Add(checked((int)hWnd), new ProcessInterface(ref pObj, hWnd, title));
-                }
+                return true;
             }
+
+            //If the window is visible and has a title, save it(and it's not Program Manager).            
+            //tObj.updateTextbox(GetParent(hWnd).ToString());
+            GetWindowThreadProcessId(hWnd, out processId);
+            pObj = Process.GetProcessById(checked((int)processId));
+            //ApplicationFrameHost allows stock windows app to be interacted with through GUI
+            //but causes additional problems such as creating hidden top-level windows to Mail, Photos, and Groove Music open
+            //while checking for updates to those software in WinStoreApp
+                
+            newPDict.Add(checked((int)hWnd), new ProcessInterface(ref pObj, hWnd, title));
+
+
 
             // Return true to indicate that we
             // should continue enumerating windows.
             return true;
+        }
+
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
+        static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr GetParent(IntPtr hWnd);
+
+        enum DWMWINDOWATTRIBUTE : uint
+        {
+            NCRenderingEnabled = 1,
+            NCRenderingPolicy,
+            TransitionsForceDisabled,
+            AllowNCPaint,
+            CaptionButtonBounds,
+            NonClientRtlLayout,
+            ForceIconicRepresentation,
+            Flip3DPolicy,
+            ExtendedFrameBounds,
+            HasIconicBitmap,
+            DisallowPeek,
+            ExcludedFromPeek,
+            Cloak,
+            Cloaked,
+            FreezeRepresentation
+        }
+
+        [DllImport("dwmapi.dll")]
+        static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out int pvAttribute, int cbAttribute);
+
+        static bool IsInvisibleWin10BackgroundAppWindow(IntPtr hWnd)
+        {
+            int CloakedVal;
+            int S_OK = 0x00000000;
+            int hRes = DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out CloakedVal, sizeof(int));
+            if (hRes != S_OK)
+            {
+                CloakedVal = 0;
+            }
+            return CloakedVal > 0;
+        }
+
+
+        private bool isTopLevel(IntPtr hWnd, IntPtr lShellWindow)
+        {
+            if(hWnd == lShellWindow)
+            {
+                return false;
+            }
+
+            if (IsInvisibleWin10BackgroundAppWindow(hWnd))
+            {
+                return false;
+            }
+
+            if (!IsWindowVisible(hWnd))
+            {
+                return false;
+            }
+
+            IntPtr root = GetAncestor(hWnd, GetAncestorFlags.GA_GETROOTOWNER);
+
+            if (GetLastVisibleActivePopupOfWindow(root) != hWnd)
+            {
+                return false;
+            }
+
+            StringBuilder sb_title = new StringBuilder(256);
+            int length = GetWindowText(hWnd, sb_title, sb_title.Capacity);
+            string title = sb_title.ToString();
+
+            if (string.IsNullOrEmpty(title))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private const int MaxLastActivePopupIterations = 50;
+
+        private static IntPtr GetLastVisibleActivePopupOfWindow(IntPtr window)
+        {
+            var level = MaxLastActivePopupIterations;
+            var currentWindow = window;
+            while (level-- > 0)
+            {
+                var lastPopUp = GetLastActivePopup(currentWindow);
+
+                if (IsWindowVisible(lastPopUp))
+                    return lastPopUp;
+
+                if (lastPopUp == currentWindow)
+                    return IntPtr.Zero;
+
+                currentWindow = lastPopUp;
+            }
+
+            //Log.Warn(string.Format("Could not find last active popup for window {0} after {1} iterations", window, MaxLastActivePopupIterations));
+            return IntPtr.Zero;
+        }
+
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetShellWindow();
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetLastActivePopup(IntPtr hWnd);
+
+        public enum GetAncestorFlags
+        {
+            GA_PARENT = 1,
+            GA_ROOT = 2,
+            GA_GETROOTOWNER = 3
         }
     }
 }

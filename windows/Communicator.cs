@@ -36,9 +36,14 @@ namespace Networking
         **/
         static Communicator()
         {
-            sendInitialBroadcast();
             tcpListener = initListener();
+            sendInitialBroadcast();
             tcpListener.Start();
+            handler = tcpListener.AcceptSocket();
+            s = new NetworkStream(handler);
+            sw = new StreamWriter(s);
+            sr = new StreamReader(s);
+            sw.AutoFlush = true;
         }
 
         /**
@@ -101,7 +106,7 @@ namespace Networking
             }
         }
 
-        public static void sendMessage()
+        public static void sendMessage(int cmdTarget, int cmd)
         {
 
         }
@@ -113,15 +118,6 @@ namespace Networking
         **/
         public static void listenForRequests()
         {
-            handler = tcpListener.AcceptSocket();
-            s = new NetworkStream(handler);
-            sw = new StreamWriter(s);
-            sr = new StreamReader(s);
-            sw.AutoFlush = true;
-            sendCommand("Waiting for request from Phone...");
-            sendCommand("Waiting for requests from Phone...");
-            string rCfP = string.Format("Recieved connection from phone at {0}", handler.RemoteEndPoint);
-            sendCommand(rCfP);//"Recieved connection from phone at {0}", handler.RemoteEndPoint);
             try
             {
                 data = null;
@@ -129,13 +125,13 @@ namespace Networking
                 {
                     try
                     {
-                        data = sr.ReadLine();
-                        Console.WriteLine(data);
-                        if (data.IndexOf("<EC>") > -1)
-                        {
-                            sendCommand(data);
-                            sw.WriteLine("shut the fuck up");
-                        }
+                        //data = sr.ReadLine();
+                        //Console.WriteLine(data);
+                        //if (data.IndexOf("<EC>") > -1)
+                        //{
+                            //sendCommand(data);
+                            //sw.WriteLine("shut the fuck up");
+                        //}
                     }
                     catch (SocketException e)
                     {
