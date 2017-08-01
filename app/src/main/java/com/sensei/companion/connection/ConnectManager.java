@@ -75,6 +75,7 @@ public class ConnectManager {
                 if (programInfoBytes != null && imageBytes != null) {
                     String programInfo = new String(programInfoBytes);
                     Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+
                     //TODO: SEND THE PROGRAM INFO AND IMAGE BITMAP TO THE TOUCH_BAR_ACTIVITY
                 }
                 else {
