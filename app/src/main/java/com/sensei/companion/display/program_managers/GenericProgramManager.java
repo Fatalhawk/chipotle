@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.sensei.companion.R;
 import com.sensei.companion.connection.ConnectManager;
@@ -16,22 +17,29 @@ public class GenericProgramManager extends TouchBarFragment {
     private final String DEBUG_TAG = "appMonitor";
     private int testCounter = 0;
 
+    /*
+    Every time an action is done on the touchbar fragment, call super.mListener.sendMessage (String message)
+     */
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_generic_program_manager, container, false);
-        final Button button = (Button) v.findViewById(R.id.testButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendTestMessage(v);
+        View view = inflater.inflate(R.layout.touch_bar_fragment, container, false);
+        final ImageButton imageButton7 =  (ImageButton) view.findViewById(R.id.imageButton7);
+        imageButton7.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                //once I set the play.png and pause.png properly I'm good for the touchbar fragment
+                if(imageButton7.getTag() != null && imageButton7.getTag().toString().equals("pause.png")){
+                    imageButton7.setImageResource(R.drawable.play);
+                    imageButton7.setTag("play.png");
+                } else {
+                    imageButton7.setImageResource(R.drawable.pause);
+                    imageButton7.setTag("pause.png");
+                }
             }
         });
-        return v;
+        return view;
     }
 
-    public void sendTestMessage (View v) {
-        super.mListener.sendMessage ("test");
-    }
 }
