@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/RedSmooth_4"
-    tools:context="com.sensei.companion.display.AppLauncher">
+    tools:context="com.sensei.companion.display.TouchBarActivity">
 
     <LinearLayout
         android:layout_width="576dp"
@@ -17,7 +17,7 @@
 
         <fragment
             android:id="@+id/fragment3"
-            android:name="com.sensei.companion.display.user_interface.touch_bar_fragment"
+            android:name="com.sensei.companion.display.program_managers.GenericProgramManager"
             android:layout_height="0dp"
             android:layout_width="match_parent"
             android:layout_weight="2"
@@ -28,7 +28,7 @@
 
         <fragment
             android:id="@+id/fragment4"
-            android:name="com.sensei.companion.display.user_interface.dtop_management"
+            android:name="com.sensei.companion.display.ScreenSelectorFragment"
             android:layout_height="0dp"
             android:layout_width="match_parent"
             android:layout_weight="1"

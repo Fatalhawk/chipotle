@@ -36,7 +36,6 @@
         <activity android:name=".display.PcManager" />
         <activity android:name=".display.GestureActivity" />
         <activity android:name=".display.PcSelectionActivity" />
-        <activity android:name=".display.user_interface.UIAppLauncher"/>
     </application>
 
 </manifest>

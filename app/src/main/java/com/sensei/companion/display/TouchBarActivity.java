@@ -41,6 +41,10 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
         Log.i (DEBUG_TAG, "Test message");
     }
 
+    /*
+    Call this method with the appropriate screen key (representing the appropriate fragment/touchbar) to change to that
+    touchbar.
+     */
     @Override
     public void switchScreen(int screenKey) {
         if (currentScreen != screenKey) {
