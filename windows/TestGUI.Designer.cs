@@ -32,6 +32,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.sendButton = new System.Windows.Forms.Button();
+            this.cmdTxtBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,7 +55,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(176, 437);
+            this.button1.Location = new System.Drawing.Point(138, 448);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(162, 40);
             this.button1.TabIndex = 1;
@@ -63,7 +65,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(483, 436);
+            this.button2.Location = new System.Drawing.Point(513, 448);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(155, 41);
             this.button2.TabIndex = 2;
@@ -75,7 +77,7 @@
             // 
             this.textBox1.AcceptsReturn = true;
             this.textBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.textBox1.Location = new System.Drawing.Point(139, 532);
+            this.textBox1.Location = new System.Drawing.Point(138, 570);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -83,11 +85,31 @@
             this.textBox1.TabIndex = 3;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
+            // sendButton
+            // 
+            this.sendButton.Location = new System.Drawing.Point(334, 448);
+            this.sendButton.Name = "sendButton";
+            this.sendButton.Size = new System.Drawing.Size(148, 40);
+            this.sendButton.TabIndex = 4;
+            this.sendButton.Text = "Send";
+            this.sendButton.UseVisualStyleBackColor = true;
+            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
+            // 
+            // cmdTxtBox
+            // 
+            this.cmdTxtBox.Location = new System.Drawing.Point(297, 514);
+            this.cmdTxtBox.Name = "cmdTxtBox";
+            this.cmdTxtBox.Size = new System.Drawing.Size(216, 22);
+            this.cmdTxtBox.TabIndex = 5;
+            this.cmdTxtBox.TextChanged += new System.EventHandler(this.cmdTxtBox_TextChanged);
+            // 
             // TestGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 832);
+            this.Controls.Add(this.cmdTxtBox);
+            this.Controls.Add(this.sendButton);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -106,5 +128,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         public System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button sendButton;
+        private System.Windows.Forms.TextBox cmdTxtBox;
     }
 }

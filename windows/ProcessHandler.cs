@@ -87,25 +87,17 @@ namespace Networking
 
         public static void openProgram(int key)
         {
-            if (processDict[key].setForegroundApp())
-            {
-                currentProcess = processDict[key];
-            }
+            processDict[key].setForegroundApp();
         }
         /**
          * main method to be called upon recieving instructions
          * will direct instruction to the appropriate process object
          **/
-        public static void performAction()
+        public static void performAction(int x)
         {
 
         }
 
-        private static void setForeGroundApp(int key)
-        {
-            currentProcess = processDict[key];
-            currentProcess.setForegroundApp();
-        }
 
         /**
          * Displays to console list of currently running processes in processList variable
@@ -123,6 +115,11 @@ namespace Networking
         public static IDictionary<int, ProcessInterface> getProcessDict()
         {
             return processDict;
+        }
+
+        public static ProcessInterface getPInterface(int key)
+        {
+            return processDict[key];
         }
     }
 }

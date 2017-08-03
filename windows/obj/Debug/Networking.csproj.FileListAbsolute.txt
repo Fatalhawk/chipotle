@@ -1,3 +1,4 @@
+C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.csproj.ResolveComReference.cache
 C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Networking.exe
 C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Networking.pdb
 C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.csprojResolveAssemblyReference.cache
@@ -5,4 +6,7 @@ C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.TestGUI.re
 C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.csproj.GenerateResource.Cache
 C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.exe
 C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.pdb
-C:\Users\takat\Source\Repos\chipotle_new\windows\obj\Debug\Networking.csproj.ResolveComReference.cache
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Newtonsoft.Json.dll
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\SpotifyAPI.dll
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Newtonsoft.Json.xml
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\SpotifyAPI.xml

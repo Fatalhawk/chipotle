@@ -39,11 +39,11 @@ namespace Networking
             tcpListener = initListener();
             sendInitialBroadcast();
             tcpListener.Start();
-            handler = tcpListener.AcceptSocket();
-            s = new NetworkStream(handler);
-            sw = new StreamWriter(s);
-            sr = new StreamReader(s);
-            sw.AutoFlush = true;
+            //handler = tcpListener.AcceptSocket();
+            //s = new NetworkStream(handler);
+            //sw = new StreamWriter(s);
+            //sr = new StreamReader(s);
+            //sw.AutoFlush = true;
         }
 
         /**
@@ -135,8 +135,7 @@ namespace Networking
                     }
                     catch (SocketException e)
                     {
-                        //Console.WriteLine("Error occured");
-                        //Console.WriteLine(e.ToString());
+                        Console.WriteLine(e.ToString());
                         break;
                     }
                     catch (NullReferenceException e)
@@ -148,7 +147,7 @@ namespace Networking
                         sw = new StreamWriter(s);
                         sr = new StreamReader(s);
                         sw.AutoFlush = true;
-                        //Console.WriteLine(e.ToString());
+                        Console.WriteLine(e.ToString());
                         continue;
                     }
                     catch (Exception e)

@@ -25,11 +25,11 @@ namespace Networking
             dataGridView1.Columns.Add(new DataGridViewImageColumn());
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
-            //dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView1.Columns[0].Name = "Icon";
             dataGridView1.Columns[1].Name = "Title";
             dataGridView1.Columns[2].Name = "ID";
-            //dataGridView1.Columns[3].Name = "Responding";
+            dataGridView1.Columns[3].Name = "Responding";
             Communicator.sendCommand = new Communicator.commandRecieved(updateTextbox);
         }
 
@@ -65,7 +65,7 @@ namespace Networking
                 foreach (int key in ProcessHandler.getProcessDict().Keys)
                 {
                     dataGridView1.Rows.Add(new object[] { ProcessHandler.getProcessDict()[key].getIcon(), ProcessHandler.getProcessDict()[key].getTitle(),
-                        ProcessHandler.getProcessDict()[key].getHandle()});
+                        ProcessHandler.getProcessDict()[key].getHandle(), ProcessHandler.getProcessDict()[key].getProcessName()});
                 }
             }
 
@@ -105,6 +105,16 @@ namespace Networking
         {
             ProcessHandler.killProcess((int)dataGridView1.SelectedRows[0].Cells[2].Value);
             updateGridView2();
+        }
+
+        private void sendButton_Click(object sender, EventArgs e)
+        {
+            ProcessHandler.getPInterface((int)dataGridView1.SelectedRows[0].Cells[2].Value).performAction(Int32.Parse(cmdTxtBox.Text));
+        }
+
+        private void cmdTxtBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

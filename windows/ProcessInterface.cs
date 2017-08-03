@@ -19,7 +19,7 @@ namespace Networking
      **/ 
     public class ProcessInterface
     {
-        private Process process;
+        protected Process process;
         //process encapsulated in processInterface 
         public Process ProcessProp {
             get { return process; }
@@ -30,10 +30,10 @@ namespace Networking
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
 
         //process's main handle as observed by program
-        private IntPtr handle;
+        protected IntPtr handle;
         //process's icon
-        private Icon processIcon;
-        private string windowTitle;
+        protected Icon processIcon;
+        protected string windowTitle;
 
         //used for retrieving window handle
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
@@ -79,14 +79,17 @@ namespace Networking
         /**
          * makes window of process the foreground window
          **/
-        public bool setForegroundApp()
+        public void setForegroundApp()
         {
-            if (!SetForegroundWindow(handle))
-            {
-                return false;
-            }
-            return true;
+            if (!SetForegroundWindow(handle)) { }
         }
+
+        public virtual void performAction(int x)
+        {
+
+        }
+
+
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -104,30 +107,6 @@ namespace Networking
 
         // Define the callback delegate's type.
         private delegate bool EnumDelegate(IntPtr hWnd, int lParam);
-        private IntPtr confirmationHandle;
-
-        private bool filterCallBack(IntPtr hWnd, int lParam)
-        {
-            if (IsWindowVisible(hWnd))
-            {
-                confirmationHandle = hWnd;
-                return true;
-            }
-            return false;
-        }
-
-        private void getConfirmationHandle(out IntPtr conHandle)
-        {
-            conHandle = new IntPtr();
-            if (!EnumDesktopWindows(handle, filterCallBack, IntPtr.Zero))
-            {
-                conHandle = IntPtr.Zero;
-            }
-            else
-            {
-                conHandle = confirmationHandle;
-            }
-        }
 
         private const UInt32 WM_CLOSE = 0x0010;
         private const UInt32 WM_KEYDOWN = 0x0100;
@@ -158,12 +137,13 @@ namespace Networking
             }
             catch (NullReferenceException e)
             {
+                Console.WriteLine(e.ToString());
                 process.Kill();
             }
             catch (Exception e)
             {
                 process.Kill();
-                //Console.WriteLine("Error: {0}", e.ToString());
+                Console.WriteLine(e.ToString());
             }
             return true;
         }
@@ -194,6 +174,7 @@ namespace Networking
             }
             catch (InvalidOperationException e)
             {
+                Console.WriteLine(e.ToString());
                 return "lol";
             }
         }
@@ -206,6 +187,24 @@ namespace Networking
         public int getHandle()
         {
             return handle.ToInt32();
+        }
+
+        public bool hasExited()
+        {
+            if (process == null)
+            {
+                return false;
+            }
+            try
+            {
+                return process.HasExited;
+            }
+            catch (System.ComponentModel.Win32Exception e)
+            {
+                //Console.WriteLine("Throwing for: {0}", process.MainWindowTitle);
+                //Console.WriteLine(e.ToString());
+                return false;
+            }
         }
     }
 }
