@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -42,7 +42,11 @@
         <activity android:name=".display.TrackpadActivity" />
         <activity android:name=".display.PcManager" />
         <activity android:name=".display.GestureActivity" />
-        <activity android:name=".display.PcSelectionActivity" />
+        <activity
+            android:name=".display.PcSelectionActivity"
+            android:theme="@style/PcSelection"
+            android:label="PC Selection"/>
+        <activity android:name=".display.user_interface.UIAppLauncher"/>
     </application>
 
 </manifest>
