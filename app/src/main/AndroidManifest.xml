@@ -20,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+
             android:name=".display.AppLauncher"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape">
