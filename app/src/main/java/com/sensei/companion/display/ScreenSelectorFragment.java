@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.sensei.companion.R;
 
@@ -55,7 +57,10 @@ public class ScreenSelectorFragment extends Fragment {
          I can assume the pictures and names will be given
          For desktops, similar story **/
         //need swipe up to delete desktops
+        super.onCreate(savedInstanceState);
 
+
+        //this is a fragment so we don't need this setContentView(R.layout.dtop_management);
 
         View view1 = inflater.inflate(R.layout.dtop_management, container, false);
 
@@ -65,7 +70,12 @@ public class ScreenSelectorFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(llm);
-
+        //why does the drawable icon only show up for the first button and not
+        // for the others
+        //also need to make imagebackground transparent
+        List<Screen> myScreens = createList(2);
+        MyAdapter mAdapter = new MyAdapter(myScreens);
+        recyclerView.setAdapter(mAdapter);
 
 
         //need to do everything programmatically now
@@ -75,25 +85,18 @@ public class ScreenSelectorFragment extends Fragment {
         addDesktopButton.setId(View.generateViewId());
         addDesktopButton.setImageResource(R.drawable.ic_add_black_24dp);
 
+
+
+
+
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
-
-        //addview not supported in AdapterView, what to do??
-
-        ImageButton first_desktop = new ImageButton(getActivity());
-        first_desktop.setId(View.generateViewId());
-        first_desktop.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
-
-
-
-
-        //just put onclick listener here makes your life easier
 
         float scale = getResources().getDisplayMetrics().density;
         final int ib_padding = (int) (28*scale + 0.5f); //56 is the size of a floating action button
 
 
-
+        /**
         addDesktopButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -120,7 +123,7 @@ public class ScreenSelectorFragment extends Fragment {
 
             }
         });
-
+            **/
 
         return view1;
     }
@@ -144,5 +147,22 @@ public class ScreenSelectorFragment extends Fragment {
     interface OnScreenSelectorInteractionListener {
         // TODO: Update argument type and name
         void switchScreen (int screenKey);
+    }
+
+
+    private List<Screen> createList(int size) {
+
+        List<Screen> result = new ArrayList<Screen>();
+        for (int i=1; i <= size; i++) {
+            Screen ci = new Screen();
+            ci.name = Screen.DESKTOP_NAME_PREFIX + i;
+            ci.imageB = new ImageButton(getActivity());
+            ci.imageB.setId(View.generateViewId());
+            ci.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
+            result.add(ci);
+
+        }
+
+        return result;
     }
 }
