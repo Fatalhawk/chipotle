@@ -13,25 +13,29 @@ using SpotifyAPI.Local.Enums; //Enums
 using SpotifyAPI.Local.Models; //Models for the JSON-responses
 using System.Drawing;
 
-namespace chrometest
+namespace Networking
 {
-    class spotifyApp
+    class SpotifyApp : ProcessInterface
     {
         private static SpotifyLocalAPI _spotify = new SpotifyLocalAPI();
-
-        public static void Main()
-        {
-            spotifyApp s = new spotifyApp();
-            _spotify.Connect();
-            Console.WriteLine(s.TrackName() + " " + s.PlayingPosition().ToString() + " " + s.ArtistName());
-            Console.WriteLine(s.IsAd().ToString());
-        }
         
 
-        public bool isSpotifyRunning()
+
+        public SpotifyApp(ref Process pObj, IntPtr hWnd, string title) : base(ref pObj, hWnd, title)
         {
-            return SpotifyLocalAPI.IsSpotifyRunning();
+            if (!isFunctional())
+            {
+                //send command letting Phone know to use default screen
+            }
         }
+        //public static void Main()
+        //{
+        //    spotifyApp s = new spotifyApp();
+        //    _spotify.Connect();
+        //    Console.WriteLine(s.TrackName() + " " + s.PlayingPosition().ToString() + " " + s.ArtistName());
+        //    Console.WriteLine(s.IsAd().ToString());
+        //}
+
 
         public bool isFunctional()
         {

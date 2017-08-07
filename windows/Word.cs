@@ -1,42 +1,58 @@
-﻿using System;
-using Word = Microsoft.Office.Interop.Word;
-using Excel = Microsoft.Office.Interop.Excel;
-using Microsoft.Office.Interop.Word;
-using System.Threading;
-using System.Reflection;
-using Microsoft.Office.Core;
+﻿/*
+ * Current Problems:
+ * -opening word while program is running will cause unwanted result in bindWordWindow()
+ * -no document has been chosen and thus no child window called "_WwG" will be present
+ * -myWordApp will = null
+ * -when opening word, another "opening word" sequence window will be present
+ */
 
-namespace shibe
+using System;
+using Word = Microsoft.Office.Interop.Word;
+using Microsoft.Office.Interop.Word;
+using Microsoft.Office.Core;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
+
+namespace Networking
 {
-    class WordApp
+    class WordApp : ProcessInterface
     {
-        static void Main(string[] args)
+        public WordApp(ref Process pObj, IntPtr hWnd, string title) : base(ref pObj, hWnd, title)
         {
-            if (Console.ReadLine().Equals("start"))
-            {
-                Thread.Sleep(4000);
-                WordApp f = new WordApp();
-                f.wordCommand("s");
-                Console.ReadLine();
-            }
+            childWindow = 0;
+            bindWordWindow();
         }
 
-        //INSERT FIELDS AS NECESSARY 
-        public void wordCommand(String s)
+        private int childWindow;
+
+
+        public delegate bool EnumChildCallback(int hwnd, ref int lParam);
+
+        [DllImport("User32.dll")]
+        public static extern bool EnumChildWindows(int hWndParent, EnumChildCallback lpEnumFunc, ref int lParam);
+
+        private void bindWordWindow()
         {
-            Word.Application myWordApp = null;
-            try
+            EnumChildCallback cb = new EnumChildCallback(EnumChildProc);
+            EnumChildWindows(handle.ToInt32(), cb, ref childWindow);
+
+            if (childWindow != 0)
             {
-                myWordApp =
-                  System.Runtime.InteropServices.Marshal.GetActiveObject(
-                  "Word.Application") as Word.Application;
-            }
-            catch (System.Runtime.InteropServices.COMException e)
-            {
-                Console.WriteLine(
-                  String.Format("Word application was not running: {0}",
-                  e.Message));
-                return;
+                // We call AccessibleObjectFromWindow, passing the constant OBJID_NATIVEOM (defined in winuser.h) 
+                // and IID_IDispatch - we want an IDispatch pointer into the native object model.
+                //
+                const uint OBJID_NATIVEOM = 0xFFFFFFF0;
+                Guid IID_IDispatch = new Guid("{00020400-0000-0000-C000-000000000046}");
+                IDispatch ptr;
+
+                int hr = AccessibleObjectFromWindow(childWindow, OBJID_NATIVEOM, IID_IDispatch.ToByteArray(), out ptr);
+
+                if (hr >= 0)
+                {
+                    myWordApp = (Word.Application)ptr.GetType().InvokeMember("Application", BindingFlags.GetProperty, null, ptr, null);
+                }
             }
 
             if (myWordApp != null)
@@ -50,17 +66,62 @@ namespace shibe
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.ToString());
                     Console.WriteLine("No document open");
                 }
             }
         }
 
-        public string getStyleName(Word.Application myWordApp)
+        [DllImport("User32.dll")]
+        public static extern int GetClassName(int hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        public static bool EnumChildProc(int hwndChild, ref int lParam)
+        {
+            StringBuilder buf = new StringBuilder(128);
+            GetClassName(hwndChild, buf, 128);
+            if (buf.ToString() == "_WwG")
+            {
+                lParam = hwndChild;
+                return false;
+            }
+            return true;
+        }
+
+        [DllImport("Oleacc.dll")]
+        static extern int AccessibleObjectFromWindow(int hwnd, uint dwObjectID, byte[] riid, out IDispatch ptr);
+
+        Word.Application myWordApp;
+
+
+        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("00020400-0000-0000-C000-000000000046")]
+        public interface IDispatch
+        {
+        }
+
+        public override void performAction(int x)
+        {
+            //base.performAction();
+            if (x == 1)
+            {
+                bold();
+            }
+            if (x == 2)
+            {
+                italicize();
+            }
+            if (x == 3)
+            {
+                underline();
+            }
+
+        }
+
+        public string getStyleName()
         {
             return myWordApp.Selection.get_Style().NameLocal;
         }
 
-        public void bold(Word.Application myWordApp)
+        public void bold()
         {
             if (myWordApp.Selection.Font.Bold == 0)
             {
@@ -72,9 +133,10 @@ namespace shibe
             }
         }
 
-        public void italicize(Word.Application myWordApp)
+
+        public void italicize()
         {
-            if (myWordApp.Selection.Font.Bold == 0)
+            if (myWordApp.Selection.Font.Italic == 0)
             {
                 myWordApp.Selection.Font.Italic = 1;
             }
@@ -84,7 +146,7 @@ namespace shibe
             }
         }
 
-        public void underline(Word.Application myWordApp)
+        public void underline()
         {
             if (myWordApp.Selection.Font.Underline == 0)
             {
@@ -96,7 +158,7 @@ namespace shibe
             }
         }
 
-        public void strikethrough(Word.Application myWordApp)
+        public void strikethrough()
         {
             if (myWordApp.Selection.Font.StrikeThrough == 0)
             {
@@ -139,7 +201,7 @@ namespace shibe
 
         public Word.Styles getAllStyleNames(Word.Document myWordDocument)
         {
-            
+
             foreach (Word.Style currentStyle in myWordDocument.Styles)
             {
                 Console.WriteLine(currentStyle.NameLocal);
@@ -160,7 +222,7 @@ namespace shibe
         {
             int currentPageNum = myWordApp.Selection.get_Information(Word.WdInformation.wdActiveEndPageNumber);
             return currentPageNum;
-          
+
         }
 
         public int getLastPageNumber(Word.Application myWordApp)
@@ -189,46 +251,6 @@ namespace shibe
             //myWordApp.Selection.Range.set_Style(ref styleHeading2);
             myWordApp.Selection.Range.set_Style(ref styleHeading3);
         }
-    }
-    class excelApp
-    {
-        public void ExcelCommand(String s)
-        {
-            Excel.Application myExcelApp = null;
-            try
-            {
-                myExcelApp =
-                  System.Runtime.InteropServices.Marshal.GetActiveObject(
-                  "Excel.Application") as Excel.Application;
-            }
-            catch (System.Runtime.InteropServices.COMException e)
-            {
-                Console.WriteLine(
-                  String.Format("Excel application was not running: {0}",
-                  e.Message));
-                return;
-            }
-
-            if (myExcelApp != null)
-            {
-                Console.WriteLine(
-                  "Successfully attached to running instance of Excel.");
-                try
-                {
-                    Excel.Workbook myWordDocument = myExcelApp.ActiveWorkbook;
-                    //EXCECUTE COMMAND
-                    myExcelApp.Selection.Font.Bold = 1;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("No workbook open");
-                }
-            }
-        }
-    }
-    class Outlook
-    {
-
     }
 }
 

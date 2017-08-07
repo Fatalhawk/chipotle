@@ -43,4 +43,21 @@ namespace Networking
     }
 
 
+    public enum CommandTarget
+    {
+        PROGRAM,
+        SYSTEM,
+        WINDOWS
+    }
+
+    public enum SystemCommand
+    {
+        SEND_TITLE,
+        SEND_ICON,
+        SEND_HANDLE,
+        SEND_SCREENSHOT,
+        SEND_TYPE
+    }
+
+
 }
