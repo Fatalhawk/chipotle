@@ -14,16 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".display.AppLauncher">
+            android:name=".display.AppLauncher"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
-            android:name=".display.AppLauncher"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape">
         </activity>
 
         <service
@@ -31,14 +28,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".display.TouchBarActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
+        <activity android:name=".display.TouchBarActivity"/>
         <activity android:name=".display.TrackpadActivity" />
         <activity android:name=".display.PcManager" />
         <activity android:name=".display.GestureActivity" />
@@ -46,7 +36,7 @@
             android:name=".display.PcSelectionActivity"
             android:theme="@style/PcSelection"
             android:label="PC Selection"/>
-        <activity android:name=".display.user_interface.UIAppLauncher"/>
+
     </application>
 
 </manifest>
