@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="PcSelection" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/PcSelectionColorPrimary</item>
+        <item name="colorPrimaryDark">@color/PcSelectionColorPrimaryDark</item>
+        <item name="colorAccent">@color/PcSelectionColorAccent</item>
+    </style>
+
 </resources>

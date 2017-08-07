@@ -16,7 +16,7 @@ public class AppLauncher extends AppCompatActivity {
 
         //startProgram ();
 
-        Intent i = new Intent (this, TouchBarActivity.class);
+        Intent i = new Intent (this, PcSelectionActivity.class);
         startActivity (i);
     }
 
