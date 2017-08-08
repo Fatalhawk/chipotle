@@ -1,6 +1,7 @@
 package com.sensei.companion.connection;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Binder;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sensei.companion.R;
 import com.sensei.companion.connection.commands.CommandsData;
 
 import java.io.IOException;
@@ -29,9 +31,9 @@ public class ConnectService extends Service {
     private String serverIpAddress;
     private static final int DISCOVERY_PORT = 4444; //CHANGE LATER
     private static final int TIMEOUT_MS = 500;
-    private String s = null;
+    public static String s = null;
     private int counter = 0;
-    private Handler mHandler;
+    private ConnectManager.MessageHandler mHandler;
 
     /**
      * Listen on socket for responses, timing out after TIMEOUT_MS
@@ -57,10 +59,7 @@ public class ConnectService extends Service {
         }
     }
 
-    public void init (final Handler mHandler, TextView textView, Button button) {
-        final TextView serverStatus = textView;
-        final Button connectButton = button;
-
+    public void init (final ConnectManager.MessageHandler mHandler) {
         this.mHandler = mHandler;
 
         Toast.makeText (this, "My Service Created", Toast.LENGTH_LONG).show();
@@ -78,15 +77,27 @@ public class ConnectService extends Service {
                 }
                 Log.i (DEBUG_TAG, "socket created");
 
+                final int SEARCH_TIMEOUT = 3000;
+                long searchStartTime = System.currentTimeMillis();
                 while (s == null) {
+                    if (System.currentTimeMillis() - searchStartTime > SEARCH_TIMEOUT) {
+                        break;
+                    }
                     listenForBroadcasts(socket);
                 }
+
+                if (s == null) {
+                    mHandler.sendEmptyMessage(ConnectManager.SHOW_PC_NOT_FOUND);
+                    socket.close();
+                    return;
+                }
+
+                mHandler.sendEmptyMessage(ConnectManager.SHOW_PC_FOUND);
 
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        serverStatus.setText("Found PC: " + s);
-                        connectButton.setOnClickListener(new Button.OnClickListener() {
+                        (mHandler.getPopUpWindow().getContentView().findViewById(R.id.connectButton)).setOnClickListener(new Button.OnClickListener() {
                             public void onClick(View v) {
                                 mHandler.sendEmptyMessage (ConnectManager.INIT_TOUCHBAR);
                                 connectToPc();

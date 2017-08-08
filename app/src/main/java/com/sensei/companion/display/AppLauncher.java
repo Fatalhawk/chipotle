@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.Log;
-
 public class AppLauncher extends AppCompatActivity {
     private final String DEBUG_TAG = "appMonitor";
 
@@ -14,14 +12,11 @@ public class AppLauncher extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_touchbar_main);
 
-        //startProgram ();
-
-        Intent i = new Intent (this, PcSelectionActivity.class);
-        startActivity (i);
+        startProgram ();
     }
 
     public void startProgram () {
-        Intent i = new Intent(this, PcManager.class);
-        startActivity(i);
+        Intent i = new Intent (this, PcManager.class);
+        startActivity (i);
     }
 }

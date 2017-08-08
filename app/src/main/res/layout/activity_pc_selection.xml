@@ -2,17 +2,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/pc_selection_gradient"
+    android:id="@+id/pc_selection_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sensei.companion.display.PcSelectionActivity">
+    android:background="@drawable/pc_selection_gradient"
+    android:foreground="@drawable/shape_window_dim"
+    tools:context="com.sensei.companion.display.PcManager">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/texture_crossword"/>
+        android:background="@drawable/texture_crossword" />
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/pc_selection_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -55,13 +58,14 @@
             app:srcCompat="@drawable/instructions_icon" />
 
         <ImageButton
-            android:id="@+id/imageButton13"
+            android:id="@+id/search_button"
             android:layout_width="205dp"
             android:layout_height="174dp"
             android:layout_marginBottom="215dp"
             android:layout_marginLeft="91dp"
             android:adjustViewBounds="true"
             android:background="?selectableItemBackground"
+            android:onClick="searchForPC"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -11,9 +11,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.sensei.companion.R;
 import com.sensei.companion.display.PcManager;
 import com.sensei.companion.display.TouchBarActivity;
 
@@ -22,26 +26,26 @@ import java.lang.ref.WeakReference;
 public class ConnectManager {
 
     private static final String DEBUG_TAG = "appMonitor";
-    private TextView textView;
-    private Button button;
     private PcManager pcManager;
     private static ConnectService mService;
     private boolean isBound = false;
 
-    //PC message subject lines except for INIT_TOUCHBAR which is for Handler's Message.what
+    //for Handler's Message.what
     final static int INIT_TOUCHBAR = 0;
-    final static int COMPANION_COMMAND = 1;
-    final static int NEW_PROGRAM_INFO = 2;
+    final static int SHOW_PC_FOUND = 1;
+    final static int SHOW_PC_NOT_FOUND = 2;
+
+    //PC message subject lines except for INIT_TOUCHBAR which is for Handler's Message.what
+    final static int COMPANION_COMMAND = 3;
+    final static int NEW_PROGRAM_INFO = 4;
     //final static int COMPANION_DATA_<SUBJECT>
 
     //Bundle keys for Handler messages
     final static String PROGRAM_INFO = "program_info";
     final static String IMAGE_BYTES = "image_bytes";
 
-    public void initConnection (Context context, TextView textView, Button button, PcManager pcManager) {
+    public void initConnection (Context context, PcManager pcManager) {
         this.pcManager = pcManager;
-        this.textView = textView;
-        this.button = button;
         Intent intent = new Intent (context, ConnectService.class);
         context.bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -58,6 +62,10 @@ public class ConnectManager {
 
         MessageHandler (PcManager activity) {
             mPcManagerActivity = new WeakReference<> (activity);
+        }
+
+        public PopupWindow getPopUpWindow () {
+            return mPcManagerActivity.get().getPopupWindow();
         }
 
         @Override
@@ -82,6 +90,15 @@ public class ConnectManager {
                     Log.d (DEBUG_TAG, "NEW_PROGRAM_INFO NULL ERROR IN HANDLER MESSAGE");
                 }
             }
+            else if (msg.what == SHOW_PC_FOUND)
+            {
+                PcManager activity = mPcManagerActivity.get();
+                ((TextView)activity.getPopupWindow().getContentView().findViewById(R.id.searchStatus)).setText("Found PC: " + ConnectService.s);
+            }
+            else if (msg.what == SHOW_PC_NOT_FOUND) {
+                PcManager activity = mPcManagerActivity.get();
+                ((TextView)activity.getPopupWindow().getContentView().findViewById(R.id.searchStatus)).setText("Could not find a PC!");
+            }
         }
 
         public static void setActivityReferenceToTouchBar (TouchBarActivity touchBarActivity) {
@@ -96,7 +113,7 @@ public class ConnectManager {
             mService = binder.getService ();
             isBound = true;
             Log.i (DEBUG_TAG, "Connection service bound");
-            mService.init (new MessageHandler(pcManager), textView, button);
+            mService.init (new MessageHandler(pcManager));
         }
 
         @Override
