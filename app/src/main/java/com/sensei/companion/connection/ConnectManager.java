@@ -11,9 +11,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -32,11 +29,9 @@ public class ConnectManager {
 
     //for Handler's Message.what
     final static int INIT_TOUCHBAR = 0;
-    final static int SHOW_PC_FOUND = 1;
-    final static int SHOW_PC_NOT_FOUND = 2;
 
     //PC message subject lines except for INIT_TOUCHBAR which is for Handler's Message.what
-    final static int COMPANION_COMMAND = 3;
+    public static final int COMPANION_COMMAND = 3;
     final static int NEW_PROGRAM_INFO = 4;
     //final static int COMPANION_DATA_<SUBJECT>
 
@@ -64,7 +59,7 @@ public class ConnectManager {
             mPcManagerActivity = new WeakReference<> (activity);
         }
 
-        public PopupWindow getPopUpWindow () {
+        PopupWindow getPopUpWindow () {
             return mPcManagerActivity.get().getPopupWindow();
         }
 
@@ -89,15 +84,6 @@ public class ConnectManager {
                 else {
                     Log.d (DEBUG_TAG, "NEW_PROGRAM_INFO NULL ERROR IN HANDLER MESSAGE");
                 }
-            }
-            else if (msg.what == SHOW_PC_FOUND)
-            {
-                PcManager activity = mPcManagerActivity.get();
-                ((TextView)activity.getPopupWindow().getContentView().findViewById(R.id.searchStatus)).setText("Found PC: " + ConnectService.s);
-            }
-            else if (msg.what == SHOW_PC_NOT_FOUND) {
-                PcManager activity = mPcManagerActivity.get();
-                ((TextView)activity.getPopupWindow().getContentView().findViewById(R.id.searchStatus)).setText("Could not find a PC!");
             }
         }
 

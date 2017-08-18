@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package messages;
+
+option java_package = "com.sensei.companion.proto";
+option java_outer_classname = "ProtoMessage";
+
+message CommMessage {
+    string message_id = 1;
+
+    enum MessageType {
+        COMMAND = 0;
+        PROGRAM_INFO = 1;
+        REPLY = 2;
+    }
+
+    MessageType message_type = 2;
+
+    message Command {
+        enum CommandEnvironment {
+            PROGRAM = 0;
+            SYSTEM = 1;
+            WINDOWS = 2;
+        }
+
+        CommandEnvironment environment = 1;
+        string command = 2;
+        string extra_info = 3;
+    }
+
+    message ProgramInfo {
+        int32 program_id = 1;
+        string program_name = 2;
+        bytes picture = 3;
+        string program_info = 4;
+    }
+}

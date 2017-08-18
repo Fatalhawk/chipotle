@@ -5,17 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class AppLauncher extends AppCompatActivity {
-    private final String DEBUG_TAG = "appMonitor";
+
+    public static final String DEBUG_TAG = "appMonitor";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_touchbar_main);
 
-        startProgram ();
+        startPcSelection ();
     }
 
-    public void startProgram () {
+    public void startPcSelection () {
         Intent i = new Intent (this, PcManager.class);
         startActivity (i);
     }
