@@ -41,7 +41,7 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectManager.sendMessageToPC(ConnectManager.COMPANION_COMMAND, "test");
+                //ConnectManager.sendMessageToPC(ConnectManager.COMPANION_COMMAND, "test");
             }
         });
 

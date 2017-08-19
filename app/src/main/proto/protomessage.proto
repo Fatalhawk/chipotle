@@ -28,10 +28,14 @@ message CommMessage {
         string extra_info = 3;
     }
 
+    Command command_message = 3;
+
     message ProgramInfo {
         int32 program_id = 1;
         string program_name = 2;
         bytes picture = 3;
         string program_info = 4;
     }
+
+    ProgramInfo program_info_message = 4;
 }

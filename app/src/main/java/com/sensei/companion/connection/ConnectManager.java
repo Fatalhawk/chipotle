@@ -15,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.sensei.companion.R;
+import com.sensei.companion.connection.messages.CMessage;
 import com.sensei.companion.display.PcManager;
 import com.sensei.companion.display.TouchBarActivity;
 
@@ -45,9 +46,9 @@ public class ConnectManager {
         context.bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public static void sendMessageToPC (int messageSubject, String messageContent) {
+    public static void sendMessageToPC (CMessage message) {
         if (mService != null)
-            mService.sendMessageToPC(messageSubject, messageContent);
+            mService.sendMessageToPC(message);
     }
 
     public static class MessageHandler extends Handler {

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.sensei.companion.R;
 import com.sensei.companion.connection.commands.CommandsData;
+import com.sensei.companion.connection.messages.CMessage;
 import com.sensei.companion.display.AppLauncher;
 
 import java.io.IOException;
@@ -168,9 +169,9 @@ public class ConnectService extends Service {
         }
     }
 
-    public void sendMessageToPC (int messageSubject, String messageContent) {
+    public void sendMessageToPC (CMessage message) {
         if (tcpClient != null && tcpClient.isRunning()) {
-            tcpClient.sendMessage (messageSubject, messageContent);
+            tcpClient.sendMessage (message);
         }
         else {
             Log.d (DEBUG_TAG, "Error sending");
