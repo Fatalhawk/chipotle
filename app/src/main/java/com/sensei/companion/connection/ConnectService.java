@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.sensei.companion.R;
 import com.sensei.companion.connection.commands.CommandsData;
 import com.sensei.companion.connection.messages.CMessage;
+import com.sensei.companion.connection.messages.CommandMessage;
+import com.sensei.companion.connection.messages.ProgramInfoMessage;
 import com.sensei.companion.display.AppLauncher;
 
 import java.io.IOException;
@@ -102,17 +104,26 @@ public class ConnectService extends Service {
             @Override
             public void run() {
                 tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
+
+                    @Override
+                    public void callbackMessageReceiver(CommandMessage message) {
+
+                    }
+
+                    @Override
+                    public void callbackMessageReceiver(ProgramInfoMessage message) {
+
+                    }
+
                     /*
-                    For COMPANION_COMMAND messages
-                     */
+                    //FOR COMPANION_COMMAND messages
                     @Override
                     public void callbackMessageReceiver(byte[] messageContent) {
                         Log.i (DEBUG_TAG, "Received message: " + new String (messageContent));
                         CommandsData.handleCommand(mHandler, messageContent);
                     }
-                    /*
-                    For NEW_PROGRAM_INFO messages in the form "[Program]"
-                     */
+
+                    //For NEW_PROGRAM_INFO messages in the form "[Program]"
                     @Override
                     public void callbackMessageReceiver(byte[] programInfoBytes, byte[] imageBytes) {
                         Log.i (DEBUG_TAG, "Received program info & pic: " + new String (programInfoBytes));
@@ -129,6 +140,8 @@ public class ConnectService extends Service {
                             Log.d (DEBUG_TAG, "Handler message error: NEW_PROGRAM_INFO");
                         }
                     }
+                    */
+
                     @Override
                     public void restartConnection () {
                         connectToPc();

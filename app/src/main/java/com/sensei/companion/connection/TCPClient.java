@@ -2,8 +2,10 @@ package com.sensei.companion.connection;
 
 import android.util.Log;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.sensei.companion.connection.messages.CMessage;
 import com.sensei.companion.connection.messages.CommandMessage;
+import com.sensei.companion.connection.messages.ProgramInfoMessage;
 import com.sensei.companion.display.AppLauncher;
 import com.sensei.companion.proto.ProtoMessage;
 
@@ -28,6 +30,7 @@ class TCPClient {
     private OutputStream out;
     private Socket socket;
     private LinkedBlockingQueue<String> blockingQueue;
+    private boolean isWaitingForReply;
 
     TCPClient (String ipNumber, MessageCallback messageListener) {
         this.messageListener = messageListener;
@@ -50,35 +53,72 @@ class TCPClient {
             byte [] numBytesMessage = ByteBuffer.allocate(4).putInt(numBytes).array();
 
             try {
-                blockingQueue = new LinkedBlockingQueue<>(2);
+                //send
+                out.write(numBytesMessage);
+                protoMessage.writeTo(out);
 
+                //wait for reply
                 try {
-                    out.write(numBytesMessage);
-                    String reply1 = blockingQueue.take(); //wait for reply -- #bytes
-                    if (Integer.parseInt(reply1) != numBytes) {
+                    blockingQueue = new LinkedBlockingQueue<>(1);
+                    isWaitingForReply = true;
+                    String replyId = blockingQueue.take(); //wait for reply -- #bytes
+                    if (!protoMessage.getMessageId().equals(replyId)) {
                         //TODO: WHAT TO DO IF PC SENDS BACK WRONG NUMBER
-                    }
-                    else {
-                        protoMessage.writeTo(out);
-                        String reply2 = blockingQueue.take(); //wait for reply -- message id -- 36 bytes in string form
-                        if (!protoMessage.getMessageId().equals(reply2)) {
-                            //TODO: WHAT TO DO IF PC SENDS BACK WRONG ID
-                        }
-                        else {
-                            Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Successfully sent message: " + protoMessage.toString());
-                        }
+                    } else {
+                        isWaitingForReply = false;
+                        Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Successfully sent message: " + protoMessage.toString());
                     }
                 } catch (InterruptedException e) {
                     Log.e (AppLauncher.DEBUG_TAG, "[TCPClient] blocking queue's take interrupted", e);
+                    //TODO: error trap
                 }
 
                 out.flush ();
             } catch (IOException e) {
                 Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] Error sending message", e);
+                //TODO: error trap
             }
         }
         else {
             Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] Error sending message: invalid message type");
+            //TODO: error trap
+        }
+    }
+
+    /*
+    Checks whether the message is a reply or a newly issued command
+     */
+    private void messageGuider (byte [] messageBytes) {
+
+        try {
+            ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(messageBytes);
+            if (message.getMessageType() == ProtoMessage.CommMessage.MessageType.REPLY) {
+                if (isWaitingForReply) {
+                    String replyId = message.getMessageId();
+                    try {
+                        blockingQueue.put(replyId);
+                    } catch (InterruptedException e) {
+                        Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] blocking queue's put interrupted", e);
+                        //TODO: error trap
+                    }
+                } else {
+                    Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] Error - got reply when not waiting for reply");
+                    //TODO: error trap
+                }
+            } else {
+                if (messageListener != null) {
+                    if (message.getMessageType() == ProtoMessage.CommMessage.MessageType.COMMAND) {
+                        messageListener.callbackMessageReceiver(new CommandMessage(message));
+                    } else if (message.getMessageType() == ProtoMessage.CommMessage.MessageType.PROGRAM_INFO) {
+                        messageListener.callbackMessageReceiver(new ProgramInfoMessage(message));
+                    }
+                } else {
+                    Log.d(AppLauncher.DEBUG_TAG, "[TCPClient] NULL MESSAGE LISTENER");
+                    //TODO: error trap
+                }
+            }
+        } catch (InvalidProtocolBufferException e) {
+            Log.e (AppLauncher.DEBUG_TAG, "[TCPClient] Error parsing proto message", e);
         }
     }
 
@@ -88,45 +128,19 @@ class TCPClient {
             public void run() {
                 try {
                     in = socket.getInputStream();
-
                     while (connected) {
-
-                        /*
-                        byte[] messageSubjectBytes = new byte[4];
-                        byte[] messageSizeBytes = new byte[4];
-                        in.read(messageSubjectBytes);
-                        in.read(messageSizeBytes);
-                        int subject = ByteBuffer.wrap(messageSubjectBytes).asIntBuffer().get();
-                        int size = ByteBuffer.wrap(messageSizeBytes).asIntBuffer().get();
-
-                        if (messageListener != null) {
-                            if (subject == ConnectManager.COMPANION_COMMAND) {
-                                byte[] messageContentBytes;
-                                messageContentBytes = new byte[size];
-                                in.read(messageContentBytes);
-                                messageListener.callbackMessageReceiver(messageContentBytes);
-                            } else if (subject == ConnectManager.NEW_PROGRAM_INFO) {
-                                byte[] picSizeBytes = new byte[4];
-                                byte[] programInfoBytes = new byte[size];
-                                in.read(picSizeBytes);
-                                int picSize = ByteBuffer.wrap(picSizeBytes).asIntBuffer().get();
-                                in.read(programInfoBytes);
-                                byte[] imageBytes = new byte[picSize];
-                                in.read(imageBytes);
-                                messageListener.callbackMessageReceiver(programInfoBytes, imageBytes);
-                            } else {
-                                //TODO: RECEIVE OTHER MESSAGE TYPES IF NECESSARY
-                            }
-                        } else {
-                            Log.d(AppLauncher.DEBUG_TAG, "[TCPClient] NULL MESSAGE LISTENER");
-                        }
-                        */
-
+                        //receive message
+                        byte[] numBytes = new byte [4];
+                        in.read (numBytes);
+                        int messageSize = ByteBuffer.wrap(numBytes).asIntBuffer().get();
+                        byte[] message = new byte [messageSize];
+                        in.read (message);
+                        messageGuider (message);
                     }
-
                 }
                 catch (IOException e) {
                     Log.e (AppLauncher.DEBUG_TAG, "[TCPClient] S: Error w/ InputStream", e);
+                    //TODO: error trap
                 }
             }
         });
@@ -174,8 +188,8 @@ class TCPClient {
     }
 
     interface MessageCallback {
-        void callbackMessageReceiver (byte [] messageContent);
-        void callbackMessageReceiver (byte [] programInfo, byte[] imageBytes);
+        void callbackMessageReceiver (CommandMessage message);
+        void callbackMessageReceiver (ProgramInfoMessage message);
         void restartConnection ();
     }
 }
