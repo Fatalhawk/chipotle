@@ -61,10 +61,10 @@ public class ConnectService extends Service {
 
                 //Update search status on UI
                 if (serverIpAddress == null) {
-                    Log.i (AppLauncher.DEBUG_TAG, "what");
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            mHandler.getPopUpWindow().getContentView().findViewById(R.id.button_connect_pc).setVisibility(View.VISIBLE);
                             ((TextView)mHandler.getPopUpWindow().getContentView().findViewById(R.id.textview_search_status)).setText("Could not find a PC!");
                         }
                     });
@@ -73,23 +73,22 @@ public class ConnectService extends Service {
                     }
                     return;
                 }
+
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         ((TextView)mHandler.getPopUpWindow().getContentView().findViewById(R.id.textview_search_status)).setText("Found PC: " + serverIpAddress);
-                    }
-                });
-
-                //Connect to the IP of the PC found
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        (mHandler.getPopUpWindow().getContentView().findViewById(R.id.button_connect_pc)).setOnClickListener(new Button.OnClickListener() {
+                        Button connectButton = (Button)mHandler.getPopUpWindow().getContentView().findViewById(R.id.button_connect_pc);
+                        connectButton.setVisibility(View.VISIBLE);
+                        connectButton.setText("Connect to PC");
+                        connectButton.setOnClickListener(new Button.OnClickListener() {
+                            @Override
                             public void onClick(View v) {
                                 mHandler.sendEmptyMessage (MessageHandler.INIT_TOUCHBAR);
                                 connectToPc();
                             }
                         });
+
                     }
                 });
             }
@@ -148,7 +147,6 @@ public class ConnectService extends Service {
                 serverIpAddress = packet.getAddress().getHostAddress();
             }
         } catch (SocketTimeoutException e) {
-            Log.d(AppLauncher.DEBUG_TAG, "[ConnectService] Receive timed out");
         } catch (IOException e) {
             Log.e (AppLauncher.DEBUG_TAG, "[ConnectService] IOException occured when listening for udp broadcasts", e);
         }

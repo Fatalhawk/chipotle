@@ -33,9 +33,15 @@ public class PcManager extends AppCompatActivity {
         pcSelectionPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
+                pcSelectionPopup.getContentView().findViewById(R.id.button_connect_pc).setVisibility(View.GONE);
                 pcManagerFrame.getForeground().setAlpha (0);
                 ((TextView)getPopupWindow().getContentView().findViewById(R.id.textview_search_status)).setText("Searching for PC...");
-                (getPopupWindow().getContentView().findViewById(R.id.button_connect_pc)).setOnClickListener(null);
+                (getPopupWindow().getContentView().findViewById(R.id.button_connect_pc)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismissPopup(v);
+                    }
+                });
             }
         });
 
@@ -55,6 +61,10 @@ public class PcManager extends AppCompatActivity {
 
     public PopupWindow getPopupWindow () {
         return pcSelectionPopup;
+    }
+
+    public void dismissPopup (View v) {
+        pcSelectionPopup.dismiss();
     }
 
     public void searchForPC (View v) {
