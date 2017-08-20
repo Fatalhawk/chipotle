@@ -1,4 +1,4 @@
-package com.sensei.companion.connection.messages;
+package com.sensei.companion.communication.messages;
 
 import com.sensei.companion.proto.ProtoMessage;
 

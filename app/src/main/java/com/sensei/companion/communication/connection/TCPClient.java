@@ -1,28 +1,23 @@
-package com.sensei.companion.connection;
+package com.sensei.companion.communication.connection;
 
 import android.util.Log;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.sensei.companion.connection.messages.CMessage;
-import com.sensei.companion.connection.messages.CommandMessage;
-import com.sensei.companion.connection.messages.ProgramInfoMessage;
-import com.sensei.companion.display.AppLauncher;
+import com.sensei.companion.communication.messages.CMessage;
+import com.sensei.companion.communication.messages.CommandMessage;
+import com.sensei.companion.communication.messages.ReplyMessage;
+import com.sensei.companion.display.activities.AppLauncher;
 import com.sensei.companion.proto.ProtoMessage;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.concurrent.LinkedBlockingQueue;
 
 class TCPClient {
-
     private String serverIpNumber;
     private MessageCallback messageListener;
     private boolean connected = false;
@@ -38,8 +33,7 @@ class TCPClient {
     }
 
     /*
-    Sends #bytes, waits for a reply consisting of that #bytes again, sends message, waits for reply
-    consisting of that message's unique id.
+    Sends #bytes, sends message, waits for reply consisting of that message's unique id.
      */
     void sendMessage (CMessage message) {
         ProtoMessage.CommMessage protoMessage = null;
@@ -48,7 +42,6 @@ class TCPClient {
         }
 
         if (protoMessage != null) {
-
             int numBytes = protoMessage.toByteArray().length;
             byte [] numBytesMessage = ByteBuffer.allocate(4).putInt(numBytes).array();
 
@@ -86,12 +79,31 @@ class TCPClient {
     }
 
     /*
-    Checks whether the message is a reply or a newly issued command
+    Send back a reply message to sender to ensure them that their message has been received.
+    Reply message consists of empty message with same id as that received.
+     */
+    private void sendReplyMessage (String messageId) {
+        ProtoMessage.CommMessage replyMessage = new ReplyMessage(messageId).getProtoMessage();
+        int numBytes = replyMessage.toByteArray().length;
+        byte[] numBytesMessage = ByteBuffer.allocate(4).putInt(numBytes).array();
+        try {
+            out.write (numBytesMessage);
+            replyMessage.writeTo (out);
+            out.flush();
+            Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Sent reply message: " + replyMessage.toString());
+        } catch (IOException e) {
+            Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] Error sending reply message", e);
+            //TODO: error trap
+        }
+    }
+
+    /*
+    Checks whether the message is a reply or a newly issued command and proceeds appropriately
      */
     private void messageGuider (byte [] messageBytes) {
-
         try {
             ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(messageBytes);
+            Log.i (AppLauncher.DEBUG_TAG, "[TCPClient] Received message: " + message.toString());
             if (message.getMessageType() == ProtoMessage.CommMessage.MessageType.REPLY) {
                 if (isWaitingForReply) {
                     String replyId = message.getMessageId();
@@ -106,12 +118,9 @@ class TCPClient {
                     //TODO: error trap
                 }
             } else {
+                sendReplyMessage (message.getMessageId()); //send reply back w/ same id
                 if (messageListener != null) {
-                    if (message.getMessageType() == ProtoMessage.CommMessage.MessageType.COMMAND) {
-                        messageListener.callbackMessageReceiver(new CommandMessage(message));
-                    } else if (message.getMessageType() == ProtoMessage.CommMessage.MessageType.PROGRAM_INFO) {
-                        messageListener.callbackMessageReceiver(new ProgramInfoMessage(message));
-                    }
+                    messageListener.callbackMessageReceiver(message);
                 } else {
                     Log.d(AppLauncher.DEBUG_TAG, "[TCPClient] NULL MESSAGE LISTENER");
                     //TODO: error trap
@@ -188,8 +197,7 @@ class TCPClient {
     }
 
     interface MessageCallback {
-        void callbackMessageReceiver (CommandMessage message);
-        void callbackMessageReceiver (ProgramInfoMessage message);
+        void callbackMessageReceiver (ProtoMessage.CommMessage message);
         void restartConnection ();
     }
 }

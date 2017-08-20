@@ -1,4 +1,4 @@
-package com.sensei.companion.connection.messages;
+package com.sensei.companion.communication.messages;
 
 import com.sensei.companion.proto.ProtoMessage;
 
@@ -8,7 +8,7 @@ public class CMessage {
     private String messageId;
     private ProtoMessage.CommMessage.MessageType type;
 
-    //ProgramInfoMessage uses this constructor
+    //ProgramInfoMessage && ReplyMessage uses this constructor
     CMessage (String messageId, ProtoMessage.CommMessage.MessageType type) {
         this.messageId = messageId;
         this.type = type;

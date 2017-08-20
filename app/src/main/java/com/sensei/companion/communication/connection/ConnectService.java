@@ -1,4 +1,4 @@
-package com.sensei.companion.connection;
+package com.sensei.companion.communication.connection;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,11 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sensei.companion.R;
-import com.sensei.companion.connection.commands.CommandsData;
-import com.sensei.companion.connection.messages.CMessage;
-import com.sensei.companion.connection.messages.CommandMessage;
-import com.sensei.companion.connection.messages.ProgramInfoMessage;
-import com.sensei.companion.display.AppLauncher;
+import com.sensei.companion.communication.commands.CommandsData;
+import com.sensei.companion.communication.messages.CMessage;
+import com.sensei.companion.communication.messages.CommandMessage;
+import com.sensei.companion.display.activities.AppLauncher;
+import com.sensei.companion.proto.ProtoMessage;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -24,17 +24,15 @@ import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
 
 public class ConnectService extends Service {
-
-    private final String DEBUG_TAG = "appMonitor";
     private final IBinder connectBinder = new MyLocalBinder ();
     private TCPClient tcpClient;
     private String serverIpAddress;
     private static final int DISCOVERY_PORT = 4444; //CHANGE LATER
     private static final int TIMEOUT_MS = 500;
     private int counter = 0;
-    private ConnectManager.MessageHandler mHandler;
+    private MessageHandler mHandler;
 
-    public void init (final ConnectManager.MessageHandler mHandler) {
+    public void init (final MessageHandler mHandler) {
         this.mHandler = mHandler;
         Log.i (AppLauncher.DEBUG_TAG, "My Service Created");
 
@@ -49,9 +47,9 @@ public class ConnectService extends Service {
                     socket.setSoTimeout(TIMEOUT_MS);
                 }
                 catch (IOException e) {
-                    Log.e(DEBUG_TAG, "Could not send discovery request", e);
+                    Log.e(AppLauncher.DEBUG_TAG, "[ConnectService] Could not send discovery request", e);
                 }
-                Log.i (DEBUG_TAG, "UDP broadcast listener socket created");
+                Log.i (AppLauncher.DEBUG_TAG, "[ConnectService] UDP broadcast listener socket created");
                 final int SEARCH_TIMEOUT = 3000;
                 long searchStartTime = System.currentTimeMillis();
                 while (serverIpAddress == null) {
@@ -88,7 +86,7 @@ public class ConnectService extends Service {
                     public void run() {
                         (mHandler.getPopUpWindow().getContentView().findViewById(R.id.button_connect_pc)).setOnClickListener(new Button.OnClickListener() {
                             public void onClick(View v) {
-                                mHandler.sendEmptyMessage (ConnectManager.INIT_TOUCHBAR);
+                                mHandler.sendEmptyMessage (MessageHandler.INIT_TOUCHBAR);
                                 connectToPc();
                             }
                         });
@@ -104,44 +102,27 @@ public class ConnectService extends Service {
             @Override
             public void run() {
                 tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
-
                     @Override
-                    public void callbackMessageReceiver(CommandMessage message) {
-
-                    }
-
-                    @Override
-                    public void callbackMessageReceiver(ProgramInfoMessage message) {
-
-                    }
-
-                    /*
-                    //FOR COMPANION_COMMAND messages
-                    @Override
-                    public void callbackMessageReceiver(byte[] messageContent) {
-                        Log.i (DEBUG_TAG, "Received message: " + new String (messageContent));
-                        CommandsData.handleCommand(mHandler, messageContent);
-                    }
-
-                    //For NEW_PROGRAM_INFO messages in the form "[Program]"
-                    @Override
-                    public void callbackMessageReceiver(byte[] programInfoBytes, byte[] imageBytes) {
-                        Log.i (DEBUG_TAG, "Received program info & pic: " + new String (programInfoBytes));
-
-                        Message myHandlerMessage = Message.obtain();
-                        Bundle myBundle = new Bundle ();
-                        myBundle.putByteArray (ConnectManager.PROGRAM_INFO, programInfoBytes);
-                        myBundle.putByteArray (ConnectManager.IMAGE_BYTES, imageBytes);
-                        myHandlerMessage.setData (myBundle);
-                        myHandlerMessage.what = ConnectManager.NEW_PROGRAM_INFO;
-
-                        boolean handlerSuccess = mHandler.sendMessage (myHandlerMessage);
-                        if (!handlerSuccess) {
-                            Log.d (DEBUG_TAG, "Handler message error: NEW_PROGRAM_INFO");
+                    public void callbackMessageReceiver(ProtoMessage.CommMessage message) {
+                        switch (message.getMessageType()) {
+                            case COMMAND:
+                                CommandsData.handleCommand(mHandler, new CommandMessage(message));
+                                break;
+                            case PROGRAM_INFO:
+                                Message myHandlerMessage = Message.obtain();
+                                Bundle myBundle = new Bundle ();
+                                myBundle.putByteArray (MessageHandler.PROGRAM_INFO_MESSAGE, message.toByteArray());
+                                myHandlerMessage.setData(myBundle);
+                                myHandlerMessage.what = MessageHandler.NEW_PROGRAM_INFO;
+                                if (!mHandler.sendMessage(myHandlerMessage)) {
+                                    Log.d (AppLauncher.DEBUG_TAG, "[ConnectService] Handler message error: NEW_PROGRAM_INFO");
+                                }
+                                break;
+                            default:
+                                Log.d (AppLauncher.DEBUG_TAG, "[ConnectService] Unexpected message type received");
+                                break;
                         }
                     }
-                    */
-
                     @Override
                     public void restartConnection () {
                         connectToPc();
@@ -158,21 +139,18 @@ public class ConnectService extends Service {
      */
     private void listenForBroadcasts(DatagramSocket socket) {
         counter ++;
-        Log.i (DEBUG_TAG, "Listening " + counter);
+        Log.i (AppLauncher.DEBUG_TAG, "[ConnectService] Listening " + counter);
         byte[] buf = new byte[1024];
         try {
             while (true) {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-                //s = new String(packet.getData(), 0, packet.getLength());
                 serverIpAddress = packet.getAddress().getHostAddress();
-                Log.i (DEBUG_TAG, serverIpAddress);
-                //Log.d(DEBUG_TAG, "Received response " + s + " from IP: " + socket.getInetAddress().getHostAddress());
             }
         } catch (SocketTimeoutException e) {
-            Log.d(DEBUG_TAG, "Receive timed out");
+            Log.d(AppLauncher.DEBUG_TAG, "[ConnectService] Receive timed out");
         } catch (IOException e) {
-            Log.e (DEBUG_TAG, "IOEXCEPTION", e);
+            Log.e (AppLauncher.DEBUG_TAG, "[ConnectService] IOException occured when listening for udp broadcasts", e);
         }
     }
 
@@ -187,7 +165,7 @@ public class ConnectService extends Service {
             tcpClient.sendMessage (message);
         }
         else {
-            Log.d (DEBUG_TAG, "Error sending");
+            Log.d (AppLauncher.DEBUG_TAG, "[ConnectService] Error sending message to PC");
         }
     }
 

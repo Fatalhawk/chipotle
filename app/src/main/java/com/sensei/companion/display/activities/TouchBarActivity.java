@@ -1,4 +1,4 @@
-package com.sensei.companion.display;
+package com.sensei.companion.display.activities;
 
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.sensei.companion.R;
-import com.sensei.companion.connection.ConnectManager;
+import com.sensei.companion.communication.connection.MessageHandler;
+import com.sensei.companion.display.ScreenSelectorFragment;
 import com.sensei.companion.display.program_managers.*;
 
 import java.util.Hashtable;
@@ -33,7 +34,7 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_touchbar_test);
 
-        ConnectManager.MessageHandler.setActivityReferenceToTouchBar(this);
+        MessageHandler.setActivityReference(this);
 
         currentScreen = 0; //TODO: REMOVE LATER
 
@@ -44,7 +45,6 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
                 //ConnectManager.sendMessageToPC(ConnectManager.COMPANION_COMMAND, "test");
             }
         });
-
     }
 
     @Override

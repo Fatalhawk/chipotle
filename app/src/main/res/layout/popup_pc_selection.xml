@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/subtletywhite"
     android:theme="@style/Popup"
-    tools:context="com.sensei.companion.display.PcManager">
+    tools:context="com.sensei.companion.display.activities.PcManager">
 
     <View
         android:layout_width="match_parent"

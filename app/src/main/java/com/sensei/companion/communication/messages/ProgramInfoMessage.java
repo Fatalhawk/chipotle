@@ -1,4 +1,4 @@
-package com.sensei.companion.connection.messages;
+package com.sensei.companion.communication.messages;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

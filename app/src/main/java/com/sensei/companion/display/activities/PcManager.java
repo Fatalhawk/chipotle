@@ -1,4 +1,4 @@
-package com.sensei.companion.display;
+package com.sensei.companion.display.activities;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -15,7 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.sensei.companion.R;
-import com.sensei.companion.connection.ConnectManager;
+import com.sensei.companion.communication.connection.ConnectManager;
 
 public class PcManager extends AppCompatActivity {
 

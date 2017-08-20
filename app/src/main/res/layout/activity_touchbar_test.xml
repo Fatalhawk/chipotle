@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
-    tools:context="com.sensei.companion.display.TouchBarActivity">
+    tools:context="com.sensei.companion.display.activities.TouchBarActivity">
 
     <Button
         android:id="@+id/button2"

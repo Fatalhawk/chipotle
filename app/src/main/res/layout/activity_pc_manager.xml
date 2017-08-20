@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/pc_selection_gradient"
     android:foreground="@drawable/shape_pc_manager_dim"
-    tools:context="com.sensei.companion.display.PcManager">
+    tools:context="com.sensei.companion.display.activities.PcManager">
 
     <View
         android:layout_width="match_parent"
