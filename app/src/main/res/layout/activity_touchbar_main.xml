@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/RedSmooth_4"
-    tools:context="com.sensei.companion.display.TouchBarActivity">
+    tools:context="com.sensei.companion.display.activities.TouchBarActivity">
 
     <LinearLayout
         android:layout_width="576dp"

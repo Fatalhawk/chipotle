@@ -141,7 +141,7 @@ public class ScreenSelectorFragment extends Fragment {
         mListener = null;
     }
 
-    interface OnScreenSelectorInteractionListener {
+    public interface OnScreenSelectorInteractionListener {
         // TODO: Update argument type and name
         void switchScreen (int screenKey);
     }

@@ -1,16 +1,12 @@
 package com.sensei.companion.display.program_managers;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.sensei.companion.R;
-import com.sensei.companion.connection.ConnectManager;
 
 public class GenericProgramManager extends TouchBarFragment {
 
