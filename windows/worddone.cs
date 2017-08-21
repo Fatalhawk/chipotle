@@ -309,6 +309,15 @@ namespace Networking
                 }
             }
         }
+
+        public void deletObjects()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            Marshal.FinalReleaseComObject(myWordApp);
+        }
+
+
     }
 }
 
