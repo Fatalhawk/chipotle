@@ -22,9 +22,14 @@
             android:paddingTop="20sp"
             app:srcCompat="@drawable/underline"
             app:layout_constraintRight_toLeftOf="@+id/italic_button"
+            app:layout_constraintLeft_toRightOf="@+id/bold_button"
+
+
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/not_equal_button" />
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/not_equal_button"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="0.46" />
 
         <ImageButton
             android:id="@+id/italic_button"
@@ -35,90 +40,115 @@
             android:paddingRight="40sp"
             android:paddingTop="20sp"
             app:srcCompat="@drawable/italic"
-            android:layout_marginRight="100dp"
+            android:layout_marginRight="15dp"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/pi_button" />
+            app:layout_constraintLeft_toRightOf="@+id/underline_button"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/pi_button"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="0.46" />
 
         <ImageButton
             android:id="@+id/superscript_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="266dp"
+            android:layout_marginTop="12dp"
             android:paddingBottom="20sp"
             android:paddingLeft="40sp"
             android:paddingRight="40sp"
             android:paddingTop="20sp"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/superscript"
-            tools:layout_editor_absoluteX="450dp" />
+            app:layout_constraintTop_toBottomOf="@+id/color_button"
+            android:layout_marginRight="15dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/spellcheck_button"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="0.46" />
 
         <ImageButton
             android:id="@+id/color_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="179dp"
             android:paddingBottom="20sp"
             android:paddingLeft="40sp"
             android:paddingRight="40sp"
             android:paddingTop="20sp"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/text_color"
-            tools:layout_editor_absoluteX="450dp" />
+            android:layout_marginRight="15dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/strikethrough_button"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/italic_button"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="0.46" />
 
         <ImageButton
             android:id="@+id/spellcheck_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="266dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="12dp"
             android:paddingBottom="20sp"
             android:paddingLeft="40sp"
             android:paddingRight="40sp"
             android:paddingTop="20sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/spellcheck"
-            tools:layout_editor_absoluteX="315dp" />
+            app:layout_constraintHorizontal_bias="0.46"
+            app:layout_constraintLeft_toRightOf="@+id/numbered_list_button"
+            app:layout_constraintRight_toLeftOf="@+id/superscript_button"
+            app:layout_constraintTop_toBottomOf="@+id/strikethrough_button"
+            app:srcCompat="@drawable/spellcheck" />
 
         <ImageButton
             android:id="@+id/strikethrough_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="179dp"
             android:paddingBottom="20sp"
             android:paddingLeft="40sp"
             android:paddingRight="40sp"
             android:paddingTop="20sp"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/strikethrough"
-            tools:layout_editor_absoluteX="315dp" />
+            android:layout_marginTop="12dp"
+            app:layout_constraintLeft_toRightOf="@+id/bulleted_list_button"
+            app:layout_constraintTop_toBottomOf="@+id/underline_button"
+            app:layout_constraintRight_toLeftOf="@+id/color_button"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="0.46" />
 
         <ImageButton
             android:id="@+id/numbered_list_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="181dp"
-            android:layout_marginTop="266dp"
             android:paddingBottom="20sp"
             android:paddingLeft="40sp"
             android:paddingRight="40sp"
             android:paddingTop="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/numbered_list" />
+            app:srcCompat="@drawable/numbered_list"
+            app:layout_constraintRight_toLeftOf="@+id/spellcheck_button"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/bulleted_list_button"
+            app:layout_constraintHorizontal_bias="0.46" />
 
         <ImageButton
             android:id="@+id/bulleted_list_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="210dp"
-            android:layout_marginTop="167dp"
+            android:layout_marginLeft="181dp"
             android:paddingBottom="20sp"
             android:paddingLeft="40sp"
             android:paddingRight="40sp"
             android:paddingTop="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bulleted_list" />
+            app:srcCompat="@drawable/bulleted_list"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/bold_button"
+            app:layout_constraintRight_toLeftOf="@+id/strikethrough_button"
+            android:layout_marginRight="8dp"
+            app:layout_constraintHorizontal_bias="0.46" />
 
         <ImageButton
             android:id="@+id/bold_button"
@@ -133,9 +163,10 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/underline_button"
             app:srcCompat="@drawable/bold"
-            app:layout_constraintHorizontal_bias="0.478"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/plus_minus_button" />
+            app:layout_constraintHorizontal_bias="0.46"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/plus_minus_button"
+            app:layout_constraintHorizontal_chainStyle="spread" />
 
         <ImageButton
             android:id="@+id/square_root_button"
@@ -163,7 +194,7 @@
             android:paddingTop="20sp"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/alpha"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="30dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/pi_button"
             />
