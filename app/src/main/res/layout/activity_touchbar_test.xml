@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ecebf0"
+    android:orientation="vertical"
     tools:context="com.sensei.companion.display.activities.TouchBarActivity">
 
-    <Button
-        android:id="@+id/button2"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send Message" />
+        android:layout_margin="8dp"
+        android:layout_weight="730">
+
+        <fragment
+            android:id="@+id/fragment6"
+            android:name="com.sensei.companion.display.testing.DummyDesktopTouchbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_dummy_desktop_touchbar" />
+    </FrameLayout>
+
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.sensei.companion.display.testing.ScreenSelectorFragmentTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="166.41"
+        tools:layout="@layout/fragment_screen_selector_test" />
 </LinearLayout>

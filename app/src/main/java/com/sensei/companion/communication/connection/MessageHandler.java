@@ -23,7 +23,7 @@ public class MessageHandler extends Handler {
     static final int NEW_PROGRAM_INFO = 1;
     static final String PROGRAM_INFO_MESSAGE = "program_info_message";
 
-    private CommandsData.Program currentProgram;
+    private static CommandsData.Program currentProgram;
     public static WeakReference<? extends AppCompatActivity> curActivity;
 
     MessageHandler (PcManager activity) {
@@ -50,12 +50,12 @@ public class MessageHandler extends Handler {
         }
     }
 
-    public CommandsData.Program getCurrentProgram() {
+    public static CommandsData.Program getCurrentProgram() {
         return currentProgram;
     }
 
-    public void setCurrentProgram(CommandsData.Program currentProgram) {
-        this.currentProgram = currentProgram;
+    public static void setCurrentProgram(CommandsData.Program program) {
+        currentProgram = program;
     }
 
     PopupWindow getPopUpWindow () {
