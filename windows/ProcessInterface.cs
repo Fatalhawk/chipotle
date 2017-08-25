@@ -1,6 +1,14 @@
 ﻿/**
  * Author(s): Takahiro Tow
  * Last updated: July 6, 2017
+ * Description:
+ * ProcessInterface is a template base class for all apps.
+ * All specific applications will inherit from ProcessInterface as it provides neccesary basic attributes such as 
+ *      -window handle
+ *      -icon
+ *      -process
+ *      -other general information about window
+ * ProcessInterface (the base class) will also be the default for applications we have not programmed for and thus do not know specific commands.
  **/
 
 //UPDATE TO DICTIONARIES
@@ -25,6 +33,8 @@ namespace Networking
             get { return process; }
             set { process = value; }
         }
+        public delegate void updateDele();
+        public updateDele updateList;
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
@@ -33,23 +43,31 @@ namespace Networking
         protected IntPtr handle;
         //process's icon
         protected Icon processIcon;
-        protected string windowTitle;
+        public string windowTitle;
+        public WinEventDelegate dele;
+
+        protected IntPtr titleChangeHook;
 
         //used for retrieving window handle
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
+
+        protected uint WINEVENT_OUTOFCONTEXT = 0;
         /**
          * Constructor
          * @param: Process that this object manages
          **/
-        public ProcessInterface(ref Process pObj, IntPtr hWnd, string title)
+        public ProcessInterface(ref Process pObj, IntPtr hWnd, string title, updateDele updater)
         {
             windowTitle = title;
             process = pObj;
             handle = hWnd;
             initProcessIcon();
+            updateList = updater;
+            dele = new WinEventDelegate(WinEventProc);
+            titleChangeHook = SetWinEventHook(EVENT_OBJECT_NAMECHANGE, EVENT_OBJECT_NAMECHANGE, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
         }
 
         private void initProcessIcon()
@@ -76,20 +94,30 @@ namespace Networking
             }
         }
 
-        /**
-         * makes window of process the foreground window
-         **/
-        public void setForegroundApp()
+        public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+
+        protected uint EVENT_OBJECT_NAMECHANGE = 0x800C;
+
+        public virtual void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            if (!SetForegroundWindow(handle)) { }
+            if (hwnd == handle)
+            {
+                StringBuilder sb_title = new StringBuilder(256);
+                int length = GetWindowText(hwnd, sb_title, sb_title.Capacity);
+                windowTitle = sb_title.ToString();
+                updateList();
+            }
+
         }
 
-        public virtual void performAction(int x)
+
+        public virtual void performAction(int action)
         {
 
         }
-
-
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -126,6 +154,7 @@ namespace Networking
 
 
         /**
+         * MOVE TO PROCESSHANDLER
          * terminates the process and closes the window of the process
          **/
         public bool killApp()
@@ -166,6 +195,11 @@ namespace Networking
             return processIcon;
         }
 
+        public Process getProcess()
+        {
+            return process;
+        }
+
         public string getProcessName()
         {
             try
@@ -189,6 +223,10 @@ namespace Networking
             return handle.ToInt32();
         }
 
+        /**
+         * Obsolete
+         * -does not work in many cases and has been replced
+         **/
         public bool hasExited()
         {
             if (process == null)

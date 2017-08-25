@@ -79,7 +79,7 @@ namespace Networking
          */
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            if (ProcessHandler.getProcessDict().Keys.Contains(GetForegroundWindow().ToInt32()))
+            if (ProcessHandler.getProcessDict().Keys.Contains(hwnd.ToInt32()))
             {
                 tObj.updateTextbox("New window focus");
             }
@@ -126,7 +126,6 @@ namespace Networking
         ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
         private static extern bool EnumDesktopWindows(IntPtr hDesktop,
         EnumDelegate lpEnumCallbackFunction, IntPtr lParam);
-
         //EnumDesktopWindows callback delegate declaration
         private delegate bool EnumDelegate(IntPtr hWnd, int lParam);
 
@@ -155,6 +154,8 @@ namespace Networking
 
         private const long WS_EX_APPWINDOW = 0x00040000L;
 
+        public delegate void updateFunc();
+
         // We use this function to filter windows.
         // This version selects visible windows that have titles.
         private bool FilterCallback(IntPtr hWnd, int lParam)
@@ -181,11 +182,11 @@ namespace Networking
 
             if (pObj.ProcessName == "WINWORD")
             {
-                ProcessHandler.addProcess(hWnd.ToInt32(), new WordApp(ref pObj, hWnd, title));
+                ProcessHandler.addProcess(hWnd.ToInt32(), new WordApp(ref pObj, hWnd, title, tObj.updateGridView2));
             }
             else
             {
-                ProcessHandler.addProcess(hWnd.ToInt32(), new ProcessInterface(ref pObj, hWnd, title));
+                ProcessHandler.addProcess(hWnd.ToInt32(), new ProcessInterface(ref pObj, hWnd, title, tObj.updateGridView2));
             }
             tObj.updateGridView2();
 
@@ -225,7 +226,7 @@ namespace Networking
         [DllImport("dwmapi.dll")]
         static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out int pvAttribute, int cbAttribute);
 
-        static bool IsInvisibleWin10BackgroundAppWindow(IntPtr hWnd)
+        private static bool IsInvisibleWin10BackgroundAppWindow(IntPtr hWnd)
         {
             int CloakedVal;
             int S_OK = 0x00000000;

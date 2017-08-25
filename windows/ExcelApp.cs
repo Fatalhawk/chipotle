@@ -18,7 +18,7 @@ namespace Networking //TODO: Shifting down
         //        Console.ReadLine();
         //    }
         //}
-        public ExcelApp(ref Process pObj, IntPtr hWnd, string title) : base(ref pObj, hWnd, title)
+        public ExcelApp(ref Process pObj, IntPtr hWnd, string title, updateDele update) : base(ref pObj, hWnd, title, update)
         {
             excelCommand();
         }

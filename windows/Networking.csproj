@@ -66,6 +66,7 @@
     <Compile Include="ProcessInterface.cs" />
     <Compile Include="ProcessListener.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="IProgramInterface.cs" />
     <Compile Include="ProgramType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpotifyApp.cs" />

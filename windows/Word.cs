@@ -19,9 +19,11 @@ namespace Networking
 {
     class WordApp : ProcessInterface
     {
-        public WordApp(ref Process pObj, IntPtr hWnd, string title) : base(ref pObj, hWnd, title)
+        public WordApp(ref Process pObj, IntPtr hWnd, string title, updateDele updater) : base(ref pObj, hWnd, title, updater)
         {
             childWindow = 0;
+            //dele = new WinEventDelegate(WinEventProc);
+            //titleChangeHook = SetWinEventHook(EVENT_OBJECT_NAMECHANGE, EVENT_OBJECT_NAMECHANGE, IntPtr.Zero, dele, 0, 0, WINEVENT_OUTOFCONTEXT);
             bindWordWindow();
         }
 
@@ -35,40 +37,68 @@ namespace Networking
 
         private void bindWordWindow()
         {
-            EnumChildCallback cb = new EnumChildCallback(EnumChildProc);
-            EnumChildWindows(handle.ToInt32(), cb, ref childWindow);
-
-            if (childWindow != 0)
+            try
             {
-                // We call AccessibleObjectFromWindow, passing the constant OBJID_NATIVEOM (defined in winuser.h) 
-                // and IID_IDispatch - we want an IDispatch pointer into the native object model.
-                //
-                const uint OBJID_NATIVEOM = 0xFFFFFFF0;
-                Guid IID_IDispatch = new Guid("{00020400-0000-0000-C000-000000000046}");
-                IDispatch ptr;
+                EnumChildCallback cb = new EnumChildCallback(EnumChildProc);
+                EnumChildWindows(handle.ToInt32(), cb, ref childWindow);
 
-                int hr = AccessibleObjectFromWindow(childWindow, OBJID_NATIVEOM, IID_IDispatch.ToByteArray(), out ptr);
-
-                if (hr >= 0)
+                if (childWindow != 0)
                 {
-                    myWordApp = (Word.Application)ptr.GetType().InvokeMember("Application", BindingFlags.GetProperty, null, ptr, null);
+                    // We call AccessibleObjectFromWindow, passing the constant OBJID_NATIVEOM (defined in winuser.h) 
+                    // and IID_IDispatch - we want an IDispatch pointer into the native object model.
+                    //
+                    const uint OBJID_NATIVEOM = 0xFFFFFFF0;
+                    Guid IID_IDispatch = new Guid("{00020400-0000-0000-C000-000000000046}");
+                    IDispatch ptr;
+
+                    int hr = AccessibleObjectFromWindow(childWindow, OBJID_NATIVEOM, IID_IDispatch.ToByteArray(), out ptr);
+
+                    if (hr >= 0)
+                    {
+                        myWordApp = (Word.Application)ptr.GetType().InvokeMember("Application", BindingFlags.GetProperty, null, ptr, null);
+                    }
+                }
+
+                if (myWordApp != null)
+                {
+                    Console.WriteLine(
+                      "Successfully attached to running instance of Word.");
+
+                    try
+                    {
+                        Word.Document myWordDocument = myWordApp.ActiveDocument;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                        Console.WriteLine("No document open");
+                    }
                 }
             }
-
-            if (myWordApp != null)
+            catch(NullReferenceException e)
             {
-                Console.WriteLine(
-                  "Successfully attached to running instance of Word.");
 
-                try
-                {
-                    Word.Document myWordDocument = myWordApp.ActiveDocument;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                    Console.WriteLine("No document open");
-                }
+            }
+            catch(Exception e)
+            {
+
+            }
+        }
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowText",
+        ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetWindowText(IntPtr hWnd,
+            StringBuilder lpWindowText, int nMaxCount);
+
+        public override void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        {
+            if (hwnd == handle)
+            {
+                StringBuilder sb_title = new StringBuilder(256);
+                int length = GetWindowText(hwnd, sb_title, sb_title.Capacity);
+                windowTitle = sb_title.ToString();
+                updateList();
+                bindWordWindow();
             }
         }
 
@@ -98,22 +128,48 @@ namespace Networking
         {
         }
 
+        private enum CommandList
+        {
+            BOLD,
+            ITALICIZE,
+            UNDERLINE,
+            STRIKETHROUGH,
+            HIGHLIGHT
+        }
+
         public override void performAction(int x)
         {
-            //base.performAction();
-            if (x == 1)
+            try
             {
-                bold();
+                switch ((CommandList)x)
+                {
+                    case CommandList.BOLD:
+                        bold();
+                        break;
+                    case CommandList.ITALICIZE:
+                        italicize();
+                        break;
+                    case CommandList.UNDERLINE:
+                        underline();
+                        break;
+                    case CommandList.STRIKETHROUGH:
+                        strikethrough();
+                        break;
+                    case CommandList.HIGHLIGHT:
+                        highlight();
+                        break;
+                }
             }
-            if (x == 2)
+            catch (NullReferenceException e)
             {
-                italicize();
+                Console.WriteLine("Thrown by performAction in Word.cs");
+                Console.WriteLine(e.ToString());
             }
-            if (x == 3)
+            catch (Exception e)
             {
-                underline();
+                Console.WriteLine("Thrown by performAction in Word.cs");
+                Console.WriteLine(e.ToString());
             }
-
         }
 
         public string getStyleName()
@@ -184,7 +240,7 @@ namespace Networking
             myWordApp.Selection.set_Style("myStyle");
         }
 
-        public void highlight(Word.Application myWordApp, WdColorIndex color = WdColorIndex.wdDarkYellow)
+        public void highlight(WdColorIndex color = WdColorIndex.wdDarkYellow)
         {
             myWordApp.Selection.Range.HighlightColorIndex = color;
         }

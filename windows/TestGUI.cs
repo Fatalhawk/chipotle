@@ -116,5 +116,10 @@ namespace Networking
         {
 
         }
+
+        private void TestGUI_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

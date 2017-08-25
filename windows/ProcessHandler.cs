@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Networking
 {
@@ -85,10 +86,16 @@ namespace Networking
             }
         }
 
+        //used for retrieving window handle
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
         public static void openProgram(int key)
         {
-            processDict[key].setForegroundApp();
+            SetForegroundWindow(new IntPtr(key));
         }
+
         /**
          * main method to be called upon recieving instructions
          * will direct instruction to the appropriate process object

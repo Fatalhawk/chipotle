@@ -21,7 +21,7 @@ namespace Networking
         
 
 
-        public SpotifyApp(ref Process pObj, IntPtr hWnd, string title) : base(ref pObj, hWnd, title)
+        public SpotifyApp(ref Process pObj, IntPtr hWnd, string title, updateDele updater) : base(ref pObj, hWnd, title,updater)
         {
             if (!isFunctional())
             {

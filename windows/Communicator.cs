@@ -125,13 +125,13 @@ namespace Networking
                 {
                     try
                     {
-                        //data = sr.ReadLine();
-                        //Console.WriteLine(data);
-                        //if (data.IndexOf("<EC>") > -1)
-                        //{
-                            //sendCommand(data);
-                            //sw.WriteLine("shut the fuck up");
-                        //}
+                        data = sr.ReadLine();
+                        Console.WriteLine(data);
+                        if (data.IndexOf("<EC>") > -1)
+                        {
+                            sendCommand(data);
+                            sw.WriteLine("shut the fuck up");
+                        }
                     }
                     catch (SocketException e)
                     {
