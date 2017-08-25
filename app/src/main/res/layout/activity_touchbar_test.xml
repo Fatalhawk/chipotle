@@ -27,6 +27,6 @@
         android:name="com.sensei.companion.display.testing.ScreenSelectorFragmentTest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="166.41"
+        android:layout_weight="134.87"
         tools:layout="@layout/fragment_screen_selector_test" />
 </LinearLayout>

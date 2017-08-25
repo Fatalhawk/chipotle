@@ -3,8 +3,6 @@ package com.sensei.companion.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.sensei.companion.properties.Properties;
-
 public class Database {
 
     private DBHandler dbHandler;

@@ -12,11 +12,12 @@ public class AppLauncher extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i (DEBUG_TAG, "App started");
 
-        Intent i = new Intent (this, TouchBarActivity.class);
-        startActivity(i);
+        //Intent i = new Intent (this, TouchBarActivity.class);
+        //startActivity(i);
 
-        //startPcSelection ();
+        startPcSelection ();
     }
 
     public void startPcSelection () {

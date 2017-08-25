@@ -12,10 +12,15 @@ import com.sensei.companion.proto.ProtoMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 class TCPClient {
     private String serverIpNumber;
@@ -49,27 +54,34 @@ class TCPClient {
                 //send
                 out.write(numBytesMessage);
                 protoMessage.writeTo(out);
+                Log.i (AppLauncher.DEBUG_TAG, "Sent msg ["+numBytes+" bytes]: " + ((CommandMessage)message).getProtoMessage().toString());
 
                 //wait for reply
                 try {
                     blockingQueue = new LinkedBlockingQueue<>(1);
                     isWaitingForReply = true;
-                    String replyId = blockingQueue.take(); //wait for reply -- #bytes
-                    if (!protoMessage.getMessageId().equals(replyId)) {
-                        //TODO: WHAT TO DO IF PC SENDS BACK WRONG NUMBER
-                    } else {
-                        isWaitingForReply = false;
-                        Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Successfully sent message: " + protoMessage.toString());
+
+                    String replyId = blockingQueue.poll(1, TimeUnit.SECONDS); //wait for reply -- #bytes
+                    if (replyId == null) {
+                        Log.d(AppLauncher.DEBUG_TAG, "[TCPClient] Timed out waiting for a reply");
+                        stopClient();
+                    }
+                    else {
+                        if (!protoMessage.getMessageId().equals(replyId)) {
+                            //TODO: WHAT TO DO IF PC SENDS BACK WRONG NUMBER
+                        } else {
+                            isWaitingForReply = false;
+                            Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Successfully sent message and got reply!");
+                        }
                     }
                 } catch (InterruptedException e) {
                     Log.e (AppLauncher.DEBUG_TAG, "[TCPClient] blocking queue's take interrupted", e);
-                    //TODO: error trap
                 }
 
                 out.flush ();
             } catch (IOException e) {
                 Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] Error sending message", e);
-                //TODO: error trap
+                stopClient();
             }
         }
         else {
@@ -93,14 +105,14 @@ class TCPClient {
             Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Sent reply message: " + replyMessage.toString());
         } catch (IOException e) {
             Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] Error sending reply message", e);
-            //TODO: error trap
+            stopClient();
         }
     }
 
     /*
     Checks whether the message is a reply or a newly issued command and proceeds appropriately
      */
-    private void messageGuider (byte [] messageBytes) {
+    private void messageGuider (byte[] messageBytes) {
         try {
             ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(messageBytes);
             Log.i (AppLauncher.DEBUG_TAG, "[TCPClient] Received message: " + message.toString());
@@ -111,11 +123,9 @@ class TCPClient {
                         blockingQueue.put(replyId);
                     } catch (InterruptedException e) {
                         Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] blocking queue's put interrupted", e);
-                        //TODO: error trap
                     }
                 } else {
                     Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] Error - got reply when not waiting for reply");
-                    //TODO: error trap
                 }
             } else {
                 sendReplyMessage (message.getMessageId()); //send reply back w/ same id
@@ -123,7 +133,6 @@ class TCPClient {
                     messageListener.callbackMessageReceiver(message);
                 } else {
                     Log.d(AppLauncher.DEBUG_TAG, "[TCPClient] NULL MESSAGE LISTENER");
-                    //TODO: error trap
                 }
             }
         } catch (InvalidProtocolBufferException e) {
@@ -139,17 +148,34 @@ class TCPClient {
                     in = socket.getInputStream();
                     while (connected) {
                         //receive message
-                        byte[] numBytes = new byte [4];
-                        in.read (numBytes);
+                        byte[] numBytes = new byte[4];
+                        in.read(numBytes);
+                        for (int i = 0; i < numBytes.length / 2; i++) {
+                            byte temp = numBytes[i];
+                            numBytes[i] = numBytes[numBytes.length - 1 - i];
+                            numBytes[numBytes.length - 1 - i] = temp;
+                        }
                         int messageSize = ByteBuffer.wrap(numBytes).asIntBuffer().get();
-                        byte[] message = new byte [messageSize];
-                        in.read (message);
-                        messageGuider (message);
+                        Log.i (AppLauncher.DEBUG_TAG, ""+ messageSize);
+                        byte[] message = new byte[messageSize];
+                        in.read(message);
+                        //ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(in);
+                        messageGuider(message);
                     }
-                }
-                catch (IOException e) {
-                    Log.e (AppLauncher.DEBUG_TAG, "[TCPClient] S: Error w/ InputStream", e);
-                    //TODO: error trap
+                } catch (IOException e) {
+                    Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] S: Error w/ InputStream", e);
+                    connected = false;
+                } finally {
+                    try {
+                        out.flush();
+                        out.close();
+                        in.close();
+                        socket.close();
+                        Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Socket closed");
+                    } catch (IOException e) {
+                        Log.e (AppLauncher.DEBUG_TAG, "[TCPClient] IOException when stopping client", e);
+                    }
+                    messageListener.restartConnection();
                 }
             }
         });
@@ -164,6 +190,7 @@ class TCPClient {
             Socket socket = new Socket (serverAddress, MY_PORT_NUMBER);
             this.socket = socket;
             connected = true;
+
             try {
                 out = socket.getOutputStream();
                 receiveMessage();
@@ -171,19 +198,12 @@ class TCPClient {
             }
             catch (IOException e) {
                 Log.e (AppLauncher.DEBUG_TAG, "[TCPClient] S: Error", e);
-            }
-            finally {
-                out.flush();
-                out.close();
-                in.close();
-                socket.close();
-                Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Socket Closed");
-                messageListener.restartConnection ();
+                stopClient();
             }
         }
         catch (IOException e) {
             Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] C: Error", e);
-            connected = false;
+            stopClient();
         }
     }
 
@@ -192,8 +212,8 @@ class TCPClient {
     }
 
     void stopClient () {
-        Log.i (AppLauncher.DEBUG_TAG, "[TCPClient] Client stopped!");
         connected = false;
+        Log.i (AppLauncher.DEBUG_TAG, "Stopped client!");
     }
 
     interface MessageCallback {

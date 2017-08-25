@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fragment_screen_selector_test_customborder"
+    android:background="@drawable/customborder_screenselector"
     android:orientation="horizontal"
     tools:context="com.sensei.companion.display.testing.ScreenSelectorFragmentTest">
 

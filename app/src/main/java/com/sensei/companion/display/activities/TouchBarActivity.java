@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
+import com.sensei.companion.communication.connection.ConnectManager;
 import com.sensei.companion.communication.connection.MessageHandler;
 import com.sensei.companion.communication.messages.CommandMessage;
 import com.sensei.companion.display.ScreenSelectorFragment;
@@ -43,7 +44,7 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
 
     @Override
     public void sendMessage (CommandMessage msg) {
-        Log.i (AppLauncher.DEBUG_TAG, "About to send msg: " + msg.getProtoMessage().toString());
+        ConnectManager.sendMessageToPC(msg);
     }
 
     /*
