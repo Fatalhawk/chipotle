@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -14,28 +14,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".display.AppLauncher"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape">
-        </activity>
-
-        <service
-            android:name=".connection.ConnectService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <activity android:name=".display.TouchBarActivity">
+            android:name=".display.activities.AppLauncher"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".display.TrackpadActivity" />
-        <activity android:name=".display.PcManager" />
+        <service
+            android:name=".communication.connection.ConnectService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".display.activities.TouchBarActivity"/>
+        <activity android:name=".display.activities.TrackpadActivity" />
         <activity android:name=".display.GestureActivity" />
-        <activity android:name=".display.PcSelectionActivity" />
+        <activity
+            android:name=".display.activities.PcManager"
+            android:theme="@style/PcSelection"
+            android:label="PC Selection"/>
+
     </application>
 
 </manifest>

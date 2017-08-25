@@ -1,4 +1,4 @@
-package com.sensei.companion.display;
+package com.sensei.companion.display.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
