@@ -25,30 +25,6 @@ public class ScreenSelectorFragment extends Fragment {
     private final String DEBUG_TAG = "appMonitor";
     private OnScreenSelectorInteractionListener mListener;
 
-    //can only have 10 desktops maximum, need to discuss with the team later or make array dynamic
-    private ImageButton[] imageButtons = new ImageButton[10];
-    private int image_tracker = 1;  //only 1 image here
-
-
-    /** private View.OnClickListener onClickListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-    switch(v.getId()){
-    case R.id.addDesktopButton:
-    //need a way to pass in how many desktops to be made
-    imagetracker++;
-    imageButtons[imagetracker] = new ImageButton(this);
-    imageButtons[imagetracker].setLayoutParams(new ViewGroup.LayoutParams("126dp", ViewGroup.LayoutParams.MATCH_PARENT));
-
-    break;
-
-
-
-
-    }
-    }
-    } **/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,29 +35,23 @@ public class ScreenSelectorFragment extends Fragment {
         //need swipe up to delete desktops
         super.onCreate(savedInstanceState);
 
-
-        //this is a fragment so we don't need this setContentView(R.layout.dtop_management);
-
         View view1 = inflater.inflate(R.layout.dtop_management, container, false);
 
 
-        RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.desktopList);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(llm);
-        //why does the drawable icon only show up for the first button and not
-        // for the others
-        //also need to make imagebackground transparent
-        List<Screen> myScreens = createList(2);
-        MyAdapter mAdapter = new MyAdapter(myScreens);
-        recyclerView.setAdapter(mAdapter);
+        RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.screenList);
+
+        List<Screen> screens = createList(3);
+
+        MyAdapter adapter = new MyAdapter(getActivity(), screens);
+
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
         //need to do everything programmatically now
 
         final ImageButton addDesktopButton =  (ImageButton) view1.findViewById(R.id.addDesktopButton);
-        addDesktopButton.setTag(Integer.toString(image_tracker));
         addDesktopButton.setId(View.generateViewId());
         addDesktopButton.setImageResource(R.drawable.ic_add_black_24dp);
 
@@ -94,6 +64,8 @@ public class ScreenSelectorFragment extends Fragment {
 
         float scale = getResources().getDisplayMetrics().density;
         final int ib_padding = (int) (28*scale + 0.5f); //56 is the size of a floating action button
+
+
 
 
         /**
@@ -154,11 +126,14 @@ public class ScreenSelectorFragment extends Fragment {
 
         List<Screen> result = new ArrayList<Screen>();
         for (int i=1; i <= size; i++) {
-            Screen ci = new Screen();
-            ci.name = Screen.DESKTOP_NAME_PREFIX + i;
-            ci.imageB = new ImageButton(getActivity());
-            ci.imageB.setId(View.generateViewId());
-            ci.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
+            Screen ci = new Screen(Screen.DESKTOP_NAME_PREFIX + i, new Button(getActivity()));
+            ci.getButton().setId(View.generateViewId());
+
+            final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ci.getButton().setLayoutParams(params);
+            System.out.println("YOLO" + ci.getButton().getId());
+            // ci.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
+            // ci.imageB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.RedSmooth_3));
             result.add(ci);
 
         }

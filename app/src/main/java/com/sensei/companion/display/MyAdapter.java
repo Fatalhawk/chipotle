@@ -3,12 +3,15 @@ package com.sensei.companion.display;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import java.util.List;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.support.v4.content.ContextCompat;
+import android.text.Layout;
 import android.view.ViewGroup;
 import android.view.View;
 import android.view.LayoutInflater;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.content.Context;
 
 import com.sensei.companion.R;
 
@@ -17,14 +20,23 @@ import com.sensei.companion.R;
  * Created by rojigangengatharan on 2017-08-05.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ScreensViewHolder> {
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private List<Screen> screensList;
 
-    public MyAdapter(List<Screen> screensList) {
-        this.screensList = screensList;
+    private Context mContext;
+
+    public MyAdapter(Context context, List<Screen> p_screenList)
+    {
+        this.screensList = p_screenList;
+        mContext = context;
+
     }
 
+
+    public Context getContext(){
+        return mContext;
+    }
 
     @Override
     public int getItemCount() {
@@ -33,49 +45,43 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ScreensViewHolder>
     }
 
 
-    public ScreensViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.dtop_cards,
-                parent, false);
-        return new ScreensViewHolder(itemView);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        View screenView = inflater.inflate(R.layout.dtop_cards, parent, false);
+
+        ViewHolder viewHolder = new ViewHolder(screenView);
+        return viewHolder;
 
     }
 
-    //do we need this override hear? or not @Override
 
-    /**
-     * public void onBindViewHolder(ViewHolder holder, int position) {
-     * Screens si = screensList.get(position);
-     * holder.name.setText(si.name);
-     * holder.imageB = si.imageB;
-     * <p>
-     * holder.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp); //change later when needed
-     * holder.image_id = si.image_id;
-     * <p>
-     * }
-     **/
-    public void onBindViewHolder(ScreensViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        //Image Buttons are "infod" here
         Screen si = screensList.get(position);
-        holder.name.setText(si.name);
-        holder.imageB = si.imageB;
+        System.out.println(si.getName());
+        holder.button.setText(si.getName());
 
-        holder.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp); //change later when needed
+        //use bitmaps for imagebutton, for now testing with constant images
 
+
+
+        //holder.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
+
+
+        //change later when needed
+        //search up how all this stuff really works and how to set background color
+        //by getting context
     }
 
-    public class ScreensViewHolder extends RecyclerView.ViewHolder {
-        protected TextView name;
-        protected ImageButton imageB;
-        protected int image_id;
-        protected Image image;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        protected Button button;
 
-
-        public ScreensViewHolder(View v) {
-            super(v);
-            name = (TextView) v.findViewById(R.id.txtView);
-            imageB = (ImageButton) v.findViewById(R.id.imageButton);
+        public ViewHolder(View itemView) {
+            super(itemView);
+            button = (Button) itemView.findViewById(R.id.ButtonT);
             //be careful with error of having so many imagebuttons, maybe having same names?
-            image_id = R.id.imageButton;
-
 
         }
 
