@@ -1,6 +1,7 @@
 package com.sensei.companion.display;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,8 @@ import android.widget.LinearLayout;
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
 
+
+
 public class ScreenSelectorFragment extends Fragment {
 
     private final String DEBUG_TAG = "appMonitor";
@@ -27,7 +30,6 @@ public class ScreenSelectorFragment extends Fragment {
     //can only have 10 desktops maximum, need to discuss with the team later or make array dynamic
     private ImageButton[] imageButtons = new ImageButton[10];
     private int image_tracker = 1;  //only 1 image here
-
 
     /** private View.OnClickListener onClickListener = new View.OnClickListener() {
     @Override
