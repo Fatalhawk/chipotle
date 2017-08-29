@@ -11,7 +11,7 @@ import android.widget.Button;
 
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
-import com.sensei.companion.display.ScreenSelectorFragment;
+import com.sensei.companion.display.screen_selector.ScreenSelectorFragment;
 import com.sensei.companion.display.activities.AppLauncher;
 
 public class ScreenSelectorFragmentTest extends Fragment {

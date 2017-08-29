@@ -14,8 +14,8 @@
         android:background="@color/RedSmooth_3">
         <Button
             android:id="@+id/ButtonT"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@color/RedSmooth_3"
             android:text="Formal"
             android:textAllCaps="false"

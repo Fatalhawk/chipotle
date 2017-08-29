@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    tools:context=".display.activities.AppLauncher"
-    android:background="@color/RedSmooth_3">
+    tools:context="com.sensei.companion.display.activities.TouchBarActivity"
+    android:background="@drawable/customborder_screenselector">
     <ImageButton
         android:id="@+id/addDesktopButton"
         android:layout_width="wrap_content"

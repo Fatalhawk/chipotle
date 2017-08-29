@@ -10,7 +10,7 @@ import com.sensei.companion.communication.commands.CommandsData;
 import com.sensei.companion.communication.connection.ConnectManager;
 import com.sensei.companion.communication.connection.MessageHandler;
 import com.sensei.companion.communication.messages.CommandMessage;
-import com.sensei.companion.display.ScreenSelectorFragment;
+import com.sensei.companion.display.screen_selector.ScreenSelectorFragment;
 import com.sensei.companion.display.testing.DummyChromeTouchbar;
 import com.sensei.companion.display.testing.DummyDesktopTouchbar;
 import com.sensei.companion.display.testing.DummyWordTouchbar;
@@ -33,7 +33,9 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i (AppLauncher.DEBUG_TAG, "touchbaractivityoncreate");
         setContentView(R.layout.activity_touchbar_test);
+        Log.i (AppLauncher.DEBUG_TAG, "setcontentviewactivity");
 
         MessageHandler.setActivityReference(this);
 

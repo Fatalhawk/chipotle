@@ -24,9 +24,10 @@
 
     <fragment
         android:id="@+id/fragment2"
-        android:name="com.sensei.companion.display.testing.ScreenSelectorFragmentTest"
+        android:name="com.sensei.companion.display.screen_selector.ScreenSelectorFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="134.87"
-        tools:layout="@layout/fragment_screen_selector_test" />
+        tools:layout="@layout/dtop_management" />
+
 </LinearLayout>

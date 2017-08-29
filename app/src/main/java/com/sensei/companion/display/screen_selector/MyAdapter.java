@@ -1,16 +1,12 @@
-package com.sensei.companion.display;
+package com.sensei.companion.display.screen_selector;
 
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import java.util.List;
-import android.support.v4.content.ContextCompat;
-import android.text.Layout;
+
 import android.view.ViewGroup;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.content.Context;
 
 import com.sensei.companion.R;

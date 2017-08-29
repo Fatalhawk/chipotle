@@ -1,4 +1,4 @@
-package com.sensei.companion.display;
+package com.sensei.companion.display.screen_selector;
 import android.widget.Button;
 import android.graphics.Bitmap;
 /**

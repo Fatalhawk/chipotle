@@ -1,14 +1,11 @@
-package com.sensei.companion.display;
+package com.sensei.companion.display.screen_selector;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +19,13 @@ import android.graphics.Bitmap;
 
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
+import com.sensei.companion.display.activities.AppLauncher;
 
 public class ScreenSelectorFragment extends Fragment {
 
     private final String DEBUG_TAG = "appMonitor";
     private OnScreenSelectorInteractionListener mListener;
-    private List<Screen> screens = createList(1);
+    private List<Screen> screens;
 
     public void setCurrentScreen(Bitmap imageR, String name){
         //Button should be ImageButton
@@ -40,8 +38,6 @@ public class ScreenSelectorFragment extends Fragment {
 
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,7 +46,10 @@ public class ScreenSelectorFragment extends Fragment {
          I can assume the pictures and names will be given
          For desktops, similar story **/
         //need swipe up to delete desktops
+        Log.i (AppLauncher.DEBUG_TAG, "oncreateview");
         super.onCreate(savedInstanceState);
+
+        screens = createList(3);
 
         View view1 = inflater.inflate(R.layout.dtop_management, container, false);
 
@@ -115,6 +114,7 @@ public class ScreenSelectorFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        Log.i (AppLauncher.DEBUG_TAG, "onattach");
         super.onAttach(context);
         if (context instanceof OnScreenSelectorInteractionListener) {
             mListener = (OnScreenSelectorInteractionListener) context;
