@@ -15,6 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import java.util.List;
+import java.util.ArrayList;
+import android.graphics.Bitmap;
+
 
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
@@ -23,30 +27,20 @@ public class ScreenSelectorFragment extends Fragment {
 
     private final String DEBUG_TAG = "appMonitor";
     private OnScreenSelectorInteractionListener mListener;
+    private List<Screen> screens = createList(1);
 
-    //can only have 10 desktops maximum, need to discuss with the team later or make array dynamic
-    private ImageButton[] imageButtons = new ImageButton[10];
-    private int image_tracker = 1;  //only 1 image here
+    public void setCurrentScreen(Bitmap imageR, String name){
+        //Button should be ImageButton
+        //imageButton.setImageResource.....
 
-
-    /** private View.OnClickListener onClickListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-    switch(v.getId()){
-    case R.id.addDesktopButton:
-    //need a way to pass in how many desktops to be made
-    imagetracker++;
-    imageButtons[imagetracker] = new ImageButton(this);
-    imageButtons[imagetracker].setLayoutParams(new ViewGroup.LayoutParams("126dp", ViewGroup.LayoutParams.MATCH_PARENT));
-
-    break;
-
-
-
+        Button currentB = new Button(getActivity());
+        Screen screen = new Screen(name, currentB, imageR);
+        screens.add(screen);
+        //find out a way to prepend to array list
 
     }
-    }
-    } **/
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,45 +50,38 @@ public class ScreenSelectorFragment extends Fragment {
          I can assume the pictures and names will be given
          For desktops, similar story **/
         //need swipe up to delete desktops
-
+        super.onCreate(savedInstanceState);
 
         View view1 = inflater.inflate(R.layout.dtop_management, container, false);
 
 
-        RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.desktopList);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(llm);
+        RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.screenList);
 
+
+
+        MyAdapter adapter = new MyAdapter(getActivity(), screens);
+
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
 
         //need to do everything programmatically now
 
         final ImageButton addDesktopButton =  (ImageButton) view1.findViewById(R.id.addDesktopButton);
-        addDesktopButton.setTag(Integer.toString(image_tracker));
         addDesktopButton.setId(View.generateViewId());
         addDesktopButton.setImageResource(R.drawable.ic_add_black_24dp);
 
-        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER;
-
-        //addview not supported in AdapterView, what to do??
-
-        ImageButton first_desktop = new ImageButton(getActivity());
-        first_desktop.setId(View.generateViewId());
-        first_desktop.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
 
 
-
-
-        //just put onclick listener here makes your life easier
 
         float scale = getResources().getDisplayMetrics().density;
         final int ib_padding = (int) (28*scale + 0.5f); //56 is the size of a floating action button
 
 
 
+
+        /**
         addDesktopButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -121,7 +108,7 @@ public class ScreenSelectorFragment extends Fragment {
 
             }
         });
-
+            **/
 
         return view1;
     }
@@ -145,5 +132,25 @@ public class ScreenSelectorFragment extends Fragment {
     public interface OnScreenSelectorInteractionListener {
         // TODO: Update argument type and name
         void switchScreen (CommandsData.Program programKey);
+    }
+
+
+    private List<Screen> createList(int size) {
+
+        List<Screen> result = new ArrayList<Screen>();
+        for (int i=1; i <= size; i++) {
+            Screen ci = new Screen(Screen.DESKTOP_NAME_PREFIX + i, new Button(getActivity()));
+            ci.getButton().setId(View.generateViewId());
+
+            final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ci.getButton().setLayoutParams(params);
+            System.out.println("YOLO" + ci.getButton().getId());
+            // ci.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
+            // ci.imageB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.RedSmooth_3));
+            result.add(ci);
+
+        }
+
+        return result;
     }
 }
