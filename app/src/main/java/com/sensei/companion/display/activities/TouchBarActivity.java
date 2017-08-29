@@ -4,29 +4,30 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.sensei.companion.R;
+import com.sensei.companion.communication.commands.CommandsData;
+import com.sensei.companion.communication.connection.ConnectManager;
 import com.sensei.companion.communication.connection.MessageHandler;
+import com.sensei.companion.communication.messages.CommandMessage;
 import com.sensei.companion.display.ScreenSelectorFragment;
+import com.sensei.companion.display.testing.DummyChromeTouchbar;
+import com.sensei.companion.display.testing.DummyDesktopTouchbar;
+import com.sensei.companion.display.testing.DummyWordTouchbar;
+import com.sensei.companion.display.testing.ScreenSelectorFragmentTest;
 import com.sensei.companion.display.program_managers.*;
 
 import java.util.Hashtable;
 
 public class TouchBarActivity extends AppCompatActivity implements TouchBarFragment.OnTouchbarInteractionListener,
-        ScreenSelectorFragment.OnScreenSelectorInteractionListener {
+        ScreenSelectorFragment.OnScreenSelectorInteractionListener, ScreenSelectorFragmentTest.OnScreenSelectorInteractionListener {
 
-    private final String DEBUG_TAG = "appMonitor";
-    private static final Hashtable<Integer, Class<? extends TouchBarFragment>> touchbarClass = new Hashtable <> ();
-    private int currentScreen;
-
-    public static final int DESKTOP = 0;
-    public static final int WORD = 1;
+    private static final Hashtable<CommandsData.Program, Class<? extends TouchBarFragment>> touchbarClass = new Hashtable <> ();
 
     static {
-        touchbarClass.put (DESKTOP, GenericProgramManager.class);
-        touchbarClass.put (WORD, WordManager.class);
+        touchbarClass.put (CommandsData.Program.WINDOWS, DummyDesktopTouchbar.class);
+        touchbarClass.put (CommandsData.Program.CHROME, DummyChromeTouchbar.class);
+        touchbarClass.put (CommandsData.Program.MICROSOFT_WORD, DummyWordTouchbar.class);
     }
 
     @Override
@@ -36,20 +37,14 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
 
         MessageHandler.setActivityReference(this);
 
-        currentScreen = 0; //TODO: REMOVE LATER
-
-        Button button = (Button) findViewById(R.id.button2);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //ConnectManager.sendMessageToPC(ConnectManager.COMPANION_COMMAND, "test");
-            }
-        });
+        MessageHandler.setCurrentProgram(CommandsData.Program.WINDOWS); //TODO: REMOVE LATER
     }
 
+    ///////////////////////////// Methods from implemented classes /////////////////////////////
+
     @Override
-    public void sendMessage (String msg) {
-        Log.i (DEBUG_TAG, "Test message");
+    public void sendMessage (CommandMessage msg) {
+        ConnectManager.sendMessageToPC(msg);
     }
 
     /*
@@ -57,15 +52,15 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
     touchbar.
      */
     @Override
-    public void switchScreen(int screenKey) {
-        if (currentScreen != screenKey) {
+    public void switchScreen(CommandsData.Program screenKey) {
+        if (MessageHandler.getCurrentProgram() != screenKey) {
             // Create fragment and give it an argument specifying the article it should show
             Class<? extends TouchBarFragment> fragmentClass = touchbarClass.get(screenKey);
             TouchBarFragment newFragment = null;
             try {
                 newFragment = fragmentClass.newInstance();
             } catch (Exception e) {
-                Log.d(DEBUG_TAG, "Error instantiating fragment");
+                Log.d(AppLauncher.DEBUG_TAG, "[TouchBarActivity] Error instantiating fragment");
             }
             //Bundle args = new Bundle();
             //args.putInt(ArticleFragment.ARG_POSITION, position);
@@ -76,7 +71,7 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
             transaction.addToBackStack(null); //TODO: MIGHT REMOVE LATER
             transaction.commit();
 
-            currentScreen = screenKey;
+            MessageHandler.setCurrentProgram(screenKey);
         }
     }
 }

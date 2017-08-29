@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.sensei.companion.R;
+import com.sensei.companion.communication.commands.CommandsData;
 
 public class ScreenSelectorFragment extends Fragment {
 
@@ -143,6 +144,6 @@ public class ScreenSelectorFragment extends Fragment {
 
     public interface OnScreenSelectorInteractionListener {
         // TODO: Update argument type and name
-        void switchScreen (int screenKey);
+        void switchScreen (CommandsData.Program programKey);
     }
 }

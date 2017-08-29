@@ -10,11 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sensei.companion.R;
+import com.sensei.companion.communication.messages.CommandMessage;
+import com.sensei.companion.display.activities.AppLauncher;
 
 public class TouchBarFragment extends Fragment {
 
-    private final String DEBUG_TAG = "appMonitor";
-    OnTouchbarInteractionListener mListener;
+    public OnTouchbarInteractionListener mListener;
 
     @Override
     public void onAttach(Context context) {
@@ -22,7 +23,7 @@ public class TouchBarFragment extends Fragment {
         if (context instanceof OnTouchbarInteractionListener) {
             mListener = (OnTouchbarInteractionListener) context;
         } else {
-            Log.d (DEBUG_TAG, "must implement OnFragmentInteractionListener");
+            Log.d (AppLauncher.DEBUG_TAG, "must implement OnFragmentInteractionListener");
         }
     }
 
@@ -34,6 +35,6 @@ public class TouchBarFragment extends Fragment {
 
     public interface OnTouchbarInteractionListener {
         // TODO: Update argument type and name
-        void sendMessage (String msg);
+        void sendMessage (CommandMessage msg);
     }
 }

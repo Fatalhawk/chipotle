@@ -50,7 +50,7 @@ public class ConnectService extends Service {
                     Log.e(AppLauncher.DEBUG_TAG, "[ConnectService] Could not send discovery request", e);
                 }
                 Log.i (AppLauncher.DEBUG_TAG, "[ConnectService] UDP broadcast listener socket created");
-                final int SEARCH_TIMEOUT = 3000;
+                final int SEARCH_TIMEOUT = 5000;
                 long searchStartTime = System.currentTimeMillis();
                 while (serverIpAddress == null) {
                     if (System.currentTimeMillis() - searchStartTime > SEARCH_TIMEOUT) {

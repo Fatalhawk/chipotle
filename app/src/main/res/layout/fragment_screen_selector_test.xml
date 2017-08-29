@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/customborder_screenselector"
+    android:orientation="horizontal"
+    tools:context="com.sensei.companion.display.testing.ScreenSelectorFragmentTest">
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_weight="84.42"
+        android:background="#353129"
+        android:text="Show All"
+        android:textColor="#ecebf0" />
+
+    <Button
+        android:id="@+id/button_desktop"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="288"
+        android:background="#ADADB0"
+        android:text="Desktop"
+        android:textColor="#434542" />
+
+    <Button
+        android:id="@+id/button_chrome"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="288"
+        android:background="#ADADB0"
+        android:text="Chrome"
+        android:textColor="#434542" />
+
+    <Button
+        android:id="@+id/button_word"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="288"
+        android:background="#ADADB0"
+        android:text="Word"
+        android:textColor="#434542" />
+
+</LinearLayout>

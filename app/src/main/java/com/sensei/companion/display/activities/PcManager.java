@@ -27,7 +27,7 @@ public class PcManager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //initializing PopupWindow
-        View popUpView = getLayoutInflater().inflate(R.layout.popup_pc_selection, (ViewGroup) findViewById(R.id.frame_popup_pc_selection));
+        View popUpView = getLayoutInflater().inflate(R.layout.popup_pc_selection, (ViewGroup) findViewById(R.id.layout_popup_pc_selection));
         pcSelectionPopup = new PopupWindow(popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
         pcSelectionPopup.setAnimationStyle(android.R.style.Animation_Dialog);
         pcSelectionPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -70,7 +70,7 @@ public class PcManager extends AppCompatActivity {
     public void searchForPC (View v) {
         //open popup
         pcSelectionPopup.showAtLocation(findViewById(R.id.layout_pc_manager), Gravity.CENTER, 0, 0);
-        pcSelectionPopup.update(0, 25, 750, 1000);
+        pcSelectionPopup.update(0, 25, 1000, 1250);
         pcManagerFrame.getForeground().setAlpha(150);
 
         //init search for a valid connection
