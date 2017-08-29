@@ -17,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import java.util.List;
 import java.util.ArrayList;
+import android.graphics.Bitmap;
+
 
 import com.sensei.companion.R;
 
@@ -24,6 +26,20 @@ public class ScreenSelectorFragment extends Fragment {
 
     private final String DEBUG_TAG = "appMonitor";
     private OnScreenSelectorInteractionListener mListener;
+    private List<Screen> screens = createList(1);
+
+    public void setCurrentScreen(Bitmap imageR, String name){
+        //Button should be ImageButton
+        //imageButton.setImageResource.....
+
+        Button currentB = new Button(getActivity());
+        Screen screen = new Screen(name, currentB, imageR);
+        screens.add(screen);
+        //find out a way to prepend to array list
+
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,13 +56,13 @@ public class ScreenSelectorFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.screenList);
 
-        List<Screen> screens = createList(3);
+
 
         MyAdapter adapter = new MyAdapter(getActivity(), screens);
 
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
 
         //need to do everything programmatically now
@@ -57,10 +73,6 @@ public class ScreenSelectorFragment extends Fragment {
 
 
 
-
-
-        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER;
 
         float scale = getResources().getDisplayMetrics().density;
         final int ib_padding = (int) (28*scale + 0.5f); //56 is the size of a floating action button

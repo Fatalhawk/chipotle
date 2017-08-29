@@ -14,13 +14,14 @@
         android:background="@color/RedSmooth_3">
         <Button
             android:id="@+id/ButtonT"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@color/RedSmooth_3"
             android:text="Formal"
             android:textAllCaps="false"
 
             />
+
 
     </RelativeLayout>
 
