@@ -1,6 +1,11 @@
 package com.sensei.companion.display.activities;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,13 +21,17 @@ import com.sensei.companion.display.testing.DummyDesktopTouchbar;
 import com.sensei.companion.display.testing.DummyWordTouchbar;
 import com.sensei.companion.display.testing.ScreenSelectorFragmentTest;
 import com.sensei.companion.display.program_managers.*;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.Hashtable;
 
-public class TouchBarActivity extends AppCompatActivity implements TouchBarFragment.OnTouchbarInteractionListener,
+public class TouchBarActivity extends FragmentActivity implements TouchBarFragment.OnTouchbarInteractionListener,
         ScreenSelectorFragment.OnScreenSelectorInteractionListener, ScreenSelectorFragmentTest.OnScreenSelectorInteractionListener {
 
     private static final Hashtable<CommandsData.Program, Class<? extends TouchBarFragment>> touchbarClass = new Hashtable <> ();
+    private int numPagerItems = 3;
+    private MyPagerAdapter pagerAdapter;
+    private ViewPager viewPager;
 
     static {
         touchbarClass.put (CommandsData.Program.WINDOWS, DummyDesktopTouchbar.class);
@@ -33,13 +42,53 @@ public class TouchBarActivity extends AppCompatActivity implements TouchBarFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i (AppLauncher.DEBUG_TAG, "touchbaractivityoncreate");
         setContentView(R.layout.activity_touchbar_test);
-        Log.i (AppLauncher.DEBUG_TAG, "setcontentviewactivity");
 
+        //update message handler
         MessageHandler.setActivityReference(this);
-
         MessageHandler.setCurrentProgram(CommandsData.Program.WINDOWS); //TODO: REMOVE LATER
+
+        //instantiate view pager and its adapter
+        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        viewPager = (ViewPager)findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setPageMargin(16);
+
+        CirclePageIndicator circlePageIndicator = (CirclePageIndicator)findViewById(R.id.circle_page_indicator);
+        circlePageIndicator.setViewPager(viewPager);
+    }
+
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+        MyPagerAdapter(FragmentManager fm) {
+            super (fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new DummyDesktopTouchbar();
+                case 1:
+                    Class<? extends TouchBarFragment> fragmentClass = touchbarClass.get(MessageHandler.getCurrentProgram());
+                    TouchBarFragment fragment = null;
+                    try {
+                        fragment = fragmentClass.newInstance();
+                    } catch (InstantiationException|IllegalAccessException e) {
+                        Log.e(AppLauncher.DEBUG_TAG, "[TouchBarActivity] Error instantiating fragment", e);
+                    }
+                    return fragment;
+                case 2:
+                    return new WordManager();
+                default:
+                    Log.d (AppLauncher.DEBUG_TAG, "[TouchBarActivity] Error - nonexistant fragment position");
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return numPagerItems;
+        }
     }
 
     ///////////////////////////// Methods from implemented classes /////////////////////////////

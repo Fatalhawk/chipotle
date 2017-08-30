@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/customborder_touchbar"
+    android:background="@drawable/customborder_touchbar_item"
+
     tools:context="com.sensei.companion.display.testing.DummyDesktopTouchbar">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
+
         android:layout_height="match_parent">
 
         <Button

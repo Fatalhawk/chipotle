@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/customborder_touchbar"
     tools:context="com.sensei.companion.display.program_managers.TouchBarFragment">
 
     <android.support.constraint.ConstraintLayout
