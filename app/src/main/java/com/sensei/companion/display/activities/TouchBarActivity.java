@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -19,14 +18,13 @@ import com.sensei.companion.display.screen_selector.ScreenSelectorFragment;
 import com.sensei.companion.display.testing.DummyChromeTouchbar;
 import com.sensei.companion.display.testing.DummyDesktopTouchbar;
 import com.sensei.companion.display.testing.DummyWordTouchbar;
-import com.sensei.companion.display.testing.ScreenSelectorFragmentTest;
 import com.sensei.companion.display.program_managers.*;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.Hashtable;
 
 public class TouchBarActivity extends FragmentActivity implements TouchBarFragment.OnTouchbarInteractionListener,
-        ScreenSelectorFragment.OnScreenSelectorInteractionListener, ScreenSelectorFragmentTest.OnScreenSelectorInteractionListener {
+        ScreenSelectorFragment.OnScreenSelectorInteractionListener {
 
     private static final Hashtable<CommandsData.Program, Class<? extends TouchBarFragment>> touchbarClass = new Hashtable <> ();
     private int numPagerItems = 3;
@@ -104,6 +102,7 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
      */
     @Override
     public void switchScreen(CommandsData.Program screenKey) {
+        /*
         if (MessageHandler.getCurrentProgram() != screenKey) {
             // Create fragment and give it an argument specifying the article it should show
             Class<? extends TouchBarFragment> fragmentClass = touchbarClass.get(screenKey);
@@ -124,5 +123,6 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
 
             MessageHandler.setCurrentProgram(screenKey);
         }
+        */
     }
 }

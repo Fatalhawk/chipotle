@@ -1,78 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frame_activity_pc_manager"
+    android:id="@+id/layout_pc_manager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pc_selection_gradient"
+    android:background="@drawable/background_pc_selection"
     android:foreground="@drawable/shape_pc_manager_dim"
     tools:context="com.sensei.companion.display.activities.PcManager">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/texture_crossword" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/layout_pc_manager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textview_wifi"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:background="#495761"
+        android:gravity="center_vertical"
+        android:paddingBottom="6dp"
+        android:paddingStart="16dp"
+        android:paddingTop="6dp"
+        android:text="Wi-Fi:"
+        android:textColor="#ECEbf0"
+        android:textSize="17sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textview_wifi"
-            android:layout_width="280dp"
-            android:layout_height="34dp"
-            android:background="#495761"
-            android:gravity="center_vertical"
-            android:text="    Wi-Fi:"
-            android:textColor="#ECEbf0"
-            android:textSize="17sp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/icon_desktop"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/textview_wifi"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/monitor" />
 
-        <ImageView
-            android:id="@+id/icon_desktop"
-            android:layout_width="70dp"
-            android:layout_height="34dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/textview_wifi"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/monitor"
-            android:layout_marginTop="0dp"
-            app:layout_constraintHorizontal_bias="0.432" />
+    <ImageButton
+        android:id="@+id/icon_instructions"
+        android:layout_width="69dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:adjustViewBounds="true"
+        android:background="?android:selectableItemBackground"
+        android:onClick="showInstructions"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/instructions_icon" />
 
-        <ImageButton
-            android:id="@+id/icon_instructions"
-            android:layout_width="69dp"
-            android:layout_height="65dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
-            android:adjustViewBounds="true"
-            android:background="?android:selectableItemBackground"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@drawable/instructions_icon" />
+    <ImageButton
+        android:id="@+id/image_button_connect_pc"
+        android:layout_width="205dp"
+        android:layout_height="174dp"
+        android:adjustViewBounds="true"
+        android:background="?selectableItemBackground"
+        android:onClick="searchForPC"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cbrown_new" />
 
-        <ImageButton
-            android:id="@+id/image_button_connect_pc"
-            android:layout_width="205dp"
-            android:layout_height="174dp"
-            android:layout_marginBottom="171dp"
-            android:layout_marginLeft="70dp"
-            android:adjustViewBounds="true"
-            android:background="?selectableItemBackground"
-            android:onClick="searchForPC"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/cbrown_new" />
-
-    </android.support.constraint.ConstraintLayout>
-
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>
