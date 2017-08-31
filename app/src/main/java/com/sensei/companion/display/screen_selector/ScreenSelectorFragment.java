@@ -35,7 +35,6 @@ public class ScreenSelectorFragment extends Fragment {
         Screen screen = new Screen(name, currentB, imageR);
         screens.add(screen);
         //find out a way to prepend to array list
-
     }
 
     @Override
@@ -46,7 +45,6 @@ public class ScreenSelectorFragment extends Fragment {
          I can assume the pictures and names will be given
          For desktops, similar story **/
         //need swipe up to delete desktops
-        Log.i (AppLauncher.DEBUG_TAG, "oncreateview");
         super.onCreate(savedInstanceState);
 
         screens = createList(3);
@@ -114,7 +112,6 @@ public class ScreenSelectorFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        Log.i (AppLauncher.DEBUG_TAG, "onattach");
         super.onAttach(context);
         if (context instanceof OnScreenSelectorInteractionListener) {
             mListener = (OnScreenSelectorInteractionListener) context;

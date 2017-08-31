@@ -64,6 +64,8 @@ public class ConnectService extends Service {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            mHandler.getPopUpWindow().setOutsideTouchable(true);
+                            mHandler.getPopUpWindow().update();
                             mHandler.getPopUpWindow().getContentView().findViewById(R.id.button_connect_pc).setVisibility(View.VISIBLE);
                             ((TextView)mHandler.getPopUpWindow().getContentView().findViewById(R.id.textview_search_status)).setText("Could not find a PC!");
                         }
@@ -77,6 +79,8 @@ public class ConnectService extends Service {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
+                        mHandler.getPopUpWindow().setOutsideTouchable(true);
+                        mHandler.getPopUpWindow().update();
                         ((TextView)mHandler.getPopUpWindow().getContentView().findViewById(R.id.textview_search_status)).setText("Found PC: " + serverIpAddress);
                         Button connectButton = (Button)mHandler.getPopUpWindow().getContentView().findViewById(R.id.button_connect_pc);
                         connectButton.setVisibility(View.VISIBLE);

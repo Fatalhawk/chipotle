@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/customborder_touchbar_item"
     tools:context="com.sensei.companion.display.program_managers.WordManager">
 
     <!-- TODO: Update blank fragment layout -->
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_blue_dark">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView2"
