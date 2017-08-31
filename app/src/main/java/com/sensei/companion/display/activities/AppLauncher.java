@@ -14,10 +14,10 @@ public class AppLauncher extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.i (DEBUG_TAG, "App started");
 
-        //Intent i = new Intent (this, TouchBarActivity.class);
-        //startActivity(i);
+        Intent i = new Intent (this, TouchBarActivity.class);
+        startActivity(i);
 
-        startPcSelection ();
+        //startPcSelection ();
     }
 
     public void startPcSelection () {

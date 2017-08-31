@@ -1,5 +1,7 @@
 package com.sensei.companion.display.activities;
 
+import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +43,13 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_touchbar_test);
+        //want to run it on Android 2.3 and newer as a "sensorLandscape" configuration
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        }
+        else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         //update message handler
         MessageHandler.setActivityReference(this);
