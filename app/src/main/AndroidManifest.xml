@@ -26,11 +26,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".display.activities.TouchBarActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".display.activities.TrackpadActivity" />
+        <activity android:name=".display.activities.TouchBarActivity"/>
         <activity android:name=".display.GestureActivity" />
         <activity
             android:name=".display.activities.PcManager"

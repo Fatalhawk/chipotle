@@ -1,10 +1,10 @@
 package com.sensei.companion.communication.connection;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.PopupWindow;
 
@@ -24,10 +24,10 @@ public class MessageHandler extends Handler {
     static final String PROGRAM_INFO_MESSAGE = "program_info_message";
 
     private static CommandsData.Program currentProgram;
-    public static WeakReference<? extends AppCompatActivity> curActivity;
+    public static WeakReference<? extends Activity> curActivity;
 
     MessageHandler (PcManager activity) {
-        curActivity = new WeakReference<AppCompatActivity>(activity);
+        curActivity = new WeakReference<Activity>(activity);
     }
 
     @Override
@@ -59,10 +59,10 @@ public class MessageHandler extends Handler {
     }
 
     PopupWindow getPopUpWindow () {
-        return ((PcManager)curActivity.get()).getPopupWindow();
+        return ((PcManager)curActivity.get()).getConnectPopupWindow();
     }
 
-    public static void setActivityReference (AppCompatActivity activity) {
+    public static void setActivityReference (Activity activity) {
         curActivity = new WeakReference<>(activity);
     }
 }
