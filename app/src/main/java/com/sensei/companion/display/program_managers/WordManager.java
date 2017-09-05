@@ -21,12 +21,14 @@ import com.sensei.companion.R;
 
 public class WordManager extends TouchBarFragment {
 
+    final ColorPicker cp;
     private RadioRealButtonGroup group2;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_word_manager, container, false);
+
         group2.setOnClickedButtonListener(new RadioRealButtonGroup.OnClickedButtonListener() {
             @Override
             public void onClickedButton(RadioRealButton button, int position) {
@@ -35,9 +37,8 @@ public class WordManager extends TouchBarFragment {
         });
 
         // color stuff first argument is view
-        final ColorPicker cp = new ColorPicker(inflater.inflate(R.layout.fragment_word_manager, container, false), 255, 255, 255);
-        cp.show();
 
+        cp = new ColorPicker(inflater.inflate(R.layout.fragment_word_manager, container, false), 255, 255, 255);
         cp.setCallback(new ColorPickerCallback() {
             @Override
             public void onColorChosen(@ColorInt int color) {
@@ -51,14 +52,26 @@ public class WordManager extends TouchBarFragment {
                 Log.d("Pure Hex", Integer.toHexString(color));
                 Log.d("#Hex no alpha", String.format("#%06X", (0xFFFFFF & color)));
                 Log.d("#Hex with alpha", String.format("#%08X", (0xFFFFFFFF & color)));
+                // send color message
+
                 cp.dismiss();
             }
         });
-
-
-
-
+        return inflater.inflate(R.layout.fragment_word_manager, container, false);
     }
+
+
+    public void color_pressed(View view) {
+        cp.show();
+    }
+
+    public void bold_pressed(View view) {
+        // send bold message
+    }
+
+
+
+
 
 
 
