@@ -1,21 +1,27 @@
 package com.sensei.companion.display.activities;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
 import com.sensei.companion.communication.connection.ConnectManager;
 import com.sensei.companion.communication.connection.MessageHandler;
 import com.sensei.companion.communication.messages.CommandMessage;
+import com.sensei.companion.display.screen_selector.Screen;
 import com.sensei.companion.display.screen_selector.ScreenSelectorFragment;
 import com.sensei.companion.display.testing.DummyChromeTouchbar;
 import com.sensei.companion.display.testing.DummyDesktopTouchbar;
@@ -34,6 +40,7 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
     private ViewPager viewPager;
 
     static {
+        touchbarClass.put (CommandsData.Program.UNSUPPORTED, DummyDesktopTouchbar.class);
         touchbarClass.put (CommandsData.Program.WINDOWS, DummyDesktopTouchbar.class);
         touchbarClass.put (CommandsData.Program.CHROME, DummyChromeTouchbar.class);
         touchbarClass.put (CommandsData.Program.MICROSOFT_WORD, DummyWordTouchbar.class);
@@ -60,22 +67,29 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
         viewPager = (ViewPager)findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageMargin(16);
-
         CirclePageIndicator circlePageIndicator = (CirclePageIndicator)findViewById(R.id.circle_page_indicator);
         circlePageIndicator.setViewPager(viewPager);
+        viewPager.setCurrentItem(1);
     }
 
-    private class MyPagerAdapter extends FragmentPagerAdapter {
+    private class MyPagerAdapter extends FragmentStatePagerAdapter {
         MyPagerAdapter(FragmentManager fm) {
             super (fm);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
+                    Log.i(AppLauncher.DEBUG_TAG, "1");
                     return new DummyDesktopTouchbar();
                 case 1:
+                    Log.i(AppLauncher.DEBUG_TAG, "2");
                     Class<? extends TouchBarFragment> fragmentClass = touchbarClass.get(MessageHandler.getCurrentProgram());
                     TouchBarFragment fragment = null;
                     try {
@@ -85,6 +99,7 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
                     }
                     return fragment;
                 case 2:
+                    Log.i(AppLauncher.DEBUG_TAG, "3");
                     return new WordManager();
                 default:
                     Log.d (AppLauncher.DEBUG_TAG, "[TouchBarActivity] Error - nonexistant fragment position");
@@ -110,7 +125,10 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
     touchbar.
      */
     @Override
-    public void switchScreen(CommandsData.Program screenKey) {
+    public void switchScreen() {
+        pagerAdapter.notifyDataSetChanged();
+
+        Log.i(AppLauncher.DEBUG_TAG, "[TouchBarActivity-switchScreen] " + MessageHandler.getCurrentProgram());
         /*
         if (MessageHandler.getCurrentProgram() != screenKey) {
             // Create fragment and give it an argument specifying the article it should show

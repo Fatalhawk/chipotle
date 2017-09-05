@@ -64,7 +64,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@id/layout_botright"
-            tools:layout="@layout/dtop_management" />
+            tools:layout="@layout/fragment_screen_selector" />
     </RelativeLayout>
 
 </LinearLayout>

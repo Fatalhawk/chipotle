@@ -1,122 +1,172 @@
 package com.sensei.companion.display.screen_selector;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import java.util.Hashtable;
 import java.util.List;
 import java.util.ArrayList;
 import android.graphics.Bitmap;
-
+import android.widget.TextView;
 
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
+import com.sensei.companion.communication.commands.SystemCommandReceiver;
+import com.sensei.companion.communication.connection.ConnectManager;
+import com.sensei.companion.communication.connection.MessageHandler;
+import com.sensei.companion.communication.messages.CommandMessage;
+import com.sensei.companion.communication.messages.ProgramInfoMessage;
 import com.sensei.companion.display.activities.AppLauncher;
+import com.sensei.companion.proto.ProtoMessage;
 
 public class ScreenSelectorFragment extends Fragment {
+    private static OnScreenSelectorInteractionListener mListener;
+    private static List<Screen> screens;
+    private static RecyclerAdapter recyclerAdapter;
+    private static Hashtable<Integer, Integer> programIdToPosition = new Hashtable<>();
 
-    private final String DEBUG_TAG = "appMonitor";
-    private OnScreenSelectorInteractionListener mListener;
-    private List<Screen> screens;
+    public static void removeExistingScreen (int screenId){
+        int position = programIdToPosition.get(screenId);
+        screens.remove(position);
+        recyclerAdapter.notifyItemRemoved(position);
+    }
 
-    public void setCurrentScreen(Bitmap imageR, String name){
-        //Button should be ImageButton
-        //imageButton.setImageResource.....
+    public static void setCurrentScreenNew(ProgramInfoMessage message){
+        Screen screen = new Screen(message.getProgramName(), message.getProgramId(), message.getPicture());
+        screens.add(0, screen);
+        recyclerAdapter.notifyItemInserted(0);
+    }
 
-        Button currentB = new Button(getActivity());
-        Screen screen = new Screen(name, currentB, imageR);
-        screens.add(screen);
-        //find out a way to prepend to array list
+    public static void setCurrentScreenExisting (int position) {
+        Screen newCurrent = screens.remove(position);
+        screens.add(0, newCurrent);
+        recyclerAdapter.notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /** at the beginning all the programs will be loaded into dtop_management, load all pictures and names
-         during program, every time one of the imagebuttons, it should switch the fragment of the touch bar (Salar has this done)
-         I can assume the pictures and names will be given
-         For desktops, similar story **/
-        //need swipe up to delete desktops
         super.onCreate(savedInstanceState);
-
-        screens = createList(3);
-
-        View view1 = inflater.inflate(R.layout.dtop_management, container, false);
-
-
-        RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.screenList);
-
-
-
-        MyAdapter adapter = new MyAdapter(getActivity(), screens);
-
-        recyclerView.setAdapter(adapter);
-
+        View view1 = inflater.inflate(R.layout.fragment_screen_selector, container, false);
+        RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.recycler_screens);
+        //later change this so that it waits using perhaps a LinkedBlockingQueue for the list of
+        //opened programs when the app starts
+        screens = createList(5);
+        recyclerAdapter = new RecyclerAdapter(screens, recyclerView.getContext());
+        recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
-
-        //need to do everything programmatically now
-
-        final ImageButton addDesktopButton =  (ImageButton) view1.findViewById(R.id.addDesktopButton);
-        addDesktopButton.setId(View.generateViewId());
-        addDesktopButton.setImageResource(R.drawable.ic_add_black_24dp);
-
-
-
-
-        float scale = getResources().getDisplayMetrics().density;
-        final int ib_padding = (int) (28*scale + 0.5f); //56 is the size of a floating action button
-
-
-
-
-        /**
-        addDesktopButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-
-
-                ImageButton nImageButton = new ImageButton(getActivity());
-                nImageButton.setLayoutParams(params);
-                addDesktopButton.setId(View.generateViewId());
-                //need to set ImageButton's image
-                nImageButton.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
-                nImageButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.RedSmooth_3));
-                nImageButton.setPadding( 0, 0, ib_padding, 0);
-
-
-
-                //need to add these buttons to the recyclerview somehow?
-
-
-                imageButtons[image_tracker] = nImageButton;
-
-                image_tracker++;
-                System.out.println(Integer.toString(image_tracker));
-                addDesktopButton.setTag(Integer.toString(image_tracker));
-
-            }
-        });
-            **/
-
         return view1;
     }
 
+    private List<Screen> createList(int size) {
+        List<Screen> result = new ArrayList<Screen>();
+        Screen ci;
+        ci = new Screen("Microsoft_Word", 1, BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.tempdesktop));
+        result.add (ci);
+        ci = new Screen("Desktop", 2, BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.tempdesktop));
+        result.add (ci);
+        ci = new Screen("Chrome", 3, BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.tempdesktop));
+        result.add (ci);
+        for (int i=4; i <= size; i++) {
+            ci = new Screen("Screen "+i, i, BitmapFactory.decodeResource(getContext().getResources(),
+                    R.drawable.tempdesktop));
+            result.add(ci);
+        }
+        return result;
+    }
+
+    static class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+        private List<Screen> screenList;
+        private LayoutInflater layoutInflater;
+
+        RecyclerAdapter(List<Screen> screenList, Context parentContext) {
+            this.screenList = screenList;
+            this.layoutInflater = LayoutInflater.from(parentContext);
+        }
+
+        @Override
+        public int getItemCount() {
+            return screenList.size();
+        }
+
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View screenView = layoutInflater.inflate(R.layout.viewholder_screen, parent, false);
+            //The parent is the recyler view --> for getMeasuredWidth/Height to return non-zero #s, must set that to match_parent
+            int parentWidthMinusMarg = parent.getMeasuredWidth()-(int)convertDpToPixel(2*8, parent.getContext()); //get rid of left/right margins
+            int parentHeightMinusMarg = parent.getMeasuredHeight()-(int)convertDpToPixel(2*4, parent.getContext()); //get rid of bot/top margins
+            int imageWidth = (int)(parentWidthMinusMarg-5*convertDpToPixel(4, parent.getContext()))/4; //get rid of left/right margins
+            screenView.setMinimumWidth(imageWidth);
+            screenView.setMinimumHeight(parentHeightMinusMarg);
+            return new MyViewHolder(screenView, imageWidth);
+        }
+
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+            final Screen si = screenList.get(position);
+            programIdToPosition.put(si.getProgramId(), position);
+            holder.screenNameView.setText(si.getName());
+            holder.image.setMaxWidth(holder.imageWidth);
+            holder.image.setImageBitmap(si.getScreenImage());
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConnectManager.sendMessageToPC(new CommandMessage(ProtoMessage.CommMessage.Command.CommandEnvironment.SYSTEM, SystemCommandReceiver.SystemCommand.OPEN.toString(), ""+si.getProgramId()));
+                    setCurrentScreenExisting(holder.getAdapterPosition());
+                    MessageHandler.setCurrentProgram(si.getProgram());
+                    mListener.switchScreen();
+                }
+            });
+
+            //use bitmaps for imagebutton, for now testing with constant images
+            //holder.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
+        }
+
+        private float convertDpToPixel(float dp, Context context){
+            Resources resources = context.getResources();
+            DisplayMetrics metrics = resources.getDisplayMetrics();
+            return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageButton image;
+            TextView screenNameView;
+            int imageWidth;
+
+            MyViewHolder(View itemView, final int imageWidth) {
+                super(itemView);
+                this.imageWidth = imageWidth;
+                image = (ImageButton)itemView.findViewById(R.id.ButtonT);
+                screenNameView = (TextView)itemView.findViewById(R.id.name_screen);
+
+                //be careful with error of having so many imagebuttons, maybe having same names?
+            }
+        }
+    }
+
+    ////////////////////////////////////fragment stuff /////////////////////////////////////////
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnScreenSelectorInteractionListener) {
             mListener = (OnScreenSelectorInteractionListener) context;
         } else {
-            Log.d (DEBUG_TAG, "must implement OnFragmentInteractionListener");
+            Log.d (AppLauncher.DEBUG_TAG, "must implement OnFragmentInteractionListener");
         }
     }
 
@@ -127,27 +177,6 @@ public class ScreenSelectorFragment extends Fragment {
     }
 
     public interface OnScreenSelectorInteractionListener {
-        // TODO: Update argument type and name
-        void switchScreen (CommandsData.Program programKey);
-    }
-
-
-    private List<Screen> createList(int size) {
-
-        List<Screen> result = new ArrayList<Screen>();
-        for (int i=1; i <= size; i++) {
-            Screen ci = new Screen(Screen.DESKTOP_NAME_PREFIX + i, new Button(getActivity()));
-            ci.getButton().setId(View.generateViewId());
-
-            final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            ci.getButton().setLayoutParams(params);
-            System.out.println("YOLO" + ci.getButton().getId());
-            // ci.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
-            // ci.imageB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.RedSmooth_3));
-            result.add(ci);
-
-        }
-
-        return result;
+        void switchScreen ();
     }
 }
