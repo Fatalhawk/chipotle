@@ -21,7 +21,7 @@ import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
 import com.sensei.companion.display.activities.AppLauncher;
 
-public class zScreenSelectorFragment extends Fragment {
+public class ScreenSelectorFragment extends Fragment {
 
     private final String DEBUG_TAG = "appMonitor";
     private OnScreenSelectorInteractionListener mListener;
