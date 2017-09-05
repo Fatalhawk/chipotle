@@ -38,6 +38,7 @@ public class ScreenSelectorFragment extends Fragment {
     private static List<Screen> screens;
     private static RecyclerAdapter recyclerAdapter;
     private static Hashtable<Integer, Integer> programIdToPosition = new Hashtable<>();
+    private static Bitmap tmpImage;
 
     public static void removeExistingScreen (int screenId){
         int position = programIdToPosition.get(screenId);
@@ -46,9 +47,12 @@ public class ScreenSelectorFragment extends Fragment {
     }
 
     public static void setCurrentScreenNew(ProgramInfoMessage message){
-        Screen screen = new Screen(message.getProgramName(), message.getProgramId(), message.getPicture());
+        Screen screen = new Screen(message.getProgramName(), message.getProgramId(), tmpImage);
         screens.add(0, screen);
         recyclerAdapter.notifyItemInserted(0);
+        RecyclerView view = mListener.getRecyclerView();
+        view.scrollToPosition(0);
+        Log.i (AppLauncher.DEBUG_TAG, screen.getName());
     }
 
     public static void setCurrentScreenExisting (int position) {
@@ -61,6 +65,8 @@ public class ScreenSelectorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tmpImage = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.tempdesktop);
         View view1 = inflater.inflate(R.layout.fragment_screen_selector, container, false);
         RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.recycler_screens);
         //later change this so that it waits using perhaps a LinkedBlockingQueue for the list of
@@ -103,7 +109,7 @@ public class ScreenSelectorFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return screenList.size();
+            return screens.size();
         }
 
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -132,7 +138,6 @@ public class ScreenSelectorFragment extends Fragment {
                     mListener.switchScreen();
                 }
             });
-
             //use bitmaps for imagebutton, for now testing with constant images
             //holder.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
         }
@@ -178,5 +183,6 @@ public class ScreenSelectorFragment extends Fragment {
 
     public interface OnScreenSelectorInteractionListener {
         void switchScreen ();
+        RecyclerView getRecyclerView();
     }
 }

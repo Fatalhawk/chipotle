@@ -51,8 +51,12 @@ public class CommandsData {
                 Log.d (AppLauncher.DEBUG_TAG, "[CommandsData] unexpected environment in received command");
                 return;
         }
-
-        Class <? extends CommandReceiver> receiver = programEnums.get(commandEnvironment).asSubclass(CommandReceiver.class);
+        Class<? extends CommandReceiver> receiver;
+        try {
+            receiver = programEnums.get(commandEnvironment).asSubclass(CommandReceiver.class);
+        } catch (NullPointerException e) {
+            receiver = programEnums.get(Program.UNSUPPORTED).asSubclass(CommandReceiver.class);
+        }
         try {
             receiver.newInstance().interpretCommand(mHandler, command, extra_info);
         }catch (InstantiationException|IllegalAccessException e) {

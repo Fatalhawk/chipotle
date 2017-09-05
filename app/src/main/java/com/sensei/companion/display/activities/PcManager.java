@@ -79,7 +79,6 @@ public class PcManager extends AppCompatActivity {
                 paramsImg.height=wifiText.getMeasuredHeight();
                 monitor.setLayoutParams(paramsImg);
                 ViewTreeObserver obs = wifiText.getViewTreeObserver();
-                Log.i(AppLauncher.DEBUG_TAG, "[PcManager] onGlobalLayout");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     obs.removeOnGlobalLayoutListener(this);
                 } else {

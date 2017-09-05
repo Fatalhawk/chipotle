@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -86,10 +87,8 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    Log.i(AppLauncher.DEBUG_TAG, "1");
                     return new DummyDesktopTouchbar();
                 case 1:
-                    Log.i(AppLauncher.DEBUG_TAG, "2");
                     Class<? extends TouchBarFragment> fragmentClass = touchbarClass.get(MessageHandler.getCurrentProgram());
                     TouchBarFragment fragment = null;
                     try {
@@ -99,7 +98,6 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
                     }
                     return fragment;
                 case 2:
-                    Log.i(AppLauncher.DEBUG_TAG, "3");
                     return new WordManager();
                 default:
                     Log.d (AppLauncher.DEBUG_TAG, "[TouchBarActivity] Error - nonexistant fragment position");
@@ -120,10 +118,15 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
         ConnectManager.sendMessageToPC(msg);
     }
 
+    @Override
+    public RecyclerView getRecyclerView() {
+        return (RecyclerView)findViewById(R.id.recycler_screens);
+    }
+
     /*
-    Call this method with the appropriate screen key (representing the appropriate fragment/touchbar) to change to that
-    touchbar.
-     */
+        Call this method with the appropriate screen key (representing the appropriate fragment/touchbar) to change to that
+        touchbar.
+         */
     @Override
     public void switchScreen() {
         pagerAdapter.notifyDataSetChanged();

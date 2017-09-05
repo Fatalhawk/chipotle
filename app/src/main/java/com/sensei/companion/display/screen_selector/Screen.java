@@ -22,7 +22,7 @@ public class Screen {
             this.program = CommandsData.Program.valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
             this.program = CommandsData.Program.UNSUPPORTED;
-            Log.d (AppLauncher.DEBUG_TAG, "[Screen] error getting Program enum from name " + name);
+            //Log.d (AppLauncher.DEBUG_TAG, "[Screen] error getting Program enum from name " + name);
         }
     }
 

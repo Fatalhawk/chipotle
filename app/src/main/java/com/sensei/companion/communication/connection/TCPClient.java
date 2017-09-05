@@ -94,15 +94,16 @@ class TCPClient {
     Send back a reply message to sender to ensure them that their message has been received.
     Reply message consists of empty message with same id as that received.
      */
-    private void sendReplyMessage (String messageId) {
+    void sendReplyMessage (String messageId) {
         ProtoMessage.CommMessage replyMessage = new ReplyMessage(messageId).getProtoMessage();
         int numBytes = replyMessage.toByteArray().length;
+        //Log.i(AppLauncher.DEBUG_TAG, "numbytes reply" + numBytes);
         byte[] numBytesMessage = ByteBuffer.allocate(4).putInt(numBytes).array();
         try {
             out.write (numBytesMessage);
             replyMessage.writeTo (out);
             out.flush();
-            Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Sent reply message: " + replyMessage.toString());
+            Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Sent reply message[" + numBytes + "]: " + replyMessage.getMessageId());
         } catch (IOException e) {
             Log.e(AppLauncher.DEBUG_TAG, "[TCPClient] Error sending reply message", e);
             stopClient();
@@ -128,9 +129,8 @@ class TCPClient {
                     Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] Error - got reply when not waiting for reply");
                 }
             } else {
-                sendReplyMessage (message.getMessageId()); //send reply back w/ same id
                 if (messageListener != null) {
-                    messageListener.callbackMessageReceiver(message);
+                    messageListener.callbackMessageReceiver(message, message.getMessageId());
                 } else {
                     Log.d(AppLauncher.DEBUG_TAG, "[TCPClient] NULL MESSAGE LISTENER");
                 }
@@ -156,8 +156,10 @@ class TCPClient {
                             numBytes[numBytes.length - 1 - i] = temp;
                         }
                         int messageSize = ByteBuffer.wrap(numBytes).asIntBuffer().get();
-                        Log.i (AppLauncher.DEBUG_TAG, ""+ messageSize);
+                        //Log.i(AppLauncher.DEBUG_TAG, "message size: " + messageSize);
                         byte[] message = new byte[messageSize];
+                        if (messageSize == 0)
+                            break;
                         in.read(message);
                         //ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(in);
                         messageGuider(message);
@@ -217,7 +219,7 @@ class TCPClient {
     }
 
     interface MessageCallback {
-        void callbackMessageReceiver (ProtoMessage.CommMessage message);
+        void callbackMessageReceiver (ProtoMessage.CommMessage message, String messageId);
         void restartConnection ();
     }
 }
