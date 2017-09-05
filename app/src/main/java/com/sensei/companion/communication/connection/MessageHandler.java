@@ -14,6 +14,7 @@ import com.sensei.companion.communication.messages.ProgramInfoMessage;
 import com.sensei.companion.display.activities.AppLauncher;
 import com.sensei.companion.display.activities.PcManager;
 import com.sensei.companion.display.activities.TouchBarActivity;
+import com.sensei.companion.display.screen_selector.ScreenSelectorFragment;
 import com.sensei.companion.proto.ProtoMessage;
 
 import java.lang.ref.WeakReference;
@@ -43,7 +44,7 @@ public class MessageHandler extends Handler {
             try {
                 ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(messageBundle.getByteArray(PROGRAM_INFO_MESSAGE));
                 ProgramInfoMessage programInfoMessage = new ProgramInfoMessage(message);
-                //TODO: SEND THE PROGRAM INFO AND IMAGE BITMAP TO THE TOUCH_BAR_ACTIVITY
+                ScreenSelectorFragment.setCurrentScreenNew(programInfoMessage);
             } catch (InvalidProtocolBufferException e) {
                 Log.e (AppLauncher.DEBUG_TAG, "[ConnectManager] Error parsing new program info message bytes");
             }

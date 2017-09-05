@@ -2,6 +2,7 @@ package com.sensei.companion.display.screen_selector;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import java.util.Hashtable;
 import java.util.List;
 import java.util.ArrayList;
 import android.graphics.Bitmap;
@@ -22,20 +25,33 @@ import android.widget.TextView;
 
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
+import com.sensei.companion.communication.commands.SystemCommandReceiver;
+import com.sensei.companion.communication.connection.ConnectManager;
+import com.sensei.companion.communication.connection.MessageHandler;
+import com.sensei.companion.communication.messages.CommandMessage;
+import com.sensei.companion.communication.messages.ProgramInfoMessage;
 import com.sensei.companion.display.activities.AppLauncher;
+import com.sensei.companion.proto.ProtoMessage;
 
 public class ScreenSelectorFragment extends Fragment {
-    private OnScreenSelectorInteractionListener mListener;
+    private static OnScreenSelectorInteractionListener mListener;
     private static List<Screen> screens;
     private static RecyclerAdapter recyclerAdapter;
+    private static Hashtable<Integer, Integer> programIdToPosition = new Hashtable<>();
 
-    public static void setCurrentScreenNew(String name, Bitmap image){
-        Screen screen = new Screen(name, image);
+    public static void removeExistingScreen (int screenId){
+        int position = programIdToPosition.get(screenId);
+        screens.remove(position);
+        recyclerAdapter.notifyItemRemoved(position);
+    }
+
+    public static void setCurrentScreenNew(ProgramInfoMessage message){
+        Screen screen = new Screen(message.getProgramName(), message.getProgramId(), message.getPicture());
         screens.add(0, screen);
         recyclerAdapter.notifyItemInserted(0);
     }
 
-    static void setCurrentScreenExisting (int position) {
+    public static void setCurrentScreenExisting (int position) {
         Screen newCurrent = screens.remove(position);
         screens.add(0, newCurrent);
         recyclerAdapter.notifyDataSetChanged();
@@ -58,8 +74,19 @@ public class ScreenSelectorFragment extends Fragment {
 
     private List<Screen> createList(int size) {
         List<Screen> result = new ArrayList<Screen>();
-        for (int i=1; i <= size; i++) {
-            Screen ci = new Screen(Screen.DESKTOP_NAME_PREFIX + i);
+        Screen ci;
+        ci = new Screen("Microsoft_Word", 1, BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.tempdesktop));
+        result.add (ci);
+        ci = new Screen("Desktop", 2, BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.tempdesktop));
+        result.add (ci);
+        ci = new Screen("Chrome", 3, BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.tempdesktop));
+        result.add (ci);
+        for (int i=4; i <= size; i++) {
+            ci = new Screen("Screen "+i, i, BitmapFactory.decodeResource(getContext().getResources(),
+                    R.drawable.tempdesktop));
             result.add(ci);
         }
         return result;
@@ -91,14 +118,18 @@ public class ScreenSelectorFragment extends Fragment {
         }
 
         public void onBindViewHolder(final MyViewHolder holder, final int position) {
-            Screen si = screenList.get(position);
+            final Screen si = screenList.get(position);
+            programIdToPosition.put(si.getProgramId(), position);
             holder.screenNameView.setText(si.getName());
             holder.image.setMaxWidth(holder.imageWidth);
-            holder.image.setImageResource(R.drawable.tempdesktop);
+            holder.image.setImageBitmap(si.getScreenImage());
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ConnectManager.sendMessageToPC(new CommandMessage(ProtoMessage.CommMessage.Command.CommandEnvironment.SYSTEM, SystemCommandReceiver.SystemCommand.OPEN.toString(), ""+si.getProgramId()));
                     setCurrentScreenExisting(holder.getAdapterPosition());
+                    MessageHandler.setCurrentProgram(si.getProgram());
+                    mListener.switchScreen();
                 }
             });
 
@@ -146,7 +177,6 @@ public class ScreenSelectorFragment extends Fragment {
     }
 
     public interface OnScreenSelectorInteractionListener {
-        // TODO: Update argument type and name
-        void switchScreen (CommandsData.Program programKey);
+        void switchScreen ();
     }
 }
