@@ -13,313 +13,342 @@
         android:background="#e7eae5"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="0dp">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearLayout2"
-            android:layout_marginTop="25dp"
-            app:layout_constraintTop_toBottomOf="@+id/radioRealButtonGroup"
-            app:layout_constraintRight_toRightOf="@+id/radioRealButtonGroup"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/bold_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="bold_pressed"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/bold"
-                tools:layout_editor_absoluteX="338dp"
-                tools:layout_editor_absoluteY="100dp" />
-
-            <ImageButton
-                android:id="@+id/clear_formatting_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="17sp"
-                android:paddingLeft="37sp"
-                android:paddingRight="37sp"
-                android:paddingTop="17sp"
-                app:srcCompat="@drawable/clear_formatting_32"
-                tools:layout_editor_absoluteX="224dp"
-                tools:layout_editor_absoluteY="100dp" />
-
-            <ImageButton
-                android:id="@+id/underline_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/underline"
-
-
-                tools:layout_editor_absoluteY="100dp"
-                tools:layout_editor_absoluteX="451dp" />
-
-            <ImageButton
-                android:id="@+id/italic_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/italic"
-                tools:layout_editor_absoluteY="100dp"
-                tools:layout_editor_absoluteX="565dp" />
 
 
 
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-            android:id="@+id/linearLayout4"
-            app:layout_constraintRight_toRightOf="@+id/linearLayout2"
-            android:orientation="horizontal">
-            <ImageButton
-                android:id="@+id/highlight_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/highlight"
-                tools:layout_editor_absoluteX="224dp" />
-            <ImageButton
-                android:id="@+id/bulleted_list_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/bulleted_list"
-                tools:layout_editor_absoluteX="338dp"
-                android:layout_marginTop="8dp" />
-            <ImageButton
-                android:id="@+id/strikethrough_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/strikethrough"
-                tools:layout_editor_absoluteX="451dp"
-                android:layout_marginTop="8dp" />
-
-            <ImageButton
-                android:id="@+id/color_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/text_color_red"
-                android:onClick="color_pressed"
-                tools:layout_editor_absoluteX="565dp"
-                android:layout_marginTop="8dp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
-            android:id="@+id/linearLayout5"
-            app:layout_constraintRight_toRightOf="@+id/linearLayout4"
-            android:orientation="horizontal">
-            <ImageButton
-                android:id="@+id/superscript_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/superscript"
-                 />
-
-
-
-            <ImageButton
-                android:id="@+id/spellcheck_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/spellcheck"
-                 />
-
-
-
-            <ImageButton
-                android:id="@+id/numbered_list_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/numbered_list"
-                 />
-
-
-
-
-
-
-            <ImageButton
-                android:id="@+id/imageButton6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20sp"
-                android:paddingLeft="40sp"
-                android:paddingRight="40sp"
-                android:paddingTop="20sp"
-                app:srcCompat="@drawable/subscript"
-                 />
-
-
-
-        </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <co.ceryle.radiorealbutton.RadioRealButtonGroup
-            android:layout_width="410dp"
-            android:layout_height="60dp"
-            android:elevation="2dp"
-            app:rrbg_animateDrawables_enter="overshoot"
-            app:rrbg_animateDrawables_exit="overshoot"
-            app:rrbg_animateDrawables_scale="1.2"
-            app:rrbg_animateDrawables_tintColorFrom="@color/black"
-            app:rrbg_animateDrawables_tintColorTo="@android:color/transparent"
-            app:rrbg_animateDrawables_tintColor_duration="500"
-            app:rrbg_animateTexts_enter="overshoot"
-            app:rrbg_animateTexts_textColorFrom="@color/white"
-            app:rrbg_animateTexts_textColorTo="@color/black"
-            app:rrbg_animateTexts_textColor_duration="500"
-            app:rrbg_backgroundColor="#D8D8D8"
-            app:rrbg_borderColor="@color/white"
-            app:rrbg_borderSize="1dp"
-            app:rrbg_bottomLineColor="@color/blue_300"
-            app:rrbg_bottomLineRadius="2dp"
-            app:rrbg_bottomLineSize="0dp"
-            app:rrbg_dividerColor="@color/black"
-            app:rrbg_dividerPadding="12dp"
-            app:rrbg_dividerRadius="2dp"
-            app:rrbg_dividerSize="2dp"
-            app:rrbg_enableDeselection="true"
-            app:rrbg_radius="2dp"
-            app:rrbg_selectorAboveOfBottomLine="false"
-            app:rrbg_selectorAnimationType="translate_y"
-            app:rrbg_selectorColor="@color/grey_400"
-            app:rrbg_selectorRadius="0dp"
-            app:rrbg_selectorSize="8dp"
-            android:id="@+id/radioRealButtonGroup"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="12dp"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout6"
+            android:layout_marginRight="6dp"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginEnd="8dp">
+            android:layout_marginEnd="7dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp">
 
-            <co.ceryle.radiorealbutton.RadioRealButton
+            <co.ceryle.radiorealbutton.RadioRealButtonGroup
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="2dp"
+                app:rrbg_animateDrawables_enter="overshoot"
+                app:rrbg_animateDrawables_exit="overshoot"
+                app:rrbg_animateDrawables_scale="1.2"
+                app:rrbg_animateDrawables_tintColorFrom="@color/black"
+                app:rrbg_animateDrawables_tintColorTo="@android:color/transparent"
+                app:rrbg_animateDrawables_tintColor_duration="500"
+                app:rrbg_animateTexts_enter="overshoot"
+                app:rrbg_animateTexts_textColorFrom="@color/white"
+                app:rrbg_animateTexts_textColorTo="@color/black"
+                app:rrbg_animateTexts_textColor_duration="500"
+                app:rrbg_backgroundColor="#D8D8D8"
+                app:rrbg_borderColor="@color/white"
+                app:rrbg_borderSize="1dp"
+                app:rrbg_bottomLineColor="@color/blue_300"
+                app:rrbg_bottomLineRadius="2dp"
+                app:rrbg_bottomLineSize="0dp"
+                app:rrbg_dividerColor="@color/black"
+                app:rrbg_dividerPadding="12dp"
+                app:rrbg_dividerRadius="2dp"
+                app:rrbg_dividerSize="2dp"
+                app:rrbg_enableDeselection="true"
+                app:rrbg_radius="2dp"
+                app:rrbg_selectorAboveOfBottomLine="false"
+                app:rrbg_selectorAnimationType="translate_y"
+                app:rrbg_selectorColor="@color/grey_400"
+                app:rrbg_selectorRadius="0dp"
+                app:rrbg_selectorSize="8dp"
+                android:id="@+id/radioRealButtonGroup"
+                tools:layout_editor_absoluteY="15dp"
+                tools:layout_editor_absoluteX="266dp">
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawable="@drawable/plus_minus"
+                    app:rrb_drawableGravity="top"
+                    app:rrb_drawableHeight="40dp"
+                    app:rrb_drawablePadding="4dp"
+                    app:rrb_drawableWidth="30dp"
+                    app:rrb_rippleColor="@color/blue_500"
+                    app:rrb_selectorColor="@color/blue_500" />
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawable="@drawable/square_root"
+                    app:rrb_drawableGravity="top"
+                    app:rrb_drawableHeight="40dp"
+                    app:rrb_drawablePadding="4dp"
+                    app:rrb_drawableWidth="30dp"
+                    app:rrb_rippleColor="@color/blue_500"
+                    app:rrb_selectorColor="@color/blue_500" />
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawable="@drawable/not_equal"
+                    app:rrb_drawableGravity="top"
+                    app:rrb_drawableHeight="40dp"
+                    app:rrb_drawablePadding="4dp"
+                    app:rrb_drawableWidth="30dp"
+                    app:rrb_rippleColor="@color/blue_500"
+                    app:rrb_selectorColor="@color/blue_500" />
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawable="@drawable/sigma"
+                    app:rrb_drawableGravity="top"
+                    app:rrb_drawableHeight="40dp"
+                    app:rrb_drawablePadding="4dp"
+                    app:rrb_drawableWidth="30dp"
+                    app:rrb_rippleColor="@color/blue_500"
+                    app:rrb_selectorColor="@color/blue_500" />
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawable="@drawable/pi"
+                    app:rrb_drawableGravity="top"
+                    app:rrb_drawableHeight="40dp"
+                    app:rrb_drawablePadding="4dp"
+                    app:rrb_drawableWidth="30dp"
+                    app:rrb_rippleColor="@color/blue_500"
+                    app:rrb_selectorColor="@color/blue_500" />
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawable="@drawable/alpha"
+                    app:rrb_drawableGravity="top"
+                    app:rrb_drawableHeight="40dp"
+                    app:rrb_drawablePadding="4dp"
+                    app:rrb_drawableWidth="30dp"
+                    app:rrb_rippleColor="@color/blue_500"
+                    app:rrb_selectorColor="@color/blue_500" />
+
+
+
+
+            </co.ceryle.radiorealbutton.RadioRealButtonGroup>
+
+
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linearLayout2"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/radioRealButtonGroup"
+                app:layout_constraintRight_toRightOf="@+id/radioRealButtonGroup"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/bold_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="bold_pressed"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/bold"
+                    tools:layout_editor_absoluteX="338dp"
+                    tools:layout_editor_absoluteY="100dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/clear_formatting_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="17sp"
+                    android:paddingLeft="37sp"
+                    android:paddingRight="37sp"
+                    android:paddingTop="17sp"
+                    app:srcCompat="@drawable/clear_formatting_32"
+                    tools:layout_editor_absoluteX="224dp"
+                    tools:layout_editor_absoluteY="100dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/underline_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/underline"
+
+
+                    tools:layout_editor_absoluteY="100dp"
+                    tools:layout_editor_absoluteX="451dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/italic_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/italic"
+                    tools:layout_editor_absoluteY="100dp"
+                    tools:layout_editor_absoluteX="565dp"
+                    android:layout_weight="1"/>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+                android:id="@+id/linearLayout4"
+                app:layout_constraintRight_toRightOf="@+id/linearLayout2"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:id="@+id/highlight_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/highlight"
+                    tools:layout_editor_absoluteX="224dp"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:id="@+id/bulleted_list_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/bulleted_list"
+                    tools:layout_editor_absoluteX="338dp"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:id="@+id/strikethrough_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/strikethrough"
+                    tools:layout_editor_absoluteX="451dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/color_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/text_color_red"
+                    android:onClick="color_pressed"
+                    tools:layout_editor_absoluteX="565dp"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rrb_drawable="@drawable/plus_minus"
-                app:rrb_drawableGravity="top"
-                app:rrb_drawableHeight="40dp"
-                app:rrb_drawablePadding="4dp"
-                app:rrb_drawableWidth="30dp"
-                app:rrb_rippleColor="@color/blue_500"
-                app:rrb_selectorColor="@color/blue_500" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+                android:id="@+id/linearLayout5"
+                app:layout_constraintRight_toRightOf="@+id/linearLayout4"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:id="@+id/superscript_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/superscript"
+                    android:layout_weight="1"/>
 
-            <co.ceryle.radiorealbutton.RadioRealButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rrb_drawable="@drawable/square_root"
-                app:rrb_drawableGravity="top"
-                app:rrb_drawableHeight="40dp"
-                app:rrb_drawablePadding="4dp"
-                app:rrb_drawableWidth="30dp"
-                app:rrb_rippleColor="@color/blue_500"
-                app:rrb_selectorColor="@color/blue_500" />
 
-            <co.ceryle.radiorealbutton.RadioRealButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rrb_drawable="@drawable/not_equal"
-                app:rrb_drawableGravity="top"
-                app:rrb_drawableHeight="40dp"
-                app:rrb_drawablePadding="4dp"
-                app:rrb_drawableWidth="30dp"
-                app:rrb_rippleColor="@color/blue_500"
-                app:rrb_selectorColor="@color/blue_500" />
 
-            <co.ceryle.radiorealbutton.RadioRealButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rrb_drawable="@drawable/sigma"
-                app:rrb_drawableGravity="top"
-                app:rrb_drawableHeight="40dp"
-                app:rrb_drawablePadding="4dp"
-                app:rrb_drawableWidth="30dp"
-                app:rrb_rippleColor="@color/blue_500"
-                app:rrb_selectorColor="@color/blue_500" />
+                <ImageButton
+                    android:id="@+id/spellcheck_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/spellcheck"
+                    android:layout_weight="1"/>
 
-            <co.ceryle.radiorealbutton.RadioRealButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rrb_drawable="@drawable/pi"
-                app:rrb_drawableGravity="top"
-                app:rrb_drawableHeight="40dp"
-                app:rrb_drawablePadding="4dp"
-                app:rrb_drawableWidth="30dp"
-                app:rrb_rippleColor="@color/blue_500"
-                app:rrb_selectorColor="@color/blue_500" />
 
-            <co.ceryle.radiorealbutton.RadioRealButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rrb_drawable="@drawable/alpha"
-                app:rrb_drawableGravity="top"
-                app:rrb_drawableHeight="40dp"
-                app:rrb_drawablePadding="4dp"
-                app:rrb_drawableWidth="30dp"
-                app:rrb_rippleColor="@color/blue_500"
-                app:rrb_selectorColor="@color/blue_500" />
+
+                <ImageButton
+                    android:id="@+id/numbered_list_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/numbered_list"
+                    android:layout_weight="1"/>
 
 
 
 
-        </co.ceryle.radiorealbutton.RadioRealButtonGroup>
+
+
+                <ImageButton
+                    android:id="@+id/imageButton6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/subscript"
+                    android:layout_weight="1"/>
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     </android.support.constraint.ConstraintLayout>
