@@ -10,3 +10,7 @@ C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Newtonsoft.Json.dll
 C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\SpotifyAPI.dll
 C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Newtonsoft.Json.xml
 C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\SpotifyAPI.xml
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\AppCommunication.dll
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Google.Protobuf.dll
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\AppCommunication.pdb
+C:\Users\takat\Source\Repos\chipotle_new\windows\bin\Debug\Google.Protobuf.xml

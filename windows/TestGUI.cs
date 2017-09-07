@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using App.Program;
 
 namespace Networking
 {
     public partial class TestGUI : Form
     {
-        delegate void updateGridDelegate(List<ProcessInterface> pList);
+        delegate void updateGridDelegate(List<ProgramBase> pList);
         delegate void updateTxtBoxDelegate(string cmd);
         delegate void updateGridDelegate2();
 
@@ -30,10 +25,10 @@ namespace Networking
             dataGridView1.Columns[1].Name = "Title";
             dataGridView1.Columns[2].Name = "ID";
             dataGridView1.Columns[3].Name = "Responding";
-            Communicator.sendCommand = new Communicator.commandRecieved(updateTextbox);
+            //Communicator.sendCommand = new Communicator.commandRecieved(updateTextbox);
         }
 
-        public void updateGridView(List<ProcessInterface> pList)
+        public void updateGridView(List<ProgramBase> pList)
         {
             if (this.dataGridView1.InvokeRequired)
             {
@@ -42,11 +37,11 @@ namespace Networking
             }
             else
             {
-                //dataGridView1.DataSource = ProcessHandler.getProcessListNames();
+                //dataGridView1.DataSource = ProgramManager.getProcessListNames();
                 dataGridView1.Rows.Clear();
-                foreach (ProcessInterface pInt in pList)
+                foreach (ProgramBase pInt in pList)
                 {
-                    dataGridView1.Rows.Add(new object[] { pInt.getIcon(), pInt.getProcessName() });
+                    dataGridView1.Rows.Add(new object[] { pInt.getIcon(), pInt.AssociatedProcess.ProcessName });
                 }
             }            
         }
@@ -60,12 +55,12 @@ namespace Networking
             }
             else
             {
-                //dataGridView1.DataSource = ProcessHandler.getProcessListNames();
+                //dataGridView1.DataSource = ProgramManager.getProcessListNames();
                 dataGridView1.Rows.Clear();
-                foreach (int key in ProcessHandler.getProcessDict().Keys)
+                foreach (int key in ProgramManager.ProcessDict.Keys)
                 {
-                    dataGridView1.Rows.Add(new object[] { ProcessHandler.getProcessDict()[key].getIcon(), ProcessHandler.getProcessDict()[key].getTitle(),
-                        ProcessHandler.getProcessDict()[key].getHandle(), ProcessHandler.getProcessDict()[key].getProcessName()});
+                    dataGridView1.Rows.Add(new object[] { ProgramManager.ProcessDict[key].getIcon(), ProgramManager.ProcessDict[key].WindowTitle,
+                        ProgramManager.ProcessDict[key].getHandle(), ProgramManager.ProcessDict[key].AssociatedProcess.ProcessName});
                 }
             }
 
@@ -97,19 +92,19 @@ namespace Networking
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ProcessHandler.openProgram((int)dataGridView1.SelectedRows[0].Cells[2].Value);
+            ProgramManager.focusProgram((int)dataGridView1.SelectedRows[0].Cells[2].Value);
             updateGridView2();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ProcessHandler.killProcess((int)dataGridView1.SelectedRows[0].Cells[2].Value);
+            ProgramManager.removeProgram((int)dataGridView1.SelectedRows[0].Cells[2].Value);
             updateGridView2();
         }
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            ProcessHandler.getPInterface((int)dataGridView1.SelectedRows[0].Cells[2].Value).performAction(Int32.Parse(cmdTxtBox.Text));
+            //ProgramManager.getPInterface((int)dataGridView1.SelectedRows[0].Cells[2].Value).performAction(Int32.Parse(cmdTxtBox.Text));
         }
 
         private void cmdTxtBox_TextChanged(object sender, EventArgs e)
