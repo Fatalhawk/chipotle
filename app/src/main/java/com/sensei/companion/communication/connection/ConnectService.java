@@ -50,9 +50,10 @@ public class ConnectService extends Service {
                     Log.e(AppLauncher.DEBUG_TAG, "[ConnectService] Could not send discovery request", e);
                 }
                 Log.i (AppLauncher.DEBUG_TAG, "[ConnectService] UDP broadcast listener socket created");
-                final int SEARCH_TIMEOUT = 3000;
+                final int SEARCH_TIMEOUT = 5000;
                 long searchStartTime = System.currentTimeMillis();
                 while (serverIpAddress == null) {
+                    Log.i(AppLauncher.DEBUG_TAG, "test1");
                     if (System.currentTimeMillis() - searchStartTime > SEARCH_TIMEOUT) {
                         break;
                     }
@@ -64,19 +65,25 @@ public class ConnectService extends Service {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            mHandler.getPopUpWindow().setOutsideTouchable(true);
+                            mHandler.getPopUpWindow().update();
                             mHandler.getPopUpWindow().getContentView().findViewById(R.id.button_connect_pc).setVisibility(View.VISIBLE);
                             ((TextView)mHandler.getPopUpWindow().getContentView().findViewById(R.id.textview_search_status)).setText("Could not find a PC!");
                         }
                     });
-                    if (socket != null) {
-                        socket.close();
-                    }
+                    //if (socket != null) {
+                    //    socket.close();
+                    //}
                     return;
                 }
+
+                Log.i(AppLauncher.DEBUG_TAG, "be4 null");
 
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
+                        mHandler.getPopUpWindow().setOutsideTouchable(true);
+                        mHandler.getPopUpWindow().update();
                         ((TextView)mHandler.getPopUpWindow().getContentView().findViewById(R.id.textview_search_status)).setText("Found PC: " + serverIpAddress);
                         Button connectButton = (Button)mHandler.getPopUpWindow().getContentView().findViewById(R.id.button_connect_pc);
                         connectButton.setVisibility(View.VISIBLE);
@@ -102,25 +109,31 @@ public class ConnectService extends Service {
             public void run() {
                 tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
                     @Override
-                    public void callbackMessageReceiver(ProtoMessage.CommMessage message) {
-                        switch (message.getMessageType()) {
-                            case COMMAND:
-                                CommandsData.handleCommand(mHandler, new CommandMessage(message));
-                                break;
-                            case PROGRAM_INFO:
-                                Message myHandlerMessage = Message.obtain();
-                                Bundle myBundle = new Bundle ();
-                                myBundle.putByteArray (MessageHandler.PROGRAM_INFO_MESSAGE, message.toByteArray());
-                                myHandlerMessage.setData(myBundle);
-                                myHandlerMessage.what = MessageHandler.NEW_PROGRAM_INFO;
-                                if (!mHandler.sendMessage(myHandlerMessage)) {
-                                    Log.d (AppLauncher.DEBUG_TAG, "[ConnectService] Handler message error: NEW_PROGRAM_INFO");
+                    public void callbackMessageReceiver(final ProtoMessage.CommMessage message, final String messageId) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                switch (message.getMessageType()) {
+                                    case COMMAND:
+                                        CommandsData.handleCommand(mHandler, new CommandMessage(message));
+                                        break;
+                                    case PROGRAM_INFO:
+                                        Message myHandlerMessage = Message.obtain();
+                                        Bundle myBundle = new Bundle ();
+                                        myBundle.putByteArray (MessageHandler.PROGRAM_INFO_MESSAGE, message.toByteArray());
+                                        myHandlerMessage.setData(myBundle);
+                                        myHandlerMessage.what = MessageHandler.NEW_PROGRAM_INFO;
+                                        if (!mHandler.sendMessage(myHandlerMessage)) {
+                                            Log.d (AppLauncher.DEBUG_TAG, "[ConnectService] Handler message error: NEW_PROGRAM_INFO");
+                                        }
+                                        break;
+                                    default:
+                                        Log.d (AppLauncher.DEBUG_TAG, "[ConnectService] Unexpected message type received");
+                                        break;
                                 }
-                                break;
-                            default:
-                                Log.d (AppLauncher.DEBUG_TAG, "[ConnectService] Unexpected message type received");
-                                break;
-                        }
+                                tcpClient.sendReplyMessage (messageId); //send reply back w/ same id
+                            }
+                        });
                     }
                     @Override
                     public void restartConnection () {
@@ -145,6 +158,7 @@ public class ConnectService extends Service {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
                 serverIpAddress = packet.getAddress().getHostAddress();
+                break;
             }
         } catch (SocketTimeoutException e) {
         } catch (IOException e) {

@@ -28,11 +28,11 @@
 
         <fragment
             android:id="@+id/fragment4"
-            android:name="com.sensei.companion.display.ScreenSelectorFragment"
+            android:name="com.sensei.companion.display.screen_selector.ScreenSelectorFragment"
             android:layout_height="0dp"
             android:layout_width="match_parent"
             android:layout_weight="1"
-            tools:layout="@layout/dtop_management"
+            tools:layout="@layout/fragment_screen_selector"
             />
 
     </LinearLayout>

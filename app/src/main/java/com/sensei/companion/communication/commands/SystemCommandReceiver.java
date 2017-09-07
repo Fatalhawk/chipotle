@@ -6,10 +6,11 @@ import android.util.Log;
 import com.sensei.companion.communication.connection.MessageHandler;
 import com.sensei.companion.display.activities.AppLauncher;
 import com.sensei.companion.display.activities.TouchBarActivity;
+import com.sensei.companion.display.screen_selector.ScreenSelectorFragment;
 
-class SystemCommandReceiver extends CommandReceiver<SystemCommandReceiver.SystemCommand>{
+public class SystemCommandReceiver extends CommandReceiver<SystemCommandReceiver.SystemCommand>{
 
-    enum SystemCommand {
+    public enum SystemCommand {
         CLOSE, OPEN
     }
 
@@ -19,17 +20,24 @@ class SystemCommandReceiver extends CommandReceiver<SystemCommandReceiver.System
     }
 
     @Override
-    public void doCommand (Handler mHandler, SystemCommand command, String extraInfo) {
-        TouchBarActivity mActivity = (TouchBarActivity) MessageHandler.curActivity.get();
-        //TODO: add command executions
-        switch (command) {
-            case CLOSE:
-                break;
-            case OPEN:
-                break;
-            default:
-                Log.d (AppLauncher.DEBUG_TAG, "[DesktopCommandReceiver] Unexpected desktop command");
-                break;
-        }
+    public void doCommand (Handler mHandler, final SystemCommand command, final String extraInfo) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                switch (command) {
+                    case CLOSE:
+                        //the extra info in this case will be the int32 program id
+                        ScreenSelectorFragment.removeExistingScreen(Integer.parseInt(extraInfo));
+                        break;
+                    case OPEN:
+                        //the extra info in this case will be the int32 program id
+                        ScreenSelectorFragment.setCurrentScreenExisting(Integer.parseInt(extraInfo));
+                        break;
+                    default:
+                        Log.d (AppLauncher.DEBUG_TAG, "[DesktopCommandReceiver] Unexpected desktop command");
+                        break;
+                }
+            }
+        });
     }
 }
