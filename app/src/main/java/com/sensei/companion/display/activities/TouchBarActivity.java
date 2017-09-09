@@ -1,32 +1,24 @@
 package com.sensei.companion.display.activities;
 
-import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ViewGroup;
 
 import com.sensei.companion.R;
 import com.sensei.companion.communication.commands.CommandsData;
 import com.sensei.companion.communication.connection.ConnectManager;
 import com.sensei.companion.communication.connection.MessageHandler;
 import com.sensei.companion.communication.messages.CommandMessage;
-import com.sensei.companion.display.screen_selector.Screen;
 import com.sensei.companion.display.screen_selector.ScreenSelectorFragment;
 import com.sensei.companion.display.testing.DummyChromeTouchbar;
 import com.sensei.companion.display.testing.DummyDesktopTouchbar;
-import com.sensei.companion.display.testing.DummyWordTouchbar;
 import com.sensei.companion.display.program_managers.*;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -44,24 +36,17 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
         touchbarClass.put (CommandsData.Program.UNSUPPORTED, DummyDesktopTouchbar.class);
         touchbarClass.put (CommandsData.Program.WINDOWS, DummyDesktopTouchbar.class);
         touchbarClass.put (CommandsData.Program.CHROME, DummyChromeTouchbar.class);
-        touchbarClass.put (CommandsData.Program.MICROSOFT_WORD, DummyWordTouchbar.class);
+        touchbarClass.put (CommandsData.Program.MICROSOFT_WORD, WordManager.class);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_touchbar_test);
-        //want to run it on Android 2.3 and newer as a "sensorLandscape" configuration
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        }
-        else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        setContentView(R.layout.activity_touchbar);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
         //update message handler
         MessageHandler.setActivityReference(this);
-        MessageHandler.setCurrentProgram(CommandsData.Program.WINDOWS); //TODO: REMOVE LATER
 
         //instantiate view pager and its adapter
         pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
@@ -93,12 +78,12 @@ public class TouchBarActivity extends FragmentActivity implements TouchBarFragme
                     TouchBarFragment fragment = null;
                     try {
                         fragment = fragmentClass.newInstance();
-                    } catch (InstantiationException|IllegalAccessException e) {
+                    } catch (Exception e) {
                         Log.e(AppLauncher.DEBUG_TAG, "[TouchBarActivity] Error instantiating fragment", e);
                     }
                     return fragment;
                 case 2:
-                    return new WordManager();
+                    return new TrackpadFragment();
                 default:
                     Log.d (AppLauncher.DEBUG_TAG, "[TouchBarActivity] Error - nonexistant fragment position");
                     return null;

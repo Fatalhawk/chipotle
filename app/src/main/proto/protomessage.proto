@@ -35,6 +35,7 @@ message CompRequest {
         string program_name = 2;
         bytes picture = 3;
         string program_info = 4;
+        string program_type = 5;
     }
 
     ProgramInfo program_message = 4;

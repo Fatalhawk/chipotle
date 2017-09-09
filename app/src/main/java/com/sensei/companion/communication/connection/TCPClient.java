@@ -64,7 +64,9 @@ class TCPClient {
                     }
                     else {
                         if (!protoMessage.getMessageId().equals(replyId)) {
-                            //TODO: WHAT TO DO IF PC SENDS BACK WRONG NUMBER
+                            Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] Received wrong id in reply");
+                            //TODO: might change
+                            stopClient();
                         } else {
                             isWaitingForReply = false;
                             Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Successfully sent message and got reply!");
@@ -145,7 +147,10 @@ class TCPClient {
                     while (connected) {
                         //receive message
                         byte[] numBytes = new byte[4];
-                        in.read(numBytes);
+                        int numBytesRead = in.read(numBytes);
+                        if (numBytesRead == 0 || numBytesRead == -1) {
+                            Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] bad number of bytes read");
+                        }
                         for (int i = 0; i < numBytes.length / 2; i++) {
                             byte temp = numBytes[i];
                             numBytes[i] = numBytes[numBytes.length - 1 - i];
@@ -156,7 +161,10 @@ class TCPClient {
                         byte[] message = new byte[messageSize];
                         if (messageSize == 0)
                             break;
-                        in.read(message);
+                        numBytesRead = in.read(message);
+                        if (numBytesRead == 0 || numBytesRead == -1) {
+                            Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] bad number of bytes read");
+                        }
                         //ProtoMessage.CommandInfo message = ProtoMessage.CommandInfo.parseFrom(in);
                         messageGuider(message);
                     }

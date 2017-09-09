@@ -49,7 +49,11 @@ public class PcManager extends AppCompatActivity {
         setContentView(R.layout.activity_pc_manager);
 
         pcManagerFrame = (ConstraintLayout) findViewById(R.id.layout_pc_manager);
-        pcManagerFrame.getForeground().setAlpha(0);
+        if (Build.VERSION.SDK_INT >= 23) {
+            pcManagerFrame.getForeground().setAlpha(0);
+        } else {
+            Log.i (AppLauncher.DEBUG_TAG, "[PcManager] could not set foreground alpha due to api version");
+        }
 
         //Displaying the wifi network that the phone is currently connected to
         WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -79,11 +83,7 @@ public class PcManager extends AppCompatActivity {
                 paramsImg.height=wifiText.getMeasuredHeight();
                 monitor.setLayoutParams(paramsImg);
                 ViewTreeObserver obs = wifiText.getViewTreeObserver();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    obs.removeOnGlobalLayoutListener(this);
-                } else {
-                    obs.removeGlobalOnLayoutListener(this);
-                }
+                obs.removeOnGlobalLayoutListener(this);
             }
         });
 
@@ -99,7 +99,11 @@ public class PcManager extends AppCompatActivity {
             public void onDismiss() {
                 pcSelectionPopup.setOutsideTouchable(false);
                 pcSelectionPopup.getContentView().findViewById(R.id.button_connect_pc).setVisibility(View.GONE);
-                pcManagerFrame.getForeground().setAlpha (0);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    pcManagerFrame.getForeground().setAlpha(0);
+                } else {
+                    Log.i (AppLauncher.DEBUG_TAG, "[PcManager] could not set foreground alpha due to api version");
+                }
                 ((TextView) getConnectPopupWindow().getContentView().findViewById(R.id.textview_search_status)).setText("Searching for PC...");
                 (getConnectPopupWindow().getContentView().findViewById(R.id.button_connect_pc)).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -135,14 +139,22 @@ public class PcManager extends AppCompatActivity {
         int yOffSetPixels = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         pcSelectionPopup.showAtLocation(findViewById(R.id.layout_pc_manager), Gravity.CENTER, 0, -1*yOffSetPixels);
         pcSelectionPopup.update();
-        pcManagerFrame.getForeground().setAlpha(150);
+        if (Build.VERSION.SDK_INT >= 23) {
+            pcManagerFrame.getForeground().setAlpha(150);
+        } else {
+            Log.i (AppLauncher.DEBUG_TAG, "[PcManager] could not set foreground alpha due to api version");
+        }
 
         //init search for a valid connection
         initPcSearch();
     }
 
     public void showInstructions (View v) {
-        pcManagerFrame.getForeground().setAlpha(150);
+        if (Build.VERSION.SDK_INT >= 23) {
+            pcManagerFrame.getForeground().setAlpha(150);
+        } else {
+            Log.i (AppLauncher.DEBUG_TAG, "[PcManager] could not set foreground alpha due to api version");
+        }
         new DialogFragmentWindow().show(getSupportFragmentManager(), "");
     }
 
@@ -171,23 +183,29 @@ public class PcManager extends AppCompatActivity {
         public void onStart() {
             Window window = getDialog().getWindow();
             //change size
-            window.setLayout(popupWidth, popupHeight);
-            //make background transparent to get rid of shadow
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-            //get rid of shadow and dim
-            WindowManager.LayoutParams windowParams = window.getAttributes();
-            windowParams.dimAmount = 0;
-            windowParams.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            //set animation
-            windowParams.windowAnimations = android.R.style.Animation_Dialog;
-            window.setAttributes(windowParams);
+            if (window != null) {
+                window.setLayout(popupWidth, popupHeight);
+                //make background transparent to get rid of shadow
+                window.setBackgroundDrawableResource(android.R.color.transparent);
+                //get rid of shadow and dim
+                WindowManager.LayoutParams windowParams = window.getAttributes();
+                windowParams.dimAmount = 0;
+                windowParams.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                //set animation
+                windowParams.windowAnimations = android.R.style.Animation_Dialog;
+                window.setAttributes(windowParams);
+            }
             super.onStart();
         }
 
         @Override
         public void onDismiss(DialogInterface dialog) {
             ConstraintLayout pcFrame = (ConstraintLayout)getActivity().findViewById(R.id.layout_pc_manager);
-            pcFrame.getForeground().setAlpha (0);
+            if (Build.VERSION.SDK_INT >= 23) {
+                pcFrame.getForeground().setAlpha(0);
+            } else {
+                Log.i (AppLauncher.DEBUG_TAG, "[PcManager] could not set foreground alpha due to api version");
+            }
             super.onDismiss(dialog);
         }
     }

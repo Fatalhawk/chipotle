@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.widget.TextView;
 
 import com.sensei.companion.R;
+import com.sensei.companion.communication.commands.CommandsData;
 import com.sensei.companion.communication.commands.SystemCommandReceiver;
 import com.sensei.companion.communication.connection.ConnectManager;
 import com.sensei.companion.communication.connection.MessageHandler;
@@ -43,7 +44,7 @@ public class ScreenSelectorFragment extends Fragment {
     }
 
     public static void setCurrentScreenNew(ProgramInfoMessage message){
-        Screen screen = new Screen(message.getProgramName(), message.getProgramId(), message.getPicture());
+        Screen screen = new Screen(message.getProgramName(), message.getProgramId(), message.getProgramType(), message.getPicture());
         screens.add(0, screen);
         recyclerAdapter.notifyItemInserted(0);
         RecyclerView view = mListener.getRecyclerView();
@@ -67,30 +68,23 @@ public class ScreenSelectorFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.recycler_screens);
         //later change this so that it waits using perhaps a LinkedBlockingQueue for the list of
         //opened programs when the app starts
-        screens = createList(5);
+        screens = createList(3);
         recyclerAdapter = new RecyclerAdapter(screens, recyclerView.getContext());
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+        //update screen
+        MessageHandler.setCurrentProgram(screens.get(0).getProgram());
         return view1;
     }
 
     private List<Screen> createList(int size) {
-        List<Screen> result = new ArrayList<Screen>();
+        List<Screen> result = new ArrayList<>();
         Screen ci;
-        ci = new Screen("Microsoft_Word", 1, BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.tempdesktop));
+        ci = new Screen("Microsoft Word", 1, CommandsData.Program.MICROSOFT_WORD.toString(), tmpImage);
         result.add (ci);
-        ci = new Screen("Desktop", 2, BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.tempdesktop));
+        ci = new Screen("Chrome", 3, CommandsData.Program.CHROME.toString(), tmpImage);
         result.add (ci);
-        ci = new Screen("Chrome", 3, BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.tempdesktop));
-        result.add (ci);
-        for (int i=4; i <= size; i++) {
-            ci = new Screen("Screen "+i, i, BitmapFactory.decodeResource(getContext().getResources(),
-                    R.drawable.tempdesktop));
-            result.add(ci);
-        }
         return result;
     }
 
@@ -123,6 +117,11 @@ public class ScreenSelectorFragment extends Fragment {
             final Screen si = screenList.get(position);
             programIdToPosition.put(si.getProgramId(), position);
             holder.screenNameView.setText(si.getName());
+            if (position == 0) {
+                holder.image.setBackground(holder.image.getResources().getDrawable(R.drawable.customborder_openscreen));
+                int dp2 = (int)convertDpToPixel(2, holder.image.getContext());
+                holder.image.setPadding(dp2, dp2, dp2, dp2);
+            }
             holder.image.setMaxWidth(holder.imageWidth);
             holder.image.setImageBitmap(si.getScreenImage());
             holder.image.setOnClickListener(new View.OnClickListener() {
