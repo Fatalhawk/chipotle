@@ -34,7 +34,7 @@ public class CommandsData {
     public static void handleCommand (MessageHandler mHandler, CommandMessage commandMessage) {
         String command = commandMessage.getCommand();
         String extra_info = commandMessage.getExtraInfo();
-        ProtoMessage.CommMessage.Command.CommandEnvironment environment = commandMessage.getEnvironment();
+        ProtoMessage.CompRequest.CommandInfo.Target environment = commandMessage.getEnvironment();
 
         Program commandEnvironment;
         switch (environment) {

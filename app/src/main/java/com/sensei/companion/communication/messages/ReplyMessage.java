@@ -4,13 +4,13 @@ import com.sensei.companion.proto.ProtoMessage;
 
 public class ReplyMessage extends CMessage {
     public ReplyMessage (String messageId) {
-        super (messageId, ProtoMessage.CommMessage.MessageType.REPLY);
+        super (messageId, ProtoMessage.CompRequest.MessageType.REPLY);
     }
 
-    public ProtoMessage.CommMessage getProtoMessage () {
-        ProtoMessage.CommMessage.Builder message = ProtoMessage.CommMessage.newBuilder();
+    public ProtoMessage.CompRequest getProtoMessage () {
+        ProtoMessage.CompRequest.Builder message = ProtoMessage.CompRequest.newBuilder();
         message.setMessageId(getMessageID());
-        message.setMessageType(ProtoMessage.CommMessage.MessageType.REPLY);
+        message.setMessageType(ProtoMessage.CompRequest.MessageType.REPLY);
         return message.build ();
     }
 }

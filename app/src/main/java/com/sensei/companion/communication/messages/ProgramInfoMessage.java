@@ -11,9 +11,9 @@ public class ProgramInfoMessage extends CMessage {
     private Bitmap picture;
     private String programInfo;
 
-    public ProgramInfoMessage (ProtoMessage.CommMessage message) {
+    public ProgramInfoMessage (ProtoMessage.CompRequest message) {
         super (message.getMessageId(), message.getMessageType());
-        ProtoMessage.CommMessage.ProgramInfo programInfoMessage = message.getProgramInfoMessage();
+        ProtoMessage.CompRequest.ProgramInfo programInfoMessage = message.getProgramMessage();
         this.programId = programInfoMessage.getProgramId();
         this.programName = programInfoMessage.getProgramName();
         this.programInfo = programInfoMessage.getProgramInfo();

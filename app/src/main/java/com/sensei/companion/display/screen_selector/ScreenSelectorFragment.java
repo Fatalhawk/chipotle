@@ -12,10 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -24,7 +21,6 @@ import android.graphics.Bitmap;
 import android.widget.TextView;
 
 import com.sensei.companion.R;
-import com.sensei.companion.communication.commands.CommandsData;
 import com.sensei.companion.communication.commands.SystemCommandReceiver;
 import com.sensei.companion.communication.connection.ConnectManager;
 import com.sensei.companion.communication.connection.MessageHandler;
@@ -47,7 +43,7 @@ public class ScreenSelectorFragment extends Fragment {
     }
 
     public static void setCurrentScreenNew(ProgramInfoMessage message){
-        Screen screen = new Screen(message.getProgramName(), message.getProgramId(), tmpImage);
+        Screen screen = new Screen(message.getProgramName(), message.getProgramId(), message.getPicture());
         screens.add(0, screen);
         recyclerAdapter.notifyItemInserted(0);
         RecyclerView view = mListener.getRecyclerView();
@@ -132,7 +128,7 @@ public class ScreenSelectorFragment extends Fragment {
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ConnectManager.sendMessageToPC(new CommandMessage(ProtoMessage.CommMessage.Command.CommandEnvironment.SYSTEM, SystemCommandReceiver.SystemCommand.OPEN.toString(), ""+si.getProgramId()));
+                    ConnectManager.sendMessageToPC(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.SYSTEM, SystemCommandReceiver.SystemCommand.OPEN.toString(), ""+si.getProgramId()));
                     setCurrentScreenExisting(holder.getAdapterPosition());
                     MessageHandler.setCurrentProgram(si.getProgram());
                     mListener.switchScreen();

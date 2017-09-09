@@ -1,14 +1,12 @@
 package com.sensei.companion.display.program_managers;
 
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import co.ceryle.radiorealbutton.RadioRealButton;
 import co.ceryle.radiorealbutton.RadioRealButtonGroup;
@@ -70,7 +68,7 @@ public class WordManager extends TouchBarFragment {
 
     public void bold_pressed(View view) {
         if (super.mListener != null) {
-            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CommMessage.Command.CommandEnvironment.PROGRAM, "BOLD", ""));
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "BOLD", ""));
         }
     }
 }

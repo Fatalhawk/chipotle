@@ -5,7 +5,7 @@ package messages;
 option java_package = "com.sensei.companion.proto";
 option java_outer_classname = "ProtoMessage";
 
-message CommMessage {
+message CompRequest {
     string message_id = 1;
 
     enum MessageType {
@@ -16,19 +16,19 @@ message CommMessage {
 
     MessageType message_type = 2;
 
-    message Command {
-        enum CommandEnvironment {
+    message CommandInfo {
+        enum Target {
             PROGRAM = 0;
             SYSTEM = 1;
             WINDOWS = 2;
         }
 
-        CommandEnvironment environment = 1;
+        Target command_target = 1;
         string command = 2;
-        string extra_info = 3;
+        bytes extra_info = 3;
     }
 
-    Command command_message = 3;
+    CommandInfo command_message = 3;
 
     message ProgramInfo {
         int32 program_id = 1;
@@ -37,5 +37,5 @@ message CommMessage {
         string program_info = 4;
     }
 
-    ProgramInfo program_info_message = 4;
+    ProgramInfo program_message = 4;
 }
