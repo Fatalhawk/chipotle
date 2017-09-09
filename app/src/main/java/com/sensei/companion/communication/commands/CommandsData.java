@@ -59,7 +59,7 @@ public class CommandsData {
         }
         try {
             receiver.newInstance().interpretCommand(mHandler, command, extra_info);
-        }catch (InstantiationException|IllegalAccessException e) {
+        }catch (Exception e) {
             Log.e(AppLauncher.DEBUG_TAG, "[CommandsData] Error creating instance of receiver class", e);
         }
     }

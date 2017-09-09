@@ -10,6 +10,7 @@ public class ProgramInfoMessage extends CMessage {
     private String programName;
     private Bitmap picture;
     private String programInfo;
+    private String programType;
 
     public ProgramInfoMessage (ProtoMessage.CompRequest message) {
         super (message.getMessageId(), message.getMessageType());
@@ -17,6 +18,7 @@ public class ProgramInfoMessage extends CMessage {
         this.programId = programInfoMessage.getProgramId();
         this.programName = programInfoMessage.getProgramName();
         this.programInfo = programInfoMessage.getProgramInfo();
+        this.programType = programInfoMessage.getProgramType();
         byte [] picBytes = programInfoMessage.getPicture().toByteArray();
         this.picture = BitmapFactory.decodeByteArray(picBytes, 0, picBytes.length);
     }
@@ -51,5 +53,13 @@ public class ProgramInfoMessage extends CMessage {
 
     public void setProgramInfo(String programInfo) {
         this.programInfo = programInfo;
+    }
+
+    public String getProgramType() {
+        return programType;
+    }
+
+    public void setProgramType(String programType) {
+        this.programType = programType;
     }
 }

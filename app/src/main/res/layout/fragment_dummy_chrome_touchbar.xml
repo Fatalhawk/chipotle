@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sensei.companion.display.program_managers.TouchBarFragment"
-    android:background="#c1ce96">
+    android:background="@drawable/customborder_touchbar_item"
+    tools:context="com.sensei.companion.display.program_managers.TouchBarFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="Dummy Chrome Touchbar"
             app:layout_constraintLeft_toLeftOf="parent"
