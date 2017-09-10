@@ -68,7 +68,7 @@ public class ScreenSelectorFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view1.findViewById(R.id.recycler_screens);
         //later change this so that it waits using perhaps a LinkedBlockingQueue for the list of
         //opened programs when the app starts
-        screens = createList(3);
+        screens = createTempList();
         recyclerAdapter = new RecyclerAdapter(screens, recyclerView.getContext());
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -78,13 +78,15 @@ public class ScreenSelectorFragment extends Fragment {
         return view1;
     }
 
-    private List<Screen> createList(int size) {
+    private List<Screen> createTempList() {
         List<Screen> result = new ArrayList<>();
         Screen ci;
+        ci = new Screen("Desktop", 1, CommandsData.Program.WINDOWS.toString(), tmpImage);
+        result.add(ci);
         ci = new Screen("Microsoft Word", 1, CommandsData.Program.MICROSOFT_WORD.toString(), tmpImage);
         result.add (ci);
-        ci = new Screen("Chrome", 3, CommandsData.Program.CHROME.toString(), tmpImage);
-        result.add (ci);
+        //ci = new Screen("Chrome", 3, CommandsData.Program.CHROME.toString(), tmpImage);
+        //result.add (ci);
         return result;
     }
 
@@ -124,15 +126,17 @@ public class ScreenSelectorFragment extends Fragment {
             }
             holder.image.setMaxWidth(holder.imageWidth);
             holder.image.setImageBitmap(si.getScreenImage());
-            holder.image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ConnectManager.sendMessageToPC(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.SYSTEM, SystemCommandReceiver.SystemCommand.OPEN.toString(), ""+si.getProgramId()));
-                    setCurrentScreenExisting(holder.getAdapterPosition());
-                    MessageHandler.setCurrentProgram(si.getProgram());
-                    mListener.switchScreen();
-                }
-            });
+            if (position != 0) {
+                holder.image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ConnectManager.sendMessageToPC(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.SYSTEM, SystemCommandReceiver.SystemCommand.OPEN.toString(), "" + si.getProgramId()));
+                        setCurrentScreenExisting(holder.getAdapterPosition());
+                        MessageHandler.setCurrentProgram(si.getProgram());
+                        mListener.switchScreen(screenList.size());
+                    }
+                });
+            }
             //use bitmaps for imagebutton, for now testing with constant images
             //holder.imageB.setImageResource(R.drawable.ic_desktop_windows_black_24dp);
         }
@@ -159,6 +163,10 @@ public class ScreenSelectorFragment extends Fragment {
         }
     }
 
+    public static int getSizeScreenList () {
+        return screens.size();
+    }
+
     ////////////////////////////////////fragment stuff /////////////////////////////////////////
     @Override
     public void onAttach(Context context) {
@@ -177,7 +185,7 @@ public class ScreenSelectorFragment extends Fragment {
     }
 
     public interface OnScreenSelectorInteractionListener {
-        void switchScreen ();
+        void switchScreen (int sizeList);
         RecyclerView getRecyclerView();
     }
 }
