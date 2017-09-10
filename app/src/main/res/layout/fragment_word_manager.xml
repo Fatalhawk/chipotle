@@ -71,7 +71,7 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/word_plus_minus"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -82,7 +82,7 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/word_square_root"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -93,7 +93,7 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/word_not_equal"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -104,7 +104,7 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/word_sigma"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -115,7 +115,7 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/word_pi"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -126,7 +126,7 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/word_alpha"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -160,7 +160,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_bold"
                     tools:layout_editor_absoluteX="338dp"
                     tools:layout_editor_absoluteY="100dp"
                     android:layout_weight="1"/>
@@ -173,7 +173,7 @@
                     android:paddingLeft="37sp"
                     android:paddingRight="37sp"
                     android:paddingTop="17sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_clear_formatting_32"
                     tools:layout_editor_absoluteX="224dp"
                     tools:layout_editor_absoluteY="100dp"
                     android:layout_weight="1"/>
@@ -186,7 +186,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_underline"
 
 
                     tools:layout_editor_absoluteY="100dp"
@@ -201,7 +201,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_italic"
                     tools:layout_editor_absoluteY="100dp"
                     tools:layout_editor_absoluteX="565dp"
                     android:layout_weight="1"/>
@@ -227,7 +227,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_highlight"
                     tools:layout_editor_absoluteX="224dp"
                     android:layout_weight="1"/>
                 <ImageButton
@@ -238,7 +238,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_bulleted_list"
                     tools:layout_editor_absoluteX="338dp"
                     android:layout_weight="1"/>
                 <ImageButton
@@ -249,7 +249,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_strikethrough"
                     tools:layout_editor_absoluteX="451dp"
                     android:layout_weight="1"/>
 
@@ -261,7 +261,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_text_color_red"
                     android:onClick="color_pressed"
                     tools:layout_editor_absoluteX="565dp"
                     android:layout_weight="1"/>
@@ -286,7 +286,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_superscript"
                     android:layout_weight="1"/>
 
 
@@ -299,7 +299,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_spellcheck"
                     android:layout_weight="1"/>
 
 
@@ -312,13 +312,8 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_numbered_list"
                     android:layout_weight="1"/>
-
-
-
-
-
 
                 <ImageButton
                     android:id="@+id/imageButton6"
@@ -328,30 +323,12 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/word_subscript"
                     android:layout_weight="1"/>
-
-
 
             </LinearLayout>
 
-
         </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
