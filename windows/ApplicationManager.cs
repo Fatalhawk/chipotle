@@ -8,7 +8,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using App.Program;
 using AppCommunication;
-using System.Text;
+using System.Drawing;
+using Google.Protobuf.AppCommunication.Proto;
 
 namespace Networking
 {
@@ -26,6 +27,7 @@ namespace Networking
         //private static List<string> processListNames;
         private static ProgramBase currentProcess; //Process in focus
         private static ConnectionListener cListener;
+        private static ImageConverter converter;
 
         /**
          * Constructor
@@ -38,6 +40,7 @@ namespace Networking
             //cListener.onConnect += new ConnectionListener.onConnectEvent(onConnected);
             //cListener.sendInitialBroadcast();
             //cListener.listenForClient();
+            converter = new ImageConverter();
             processDict = new Dictionary<int, ProgramBase>();
             currentProcess = null;
             determineForegroundWindow();
@@ -58,6 +61,13 @@ namespace Networking
             }
         }
 
+        public static void updateWindowCap(int hWnd, Bitmap cap)
+        {
+            processDict[hWnd].WindowCap = cap;
+            CompRequest updateCapRequest = WireProtocol.createProgramMessage(Guid.NewGuid().ToString(),hWnd,(byte[])converter.ConvertTo(cap,typeof(byte[])));
+            //cListener.phoneCommChannel.sendMessage(WireProtocol.serializeMessage(updateCapRequest));
+        }
+
 
         #region System Actions
         public static void addProgram(int key, ProgramBase pInt)
@@ -66,8 +76,8 @@ namespace Networking
             currentProcess = pInt;
             try
             {
-                byte[] message = WireProtocol.serializeMessage(WireProtocol.createInfoMessage(Guid.NewGuid().ToString(),key, pInt.WindowTitle));
-                cListener.phoneCommChannel.startThread(message);
+                CompRequest message = WireProtocol.createProgramMessage(Guid.NewGuid().ToString(),key,pInt.WindowTitle, (byte[])converter.ConvertTo(pInt.WindowCap, typeof(byte[])), pInt.ProgramType);
+                //cListener.phoneCommChannel.startThread(WireProtocol.serializeMessage(message));
             }
             catch (NullReferenceException e){
                 Console.WriteLine(e.ToString());
@@ -86,6 +96,7 @@ namespace Networking
             {
                 processDict.Remove(key);
                 determineForegroundWindow();
+
             }
         }
 

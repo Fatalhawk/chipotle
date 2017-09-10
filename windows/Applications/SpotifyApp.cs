@@ -10,6 +10,13 @@ namespace App.Program
 {
     class SpotifyApp : ProgramBase
     {
+        public override string ProgramType
+        {
+            get
+            {
+                return "SPOTIFY";
+            }
+        }
         private static SpotifyLocalAPI _spotify = new SpotifyLocalAPI();
         
 

@@ -19,10 +19,11 @@ namespace App.Program
 {
     class WordApp : ProgramBase
     {
+        public override string ProgramType { get { return "MICROSOFT_WORD"; } }
         public WordApp(ref Process pObj, IntPtr hWnd, string title) : base(ref pObj, hWnd, title)
         {
             childWindow = 0;
-            bindWordWindow();
+            bindWindow();
         }
 
         private int childWindow;
@@ -48,7 +49,7 @@ namespace App.Program
             return true;
         }
 
-        private bool bindWordWindow()
+        private bool bindWindow()
         {
             try
             {
@@ -129,7 +130,7 @@ namespace App.Program
             {
                 if(myWordApp == null)
                 {
-                    if (!bindWordWindow())
+                    if (!bindWindow())
                     {
                         throw new NullReferenceException();
                     }

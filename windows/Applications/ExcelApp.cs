@@ -8,16 +8,14 @@ namespace App.Program //TODO: Shifting down
 {
     class ExcelApp : ProgramBase
     {
-        //static void Main(string[] args)
-        //{
-        //    if (Console.ReadLine().Equals("start"))
-        //    {
-        //        Thread.Sleep(4000);
-        //        excelApp f = new excelApp();
-        //        f.excelCommand("s");
-        //        Console.ReadLine();
-        //    }
-        //}
+        public override string ProgramType
+        {
+            get
+            {
+                return "MICROSOFT_EXCEL";
+            }
+        }
+
         public ExcelApp(ref Process pObj, IntPtr hWnd, string title) : base(ref pObj, hWnd, title)
         {
             excelCommand();

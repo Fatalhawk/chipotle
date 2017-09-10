@@ -17,15 +17,15 @@ namespace Networking
             //dataGridView1 = new DataGridView();
             dataGridView1.AutoGenerateColumns = true;
             //dataGridView1.ColumnCount = 2;
+            dataGridView1.RowTemplate.Height = 50;
             dataGridView1.Columns.Add(new DataGridViewImageColumn());
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
-            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView1.Columns.Add(new DataGridViewImageColumn());
             dataGridView1.Columns[0].Name = "Icon";
             dataGridView1.Columns[1].Name = "Title";
             dataGridView1.Columns[2].Name = "ID";
-            dataGridView1.Columns[3].Name = "Responding";
-            //Communicator.sendCommand = new Communicator.commandRecieved(updateTextbox);
+            dataGridView1.Columns[3].Name = "Screencap";
         }
 
         public void updateGridView(List<ProgramBase> pList)
@@ -60,7 +60,7 @@ namespace Networking
                 foreach (int key in ProgramManager.ProcessDict.Keys)
                 {
                     dataGridView1.Rows.Add(new object[] { ProgramManager.ProcessDict[key].getIcon(), ProgramManager.ProcessDict[key].WindowTitle,
-                        ProgramManager.ProcessDict[key].getHandle(), ProgramManager.ProcessDict[key].AssociatedProcess.ProcessName});
+                        ProgramManager.ProcessDict[key].getHandle(), ProgramManager.ProcessDict[key].WindowCap});
                 }
             }
 

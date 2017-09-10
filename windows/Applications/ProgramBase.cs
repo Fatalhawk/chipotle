@@ -17,7 +17,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
 
 
 namespace App.Program
@@ -28,6 +27,7 @@ namespace App.Program
      **/
     public class ProgramBase
     {
+        public virtual string ProgramType { get { return "UNSUPPORTED"; } }
         public Process AssociatedProcess{ get; set; }
         //process encapsulated in processInterface 
         //public Process ProcessProp {
@@ -44,6 +44,8 @@ namespace App.Program
         protected IntPtr handle;
         //process's icon
         protected Icon processIcon;
+        protected Bitmap windowCap;
+        public Bitmap WindowCap { get { return windowCap; } set { windowCap = value; } }
         public string WindowTitle { get; set; }
 
 
@@ -99,7 +101,12 @@ namespace App.Program
             }
         }
 
-        public virtual void performAction(string action)
+        public virtual void performAction(string cmd)
+        {
+
+        }
+
+        public virtual void performAction(string cmd, byte[] extraInfo)
         {
 
         }
