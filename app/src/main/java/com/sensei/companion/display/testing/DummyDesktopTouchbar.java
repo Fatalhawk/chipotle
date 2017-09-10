@@ -1,17 +1,13 @@
 package com.sensei.companion.display.testing;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.sensei.companion.R;
-import com.sensei.companion.communication.messages.CMessage;
 import com.sensei.companion.communication.messages.CommandMessage;
-import com.sensei.companion.display.activities.AppLauncher;
 import com.sensei.companion.display.program_managers.TouchBarFragment;
 import com.sensei.companion.proto.ProtoMessage;
 
@@ -33,6 +29,6 @@ public class DummyDesktopTouchbar extends TouchBarFragment {
     }
 
     public void testMessageButtonPressed (View v) {
-        super.mListener.sendMessage(new CommandMessage(ProtoMessage.CommMessage.Command.CommandEnvironment.PROGRAM, "testmsg", ""));
+        super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "testmsg", ""));
     }
 }

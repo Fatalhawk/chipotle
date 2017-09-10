@@ -12,15 +12,11 @@ import com.sensei.companion.proto.ProtoMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 class TCPClient {
     private String serverIpNumber;
@@ -41,8 +37,8 @@ class TCPClient {
     Sends #bytes, sends message, waits for reply consisting of that message's unique id.
      */
     void sendMessage (CMessage message) {
-        ProtoMessage.CommMessage protoMessage = null;
-        if (message.getType() == ProtoMessage.CommMessage.MessageType.COMMAND) {
+        ProtoMessage.CompRequest protoMessage = null;
+        if (message.getType() == ProtoMessage.CompRequest.MessageType.COMMAND) {
             protoMessage = ((CommandMessage)message).getProtoMessage();
         }
 
@@ -68,7 +64,9 @@ class TCPClient {
                     }
                     else {
                         if (!protoMessage.getMessageId().equals(replyId)) {
-                            //TODO: WHAT TO DO IF PC SENDS BACK WRONG NUMBER
+                            Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] Received wrong id in reply");
+                            //TODO: might change
+                            stopClient();
                         } else {
                             isWaitingForReply = false;
                             Log.i(AppLauncher.DEBUG_TAG, "[TCPClient] Successfully sent message and got reply!");
@@ -95,7 +93,7 @@ class TCPClient {
     Reply message consists of empty message with same id as that received.
      */
     void sendReplyMessage (String messageId) {
-        ProtoMessage.CommMessage replyMessage = new ReplyMessage(messageId).getProtoMessage();
+        ProtoMessage.CompRequest replyMessage = new ReplyMessage(messageId).getProtoMessage();
         int numBytes = replyMessage.toByteArray().length;
         //Log.i(AppLauncher.DEBUG_TAG, "numbytes reply" + numBytes);
         byte[] numBytesMessage = ByteBuffer.allocate(4).putInt(numBytes).array();
@@ -115,9 +113,9 @@ class TCPClient {
      */
     private void messageGuider (byte[] messageBytes) {
         try {
-            ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(messageBytes);
+            ProtoMessage.CompRequest message = ProtoMessage.CompRequest.parseFrom(messageBytes);
             Log.i (AppLauncher.DEBUG_TAG, "[TCPClient] Received message: " + message.toString());
-            if (message.getMessageType() == ProtoMessage.CommMessage.MessageType.REPLY) {
+            if (message.getMessageType() == ProtoMessage.CompRequest.MessageType.REPLY) {
                 if (isWaitingForReply) {
                     String replyId = message.getMessageId();
                     try {
@@ -149,7 +147,10 @@ class TCPClient {
                     while (connected) {
                         //receive message
                         byte[] numBytes = new byte[4];
-                        in.read(numBytes);
+                        int numBytesRead = in.read(numBytes);
+                        if (numBytesRead == 0 || numBytesRead == -1) {
+                            Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] bad number of bytes read");
+                        }
                         for (int i = 0; i < numBytes.length / 2; i++) {
                             byte temp = numBytes[i];
                             numBytes[i] = numBytes[numBytes.length - 1 - i];
@@ -160,8 +161,11 @@ class TCPClient {
                         byte[] message = new byte[messageSize];
                         if (messageSize == 0)
                             break;
-                        in.read(message);
-                        //ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(in);
+                        numBytesRead = in.read(message);
+                        if (numBytesRead == 0 || numBytesRead == -1) {
+                            Log.d (AppLauncher.DEBUG_TAG, "[TCPClient] bad number of bytes read");
+                        }
+                        //ProtoMessage.CommandInfo message = ProtoMessage.CommandInfo.parseFrom(in);
                         messageGuider(message);
                     }
                 } catch (IOException e) {
@@ -219,7 +223,7 @@ class TCPClient {
     }
 
     interface MessageCallback {
-        void callbackMessageReceiver (ProtoMessage.CommMessage message, String messageId);
+        void callbackMessageReceiver (ProtoMessage.CompRequest message, String messageId);
         void restartConnection ();
     }
 }

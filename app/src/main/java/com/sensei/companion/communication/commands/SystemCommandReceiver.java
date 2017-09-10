@@ -3,9 +3,7 @@ package com.sensei.companion.communication.commands;
 import android.os.Handler;
 import android.util.Log;
 
-import com.sensei.companion.communication.connection.MessageHandler;
 import com.sensei.companion.display.activities.AppLauncher;
-import com.sensei.companion.display.activities.TouchBarActivity;
 import com.sensei.companion.display.screen_selector.ScreenSelectorFragment;
 
 public class SystemCommandReceiver extends CommandReceiver<SystemCommandReceiver.SystemCommand>{

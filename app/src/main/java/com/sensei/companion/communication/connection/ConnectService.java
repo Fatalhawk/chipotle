@@ -42,13 +42,14 @@ public class ConnectService extends Service {
                 //init broadcast receiver which will hear PCs trying to connect
                 DatagramSocket socket = null;
                 try {
+                    Log.i(AppLauncher.DEBUG_TAG, "[ConnectService] About to create UDP Socket");
                     socket = new DatagramSocket(DISCOVERY_PORT);
                     socket.setBroadcast(true);
                     socket.setSoTimeout(TIMEOUT_MS);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Log.e(AppLauncher.DEBUG_TAG, "[ConnectService] Could not send discovery request", e);
                 }
+
                 Log.i (AppLauncher.DEBUG_TAG, "[ConnectService] UDP broadcast listener socket created");
                 final int SEARCH_TIMEOUT = 5000;
                 long searchStartTime = System.currentTimeMillis();
@@ -58,6 +59,9 @@ public class ConnectService extends Service {
                         break;
                     }
                     listenForBroadcasts(socket);
+                }
+                if (socket != null) {
+                    socket.close();
                 }
 
                 //Update search status on UI
@@ -109,7 +113,7 @@ public class ConnectService extends Service {
             public void run() {
                 tcpClient = new TCPClient(serverIpAddress, new TCPClient.MessageCallback() {
                     @Override
-                    public void callbackMessageReceiver(final ProtoMessage.CommMessage message, final String messageId) {
+                    public void callbackMessageReceiver(final ProtoMessage.CompRequest message, final String messageId) {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {

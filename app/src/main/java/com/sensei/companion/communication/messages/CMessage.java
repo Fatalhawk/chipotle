@@ -6,16 +6,16 @@ import java.util.UUID;
 
 public class CMessage {
     private String messageId;
-    private ProtoMessage.CommMessage.MessageType type;
+    private ProtoMessage.CompRequest.MessageType type;
 
     //ProgramInfoMessage && ReplyMessage uses this constructor
-    CMessage (String messageId, ProtoMessage.CommMessage.MessageType type) {
+    CMessage (String messageId, ProtoMessage.CompRequest.MessageType type) {
         this.messageId = messageId;
         this.type = type;
     }
 
     //CommandMessage uses this constructor
-    CMessage (ProtoMessage.CommMessage.MessageType type) {
+    CMessage (ProtoMessage.CompRequest.MessageType type) {
         this.type = type;
         messageId = UUID.randomUUID().toString();
     }
@@ -28,11 +28,11 @@ public class CMessage {
         this.messageId = messageId;
     }
 
-    public ProtoMessage.CommMessage.MessageType getType() {
+    public ProtoMessage.CompRequest.MessageType getType() {
         return type;
     }
 
-    public void setType(ProtoMessage.CommMessage.MessageType type) {
+    public void setType(ProtoMessage.CompRequest.MessageType type) {
         this.type = type;
     }
 }

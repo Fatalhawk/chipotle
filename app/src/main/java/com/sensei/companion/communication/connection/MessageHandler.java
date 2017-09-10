@@ -42,7 +42,7 @@ public class MessageHandler extends Handler {
         else if (msg.what == NEW_PROGRAM_INFO) { //For NEW_PROGRAM_INFO messages in the form "[Program]"
             Bundle messageBundle = msg.getData();
             try {
-                ProtoMessage.CommMessage message = ProtoMessage.CommMessage.parseFrom(messageBundle.getByteArray(PROGRAM_INFO_MESSAGE));
+                ProtoMessage.CompRequest message = ProtoMessage.CompRequest.parseFrom(messageBundle.getByteArray(PROGRAM_INFO_MESSAGE));
                 ProgramInfoMessage programInfoMessage = new ProgramInfoMessage(message);
                 ScreenSelectorFragment.setCurrentScreenNew(programInfoMessage);
             } catch (InvalidProtocolBufferException e) {
