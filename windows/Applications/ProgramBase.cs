@@ -43,9 +43,10 @@ namespace App.Program
         //process's main handle as observed by program
         protected IntPtr handle;
         //process's icon
-        protected Icon processIcon;
-        protected Bitmap windowCap;
-        public Bitmap WindowCap { get { return windowCap; } set { windowCap = value; } }
+        protected Icon _appIcon;
+        public Icon AppIcon { get { return _appIcon; } }
+        protected Bitmap _windowCap;
+        public Bitmap WindowCap { get { return _windowCap; } set { _windowCap = value; } }
         public string WindowTitle { get; set; }
 
 
@@ -81,22 +82,22 @@ namespace App.Program
         {
             try
             {
-                processIcon = Icon.ExtractAssociatedIcon(AssociatedProcess.MainModule.FileName);
+                _appIcon = Icon.ExtractAssociatedIcon(AssociatedProcess.MainModule.FileName);
             }
             //for each catch send an app-default icon to the phone to use as a placeholder
             catch (System.ComponentModel.Win32Exception e)
             {
-                processIcon = null;
+                _appIcon = null;
                 Console.WriteLine(e.ToString());
             }
             catch (ArgumentException e)
             {
-                processIcon = null;
+                _appIcon = null;
                 Console.WriteLine(e.ToString());
             }
             catch(Exception e)
             {
-                processIcon = null;
+                _appIcon = null;
                 Console.WriteLine(e.ToString());
             }
         }
@@ -133,11 +134,6 @@ namespace App.Program
                 Console.WriteLine(e.ToString());
             }
             return true;
-        }
-
-        public Icon getIcon()
-        {
-            return processIcon;
         }
 
         public bool Equals(ProgramBase otherPI)

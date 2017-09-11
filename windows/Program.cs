@@ -10,7 +10,7 @@ namespace Networking
         static void Main(string[] args)
         {
             TestGUI tGUI = new TestGUI();
-            WindowMonitor wMonitor = new WindowMonitor(tGUI);
+            WindowMonitor wMonitor = new WindowMonitor(tGUI.updateGridView, tGUI.updateTextbox);
             Application.Run(tGUI);
         }
     }

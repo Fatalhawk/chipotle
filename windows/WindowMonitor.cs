@@ -31,21 +31,23 @@ namespace Networking
     {
         //Timer to be used to control flow of polling
         private Timer pollTimer;
-        TestGUI tObj;
-        WinEventDelegate opencloseDele = null;
-        WinEventDelegate titlechangeDele = null;
         IntPtr currentApp;
-
         IntPtr m_openclosehook;
         IntPtr titleChangeHook;
+
+        public delegate void tableUpdater();
+        public delegate void textUpdater(string txt);
+        public event tableUpdater updateTable;
+        public event textUpdater updateText;
 
         #region Constructor
         /**
          * initializes timer and starts it, triggering event sequence
          **/
-        public WindowMonitor(TestGUI tgui)
+        public WindowMonitor(tableUpdater tabUp, textUpdater textUp)
         {
-            tObj = tgui;
+            updateTable += new tableUpdater(tabUp);
+            updateText += new textUpdater(textUp);
             //possible change to set global system hook for creation?
             //result so far: ALL window creations (even non-top level) raise event so doing so might actually 
             //have inverse results and cause program to crash
@@ -122,6 +124,9 @@ namespace Networking
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool IsWindowVisible(IntPtr hWnd);
+
+        WinEventDelegate opencloseDele = null;
+        WinEventDelegate titlechangeDele = null;
         #endregion
 
         #region Interop Constants and Enums
@@ -182,9 +187,11 @@ namespace Networking
             {
                 StringBuilder sb_title = new StringBuilder(256);
                 int length = GetWindowText(hwnd, sb_title, sb_title.Capacity);
-                tObj.updateTextbox("Program " + hwnd.ToString() + " changed name from " + ProgramManager.ProcessDict[hwnd.ToInt32()].WindowTitle + " to " + sb_title.ToString());
+                updateText("Program " + hwnd.ToString() + " changed name from " + ProgramManager.ProcessDict[hwnd.ToInt32()].WindowTitle + " to " + sb_title.ToString());
+                //tObj.updateTextbox("Program " + hwnd.ToString() + " changed name from " + ProgramManager.ProcessDict[hwnd.ToInt32()].WindowTitle + " to " + sb_title.ToString());
                 ProgramManager.changeProgramTitle(hwnd.ToInt32(),sb_title.ToString());
-                tObj.updateGridView2();
+                updateTable();
+                 //tObj.updateGridView();
             }
         }
 
@@ -196,10 +203,12 @@ namespace Networking
         {
             if (ProgramManager.ProcessDict.Keys.Contains(hwnd.ToInt32()))
             {
-                tObj.updateTextbox(ProgramManager.ProcessDict[hwnd.ToInt32()].WindowTitle + " is now in focus");
+                updateText(ProgramManager.ProcessDict[hwnd.ToInt32()].WindowTitle + " is now in focus");
+                //tObj.updateTextbox(ProgramManager.ProcessDict[hwnd.ToInt32()].WindowTitle + " is now in focus");
                 ProgramManager.updateWindowCap(currentApp.ToInt32(),getWindowCap(currentApp));
                 currentApp = hwnd;
-                tObj.updateGridView2();
+                //tObj.updateGridView();
+                updateTable();
             }
         }
 
@@ -236,7 +245,8 @@ namespace Networking
                 ProgramManager.addProgram(hWnd.ToInt32(), new ProgramBase(ref pObj, hWnd, title));
             }
             ProgramManager.updateWindowCap(hWnd.ToInt32(), getWindowCap(hWnd));
-            tObj.updateGridView2();
+            updateTable();
+            //tObj.updateGridView();
 
 
 
@@ -350,12 +360,12 @@ namespace Networking
             List<int> deletedKeys = findKilledProcesses(ProgramManager.ProcessDict.Keys.ToList(), newWindows);
             if (deletedKeys.Count > 0)
             {
-                //tObj.updateTextbox("WUT");
                 foreach (int key in deletedKeys)
                 {
                     ProgramManager.ProcessDict.Remove(key);
                 }
-                tObj.updateGridView2();
+                updateTable();
+                //tObj.updateGridView();
             }                  
         }
         #endregion

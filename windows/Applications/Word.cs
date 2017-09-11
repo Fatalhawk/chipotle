@@ -19,6 +19,7 @@ namespace App.Program
 {
     class WordApp : ProgramBase
     {
+        Word.Application myWordApp;
         public override string ProgramType { get { return "MICROSOFT_WORD"; } }
         public WordApp(ref Process pObj, IntPtr hWnd, string title) : base(ref pObj, hWnd, title)
         {
@@ -28,7 +29,7 @@ namespace App.Program
 
         private int childWindow;
 
-
+        #region Interop Functions
         private delegate bool EnumChildCallback(int hwnd, ref int lParam);
 
         [DllImport("User32.dll")]
@@ -36,6 +37,16 @@ namespace App.Program
 
         [DllImport("User32.dll")]
         private static extern int GetClassName(int hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("Oleacc.dll")]
+        static extern int AccessibleObjectFromWindow(int hwnd, uint dwObjectID, byte[] riid, out IDispatch ptr);
+
+
+        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("00020400-0000-0000-C000-000000000046")]
+        public interface IDispatch
+        {
+        }
+        #endregion
 
         private static bool EnumChildProc(int hwndChild, ref int lParam)
         {
@@ -102,17 +113,6 @@ namespace App.Program
             return false;
         }
 
-        [DllImport("Oleacc.dll")]
-        static extern int AccessibleObjectFromWindow(int hwnd, uint dwObjectID, byte[] riid, out IDispatch ptr);
-
-        Word.Application myWordApp;
-
-
-        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("00020400-0000-0000-C000-000000000046")]
-        public interface IDispatch
-        {
-        }
-
         private enum CommandList
         {
             BOLD,
@@ -169,6 +169,7 @@ namespace App.Program
             }
         }
 
+        #region Action Functions
         public string getStyleName()
         {
             return myWordApp.Selection.get_Style().NameLocal;
@@ -185,7 +186,6 @@ namespace App.Program
                 myWordApp.Selection.Font.Bold = 0;
             }
         }
-
 
         public void italicize()
         {
@@ -304,6 +304,7 @@ namespace App.Program
             //myWordApp.Selection.Range.set_Style(ref styleHeading2);
             myWordApp.Selection.Range.set_Style(ref styleHeading3);
         }
+        #endregion
     }
 }
 

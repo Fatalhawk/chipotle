@@ -18,11 +18,10 @@ namespace Networking
         /**
          * Attribute List
         **/
-        private static IDictionary<int,ProgramBase> processDict;
+        private static IDictionary<int,ProgramBase> _processDict;
         public static IDictionary<int, ProgramBase> ProcessDict
         {
-            get { return processDict; }
-            set { processDict = value; }
+            get { return _processDict; }
         }
         //private static List<string> processListNames;
         private static ProgramBase currentProcess; //Process in focus
@@ -41,7 +40,7 @@ namespace Networking
             //cListener.sendInitialBroadcast();
             //cListener.listenForClient();
             converter = new ImageConverter();
-            processDict = new Dictionary<int, ProgramBase>();
+            _processDict = new Dictionary<int, ProgramBase>();
             currentProcess = null;
             determineForegroundWindow();
         }
@@ -55,24 +54,31 @@ namespace Networking
         private static void determineForegroundWindow()
         {
             IntPtr currentForeground = GetForegroundWindow();
-            if (processDict.Keys.Contains(currentForeground.ToInt32()))
+            if (_processDict.Keys.Contains(currentForeground.ToInt32()))
             {
-                currentProcess = processDict[currentForeground.ToInt32()];
+                currentProcess = _processDict[currentForeground.ToInt32()];
             }
         }
 
         public static void updateWindowCap(int hWnd, Bitmap cap)
         {
-            processDict[hWnd].WindowCap = cap;
-            CompRequest updateCapRequest = WireProtocol.createProgramMessage(Guid.NewGuid().ToString(),hWnd,(byte[])converter.ConvertTo(cap,typeof(byte[])));
-            //cListener.phoneCommChannel.sendMessage(WireProtocol.serializeMessage(updateCapRequest));
+            try
+            {
+                _processDict[hWnd].WindowCap = cap;
+                CompRequest updateCapRequest = WireProtocol.createProgramMessage(Guid.NewGuid().ToString(), hWnd, (byte[])converter.ConvertTo(cap, typeof(byte[])));
+                //cListener.phoneCommChannel.sendMessage(WireProtocol.serializeMessage(updateCapRequest));
+            }
+            catch (KeyNotFoundException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
 
         #region System Actions
         public static void addProgram(int key, ProgramBase pInt)
         {
-            processDict.Add(key, pInt);
+            _processDict.Add(key, pInt);
             currentProcess = pInt;
             try
             {
@@ -92,9 +98,9 @@ namespace Networking
          **/
         public static void removeProgram(int key)
         {
-            if (processDict[key].killApp())
+            if (_processDict[key].killApp())
             {
-                processDict.Remove(key);
+                _processDict.Remove(key);
                 determineForegroundWindow();
 
             }
@@ -102,7 +108,7 @@ namespace Networking
 
         public static void changeProgramTitle(int key, string newTitle)
         {
-            processDict[key].WindowTitle = newTitle;
+            _processDict[key].WindowTitle = newTitle;
         }
 
         //used for retrieving window handle
@@ -115,6 +121,19 @@ namespace Networking
             SetForegroundWindow(new IntPtr(key));
         }
         #endregion
+
+        #region Request Handlers
+        private static void processCommand(int msgTarget, string msgCommand, byte[] msgInfo)
+        {
+            if (msgTarget == 0)
+            {
+                currentProcess.performAction(msgCommand);
+            }
+            else if (msgTarget == 1)
+            {
+                performAction(msgCommand, msgInfo);
+            }
+        }
 
         /**
          * main method to be called upon recieving instructions
@@ -150,30 +169,19 @@ namespace Networking
             }
         }
 
-        public static void onConnected(object sender, EventArgs e)
-        {
-            cListener.phoneCommChannel.processCommand += new CommunicationChannel.onDataReceivedEvent(processCommand);
-        }
-
-        private static void processCommand(int msgTarget, string msgCommand, byte[] msgInfo)
-        {
-            if (msgTarget == 0)
-            {
-                currentProcess.performAction(msgCommand);
-            }
-            else if (msgTarget == 1)
-            {
-                performAction(msgCommand,msgInfo);
-            }
-        }
-
         private static void performAction(string msgCommand)
         {
             Command cmd;
-            if (Enum.TryParse(msgCommand,out cmd))
+            if (Enum.TryParse(msgCommand, out cmd))
             {
 
             }
+        }
+        #endregion
+
+        public static void onConnected(object sender, EventArgs e)
+        {
+            cListener.PhoneCommChannel.processCommand += new CommunicationChannel.onDataReceivedEvent(processCommand);
         }
 
         private enum Command
@@ -181,11 +189,6 @@ namespace Networking
             OPEN,
             FOCUS,
             CLOSE
-        }
-
-        public static ProgramBase getPInterface(int key)
-        {
-            return processDict[key];
         }
     }
 }
