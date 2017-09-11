@@ -29,7 +29,7 @@ public class WordManager extends TouchBarFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_word_manager, container, false);
-        group2 = (RadioRealButtonGroup) v.findViewById(R.id.radioRealButtonGroup);
+        /*group2 = (RadioRealButtonGroup) v.findViewById(R.id.radioRealButtonGroup);
         group2.setOnClickedButtonListener(new RadioRealButtonGroup.OnClickedButtonListener() {
             @Override
             public void onClickedButton(RadioRealButton button, int position) {
@@ -57,7 +57,7 @@ public class WordManager extends TouchBarFragment {
 
                 cp.dismiss();
             }
-        });
+        });*/
         return v;
     }
 
@@ -71,4 +71,124 @@ public class WordManager extends TouchBarFragment {
             super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "BOLD", ""));
         }
     }
+
+    public void underline_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "UNDERLINE", ""));
+        }
+    }
+
+    public void subscript_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SUBSCRIPT", ""));
+        }
+    }
+
+    public void highlight_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "HIGHLIGHT", ""));
+        }
+    }
+
+    public void spellcheck_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SPELLCHECK", ""));
+        }
+    }
+
+    public void clear_formatting_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "CLEAR_FORMATTING", ""));
+        }
+    }
+
+    public void bulleted_list_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "BULLETED_LIST", ""));
+        }
+    }
+
+    public void numbered_list_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "NUMBERED_LIST", ""));
+        }
+    }
+
+    public void strikethrough_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "STRIKETHROUGH", ""));
+        }
+    }
+
+    public void italic_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "ITALIC", ""));
+        }
+    }
+
+    public void superscript_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SUPERSCRIPT", ""));
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    public void alpha_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SYMBOL", "97"));
+        }
+    }
+
+    public void sigma_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SYMBOL", "83"));
+        }
+    }
+
+    public void plus_minus_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SYMBOL", "177"));
+        }
+    }
+
+    public void equal_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SYMBOL", "61"));
+        }
+    }
+
+    public void not_equal_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SYMBOL", "185"));
+        }
+    }
+
+    public void percent_pressed(View view) {
+        if (super.mListener != null) {
+            super.mListener.sendMessage(new CommandMessage(ProtoMessage.CompRequest.CommandInfo.Target.PROGRAM, "SYMBOL", "37"));
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

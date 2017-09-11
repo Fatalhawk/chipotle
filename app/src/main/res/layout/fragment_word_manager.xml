@@ -21,21 +21,21 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_height="0dp"
             android:id="@+id/linearLayout6"
-            android:layout_marginRight="6dp"
+            android:layout_marginRight="7dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginEnd="7dp"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical">
 
             <co.ceryle.radiorealbutton.RadioRealButtonGroup
-                android:layout_weight="1"
+                android:id="@+id/radioRealButtonGroup"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:elevation="2dp"
                 app:rrbg_animateDrawables_enter="overshoot"
                 app:rrbg_animateDrawables_exit="overshoot"
@@ -64,14 +64,26 @@
                 app:rrbg_selectorColor="@color/grey_400"
                 app:rrbg_selectorRadius="0dp"
                 app:rrbg_selectorSize="8dp"
-                android:id="@+id/radioRealButtonGroup"
-                tools:layout_editor_absoluteY="15dp"
-                tools:layout_editor_absoluteX="266dp">
+                tools:layout_editor_absoluteX="266dp"
+                tools:layout_editor_absoluteY="15dp">
 
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/alpha"
+                    app:rrb_drawableGravity="top"
+                    app:rrb_drawableHeight="40dp"
+                    app:rrb_drawablePadding="4dp"
+                    app:rrb_drawableWidth="30dp"
+                    app:rrb_rippleColor="@color/blue_500"
+                    android:onClick="alpha_pressed"
+                    app:rrb_selectorColor="@color/blue_500" />
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawable="@drawable/sigma"
+                    android:onClick="sigma_pressed"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -82,7 +94,8 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/square_root"
+                    android:onClick="square_root_pressed"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -93,7 +106,8 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/plus_minus"
+                    android:onClick="plus_minus_pressed"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -104,7 +118,8 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/not_equal"
+                    android:onClick="not_equal_pressed"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
@@ -115,26 +130,14 @@
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
+                    app:rrb_drawable="@drawable/equal"
+                    android:onClick="equal_pressed"
                     app:rrb_drawableGravity="top"
                     app:rrb_drawableHeight="40dp"
                     app:rrb_drawablePadding="4dp"
                     app:rrb_drawableWidth="30dp"
                     app:rrb_rippleColor="@color/blue_500"
                     app:rrb_selectorColor="@color/blue_500" />
-
-                <co.ceryle.radiorealbutton.RadioRealButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:rrb_drawable="@drawable/white_settings"
-                    app:rrb_drawableGravity="top"
-                    app:rrb_drawableHeight="40dp"
-                    app:rrb_drawablePadding="4dp"
-                    app:rrb_drawableWidth="30dp"
-                    app:rrb_rippleColor="@color/blue_500"
-                    app:rrb_selectorColor="@color/blue_500" />
-
-
 
 
             </co.ceryle.radiorealbutton.RadioRealButtonGroup>
@@ -160,7 +163,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/bold"
                     tools:layout_editor_absoluteX="338dp"
                     tools:layout_editor_absoluteY="100dp"
                     android:layout_weight="1"/>
@@ -169,11 +172,12 @@
                     android:id="@+id/clear_formatting_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="17sp"
-                    android:paddingLeft="37sp"
-                    android:paddingRight="37sp"
-                    android:paddingTop="17sp"
-                    app:srcCompat="@drawable/white_settings"
+                    android:paddingBottom="20sp"
+                    android:paddingLeft="40sp"
+                    android:paddingRight="40sp"
+                    android:paddingTop="20sp"
+                    app:srcCompat="@drawable/clear_formatting"
+                    android:onClick="clear_formatting_pressed"
                     tools:layout_editor_absoluteX="224dp"
                     tools:layout_editor_absoluteY="100dp"
                     android:layout_weight="1"/>
@@ -186,7 +190,8 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/underline"
+                    android:onClick="underline_pressed"
 
 
                     tools:layout_editor_absoluteY="100dp"
@@ -201,7 +206,8 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/italic"
+                    android:onClick="italic_pressed"
                     tools:layout_editor_absoluteY="100dp"
                     tools:layout_editor_absoluteX="565dp"
                     android:layout_weight="1"/>
@@ -227,8 +233,9 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/highlight"
                     tools:layout_editor_absoluteX="224dp"
+                    android:onClick="highlight_pressed"
                     android:layout_weight="1"/>
                 <ImageButton
                     android:id="@+id/bulleted_list_button"
@@ -238,8 +245,9 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/bulleted_list"
                     tools:layout_editor_absoluteX="338dp"
+                    android:onClick="bulleted_list_pressed"
                     android:layout_weight="1"/>
                 <ImageButton
                     android:id="@+id/strikethrough_button"
@@ -249,7 +257,8 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/strikethrough"
+                    android:onClick="strikethrough_pressed"
                     tools:layout_editor_absoluteX="451dp"
                     android:layout_weight="1"/>
 
@@ -261,7 +270,7 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/text_color_red"
                     android:onClick="color_pressed"
                     tools:layout_editor_absoluteX="565dp"
                     android:layout_weight="1"/>
@@ -286,7 +295,8 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/superscript"
+                    android:onClick="superscript_pressed"
                     android:layout_weight="1"/>
 
 
@@ -299,7 +309,8 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/spellcheck"
+                    android:onClick="spellcheck_pressed"
                     android:layout_weight="1"/>
 
 
@@ -312,7 +323,8 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/numbered_list"
+                    android:onClick="numbered_list_pressed"
                     android:layout_weight="1"/>
 
 
@@ -328,7 +340,8 @@
                     android:paddingLeft="40sp"
                     android:paddingRight="40sp"
                     android:paddingTop="20sp"
-                    app:srcCompat="@drawable/white_settings"
+                    app:srcCompat="@drawable/subscript"
+                    android:onClick="subscript_pressed"
                     android:layout_weight="1"/>
 
 
